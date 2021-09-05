@@ -198,14 +198,14 @@ function Reports() {
                                             ))
 
                                         :
-                                            <p>{item.listItem[0].title} ({`${item.listItem[0].amount} ${item.listItem[0].unity} por: R$ ${item.listItem[0].price}`});</p>
+                                            <p>{item.listItem[0].title} ({`${item.listItem[0].amount}) - R$ ${item.listItem[0].price}`}</p>
                                             
                                     }
 
                                 </div>
 
-                                <h4>Data da venda: <span>{item.date}</span>  </h4>
-                                <h4>Valor total: <span>R$ {item.totalValue}</span>  </h4>
+                                <h4>Data da venda: <span>{item.date}</span></h4>
+                                <h4>Valor total: <span>R$ {item.totalValue}</span></h4>
                                 
                             </div>
 
@@ -232,15 +232,16 @@ function Reports() {
                                         <h4>{item.userName}: </h4>
 
                                         {
-                                            item.listItem.length > 1 ?
-                                                item.listItem.map(product => (
-                                                    <p>{product.title} ({`${product.amount}) - R$ ${Number(product.price * product.amount).toFixed(2)}`}</p>
+                                        item.listItem.length > 1 ?
 
-                                                ))
-                                            :
-                                                <p>{item.listItem[0].title} ({`${item.listItem[0].amount} ${item.listItem[0].unity}`});</p>
-                                                
-                                        }
+                                            item.listItem.map(product => (
+                                                <p>{product.title} ({`${product.amount}) - R$ ${Number(product.price * product.amount).toFixed(2)}`}</p>
+                                            ))
+
+                                        :
+                                            <p>{item.listItem[0].title} ({`${item.listItem[0].amount}) - R$ ${item.listItem[0].price}`}</p>
+                                            
+                                    }
 
                                     </div>
 
@@ -272,14 +273,16 @@ function Reports() {
                                         <h4>{item.userName}: </h4>
 
                                         {
-                                            item.listItem.length > 1 ?
-                                                item.listItem.map(product => (
-                                                    <p>{product.title} ({`${product.amount}) - R$ ${Number(product.price * product.amount).toFixed(2)}`}</p>
-                                                ))
-                                            :
-                                                <p>{item.listItem[0].title} ({`${item.listItem[0].amount} ${item.listItem[0].unity}`});</p>
-                                                
-                                        }
+                                        item.listItem.length > 1 ?
+
+                                            item.listItem.map(product => (
+                                                <p>{product.title} ({`${product.amount}) - R$ ${Number(product.price * product.amount).toFixed(2)}`}</p>
+                                            ))
+
+                                        :
+                                            <p>{item.listItem[0].title} ({`${item.listItem[0].amount}) - R$ ${item.listItem[0].price}`}</p>
+                                            
+                                    }
 
                                     </div>
 
@@ -311,14 +314,16 @@ function Reports() {
                                         <h4>{item.userName}: </h4>
 
                                         {
-                                            item.listItem.length > 1 ?
-                                                item.listItem.map(product => (
-                                                    <p>{product.title} ({`${product.amount}) - R$ ${Number(product.price * product.amount).toFixed(2)}`}</p>
-                                                ))
-                                            :
-                                                <p>{item.listItem[0].title} ({`${item.listItem[0].amount} ${item.listItem[0].unity}`});</p>
-                                                
-                                        }
+                                        item.listItem.length > 1 ?
+
+                                            item.listItem.map(product => (
+                                                <p>{product.title} ({`${product.amount}) - R$ ${Number(product.price * product.amount).toFixed(2)}`}</p>
+                                            ))
+
+                                        :
+                                            <p>{item.listItem[0].title} ({`${item.listItem[0].amount}) - R$ ${item.listItem[0].price}`}</p>
+                                            
+                                    }
 
                                     </div>
 
@@ -350,19 +355,22 @@ function Reports() {
                                         <h4>{item.userName}: </h4>
 
                                         {
-                                            item.listItem.length > 1 ?
-                                                item.listItem.map(product => (
-                                                    <p>{product.title} ({`${product.amount}) - R$ ${Number(product.price * product.amount).toFixed(2)}`}</p>
-                                                ))
-                                            :
-                                                <p>{item.listItem[0].title} ({`${item.listItem[0].amount} ${item.listItem[0].unity}`});</p>
-                                                
-                                        }
+                                        item.listItem.length > 1 ?
+
+                                            item.listItem.map(product => (
+                                                <p>{product.title} ({`${product.amount}) - R$ ${Number(product.price * product.amount).toFixed(2)}`}</p>
+                                            ))
+
+                                        :
+                                            <p>{item.listItem[0].title} ({`${item.listItem[0].amount}) - R$ ${item.listItem[0].price}`}</p>
+                                            
+                                    }
 
                                     </div>
 
-                                    <h4>Data da venda: <span>{item.date}</span>  </h4>
-                                    <h4>Valor total: <span>R$ {item.totalValue}</span>  </h4>
+                                    <h4>Data da venda: <span>{item.date}</span></h4>
+                                    <h4>Valor total: <span>R$ {item.totalValue}</span></h4>
+                                    
                                 </div>
 
                             )

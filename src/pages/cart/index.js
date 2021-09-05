@@ -343,6 +343,7 @@ function Cart() {
                         <Link to='/'>Continuar comprando</Link>
 
                         <button onClick={()=>sendOrder()} >Finalizar pedido</button>
+                        <button onClick={()=>firebase.analytics().logEvent('notification_received')} >Finalizar pedido</button>
 
                     </div>
 

@@ -14,8 +14,8 @@ function PaymentForm() {
     const mercadopago = require ('mercadopago');
 
     mercadopago.configure({
-      access_token:"TEST-7958052856366423-082721-e6e9735bff14c755b0c0f5af97bb4489-129407879"
-    })
+      access_token:'TEST-7958052856366423-082721-e6e9735bff14c755b0c0f5af97bb4489-129407879'
+    });
 
     let preference = {
       items: [
@@ -23,7 +23,7 @@ function PaymentForm() {
           title: 'Meu produto',
           unit_price: 100,
           quantity: 1,
-        },
+        }
       ]
     };
     
@@ -35,8 +35,7 @@ function PaymentForm() {
       console.log(error);
     });
 
-  },[])
-
+  },[]);
 
   return (
 
@@ -47,7 +46,6 @@ function PaymentForm() {
         <button className="cho-container" >Pagar</button>
         
       <Footer />
-
 
     </section>
 
