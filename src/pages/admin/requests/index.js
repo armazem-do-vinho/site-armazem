@@ -12,7 +12,6 @@ import DeliveryModal from '../../../components/modalDelivery'
 
 import closeIcon from '../../../img/removeIconWhite.png'
 
-
 function Request() {
 
     const [dataAdmin, setDataAdmin] = useState([])
@@ -68,7 +67,6 @@ function Request() {
 
         if(confirm) {
 
-            
             const totalValue = Number(item.totalValue)
             const productPrice = Number(item.listItem[indexListItem].price)
             const productAmount = Number(item.listItem[indexListItem].amount)
@@ -191,7 +189,7 @@ function Request() {
 
                             <div className="rowItens">
                                 <p>Rua:</p>
-                                <b>{item.street}</b>
+                                <b>{item.address}</b>
                             </div>
 
                             <div className="rowItens">
@@ -297,8 +295,6 @@ function Request() {
                                     <a onClick={() => { handleModalInfos(item) }}>Designar Entregador</a>
                                 </div>
                             </div>
-
-                            
 
                         </div>
 

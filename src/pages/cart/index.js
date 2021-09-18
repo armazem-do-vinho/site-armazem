@@ -23,8 +23,9 @@ function Cart() {
     const [dataAccount, setDataAccount] = useState([]);
     const [dataExists, setDataExists] = useState(false);
     const [userIsLogged, setUserIsLogged] = useState(false);
-    const [selectedClient, setSelectedClient] = useState('')
-    const [clientNote, setClientNote] = useState('')
+    const [selectedClient, setSelectedClient] = useState('');
+    const [clientNote, setClientNote] = useState('');
+    const [displayButtonClear, setDisplayButtonClear] = useState('none');
 
     const [selectedPayment, setSelectedPayment] = useState('');
 
@@ -49,6 +50,7 @@ function Cart() {
 
             setData(temp)
             setDataExists(true)
+            setDisplayButtonClear('block')
 
             console.log(verify)
 
@@ -212,6 +214,19 @@ function Cart() {
 
     }
 
+    function cleanCart() {
+        
+        var confirm = window.confirm('Tem certeza que deseja esvaziar o carrinho?')
+
+        if (confirm) {
+
+            localStorage.setItem('products', '{}')
+            window.location.reload()
+
+        }
+
+    }
+
     function handleSelectPayment(event) {
 
         setSelectedPayment(event.target.value)
@@ -318,6 +333,8 @@ function Cart() {
                             })
                         }
 
+                        <button style={{ display: displayButtonClear }} id="buttonClear" onClick={()=>cleanCart()}>Esvaziar carrinho</button>
+
                         <h3>Valor total: R$ {totalValue.toFixed(2)}</h3>
 
                     </section>
@@ -340,10 +357,9 @@ function Cart() {
 
                     <div className='checkOut' >
 
-                        <Link to='/'>Continuar comprando</Link>
+                        <Link to='/produtos'>Continuar comprando</Link>
 
                         <button onClick={()=>sendOrder()} >Finalizar pedido</button>
-                        <button onClick={()=>firebase.analytics().logEvent('notification_received')} >Finalizar pedido</button>
 
                     </div>
 

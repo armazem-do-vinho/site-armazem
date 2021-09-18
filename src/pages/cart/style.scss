@@ -18,103 +18,128 @@
 
     }
 
-    .showCartContainer {
+    #SectionCartProducts {
 
-        display: flex;
-        flex-direction: column;
-
-        .showProductCardCart {
+        .showCartContainer {
 
             display: flex;
-            flex-direction: row;
-            width: 1200px;
-            height: 150px;
-            background-color: #2B303A;
-            margin-bottom: 2rem;
-            border-radius: 7px;
+            flex-direction: column;
 
-            .imageProductWrapperCart {
+            .showProductCardCart {
 
                 display: flex;
-                height: 100%;
-                width: 10%;
-                justify-content: center;
-                border-radius: 7px 0 0 7px;
+                flex-direction: row;
+                width: 1200px;
+                height: 150px;
+                background-color: #2B303A;
+                margin-bottom: 2rem;
+                border-radius: 7px;
+
+                .imageProductWrapperCart {
+
+                    display: flex;
+                    height: 100%;
+                    width: 10%;
+                    justify-content: center;
+                    border-radius: 7px 0 0 7px;
+
+                    img {
+
+                        width: auto;
+                        height: auto;
+                        padding: .2rem;
+
+                    }
+
+                }
+
+                .descriptionProductCart {
+
+                    display: flex;
+                    flex-direction: column;
+                    height: 100%;
+                    width: 60%;
+                    padding: 2rem;
+
+                    h4, p, span {
+
+                        margin: .2rem 0;
+
+                    }
+
+                    h4 {
+
+                        color: $branco;
+
+                    }
+
+                    p, span {
+
+                        color: #6b6e75;
+
+                    }
+
+                }
+
+                .priceProductCard {
+
+                    display: flex;
+                    flex-direction: column;
+                    height: 100%;
+                    width: 30%;
+                    padding: 2rem;
+                    justify-content: center;
+
+                    h4 ,h5 {
+
+                        color: $branco;
+                        margin: .6rem 0;
+
+                    }
+
+                }
+
+                .trashCanWrapper {
+
+                    display: flex;
+                    width: 10%;
+                    height:100%;
+                    justify-content: center;
+                    align-items: center;
+
+                }
 
                 img {
 
-                    width: auto;
-                    height: auto;
-                    padding: .2rem;
+                    height: 40px;
+                    cursor: pointer;
 
                 }
-
             }
-
-            .descriptionProductCart {
-
-                display: flex;
-                flex-direction: column;
-                height: 100%;
-                width: 60%;
-                padding: 2rem;
-
-                h4, p, span {
-
-                    margin: .2rem 0;
-
-                }
-
-                h4 {
-
-                    color: $branco;
-
-                }
-
-                p, span {
-
-                    color: #6b6e75;
-
-                }
-
-            }
-
-            .priceProductCard {
-
-                display: flex;
-                flex-direction: column;
-                height: 100%;
-                width: 30%;
-                padding: 2rem;
-                justify-content: center;
-
-                h4 ,h5 {
-
-                    color: $branco;
-                    margin: .6rem 0;
-
-                }
-
-            }
-
-            .trashCanWrapper {
-
-                display: flex;
-                width: 10%;
-                height:100%;
-                justify-content: center;
-                align-items: center;
-
-            }
-
-            img {
-
-                height: 40px;
-                cursor: pointer;
-
-            }
+            
         }
-        
+
+        #buttonClear {
+
+            display: flex;
+            background-color: transparent;
+            outline: none;
+            border: none;
+            text-decoration: none;
+            padding: 0 2rem;
+            margin: 2rem 0;
+            font-size: 1rem;
+            color: $vinhoPink;
+            cursor: pointer;
+
+            &:hover {
+
+                color: $branco;
+
+            }
+    
+        }
+
     }
     
     .finishOrder {
@@ -199,5 +224,6 @@
         }
 
     }
+    
     
 }

@@ -11,6 +11,8 @@
         width: 100%;
         align-items: center;
         margin: 0 auto;
+        justify-content: center;
+        text-align: center;
 
         fieldset {
 
@@ -36,7 +38,7 @@
 
             background-color: $vinho;
             color: $branco;
-            width: 100%;
+            width: 65%;
             margin-bottom: 1.5rem;
             outline: none;
             height: 3rem;
@@ -56,7 +58,7 @@
 
             background-color: $vinho;
             color: $branco;
-            width: 100%;
+            width: 65%;
             margin-bottom: 1.5rem;
             outline: none;
             height: 3rem;

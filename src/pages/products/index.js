@@ -160,13 +160,12 @@ function Products() {
 
     let history = useHistory();
 
-    function addToCart() {
+     function addToCart() {
 
-        const listOfItems = JSON.parse(localStorage.getItem('products'))
+        const temp = JSON.parse(localStorage.getItem('products'))
+        var listOfItems = temp !== null ? Object.keys(temp).map((key) => temp[key]) : []
 
         const newItems = []
-
-        var newListOfItems = {}
 
         data.map((item) => {
 
@@ -174,33 +173,42 @@ function Products() {
                 newItems.push(item)
 
         })
-        
-        if (listOfItems !== null) {
+
+        if (listOfItems.length > 0) {
+
+            newItems.map(item=>listOfItems.push(item))
+
+            console.log('listOfItems',listOfItems)
             
-            newListOfItems = {
-                ...listOfItems,
-                ...newItems
-            }
-            
-            localStorage.setItem('products', JSON.stringify({ ...newListOfItems }))
-            
-            console.log({ ...newListOfItems })
+            localStorage.setItem('products', JSON.stringify(listOfItems))
 
         }
         else {
 
-            newListOfItems = {
-                ...newItems
-            }
-
-            localStorage.setItem('products', JSON.stringify({ ...newListOfItems }))
-            console.log({ ...newListOfItems })
+            newItems.map(item=>listOfItems.push(item))
+            localStorage.setItem('products', JSON.stringify(listOfItems))
 
         }
 
         history.push('/Carrinho')
 
     }
+
+    // newItems.map(newItems => {
+
+    //     listOfItems.map(listItems => {
+
+    //         if (newItems.id === listItems.id) {
+
+    //             listItems.amount = newItems.amount
+    //             newItems.map(item=>listOfItems.push(item))
+
+
+    //         }
+
+    //     })
+
+    // })
 
     return (
 
