@@ -43,7 +43,7 @@ const Routes = () => {
             <Route component={Stock} path='/AdminEstoque' />
             <Route component={Reports} path='/AdminRelatorios' />
             <Route component={ProviderProducts} path='/AdminProdutoFornecedor' />
-            <Route component={PaymentForm} path='/pagamento' />
+            <Route component={PaymentForm} path='/formPayment' />
 
         </BrowserRouter>
 
