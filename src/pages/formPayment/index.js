@@ -30,18 +30,21 @@ function PaymentForm() {
     data: data
   };
 
-  axios({
-    method: 'post',
-    url: 'https://ws.sandbox.pagseguro.uol.com.br/v2/checkout?email=higorb2000@gmail.com&token=683807F15631406FA20906CFA09C3763',
-    data: {
-      currency: 'BRL',
-      itemId: '1',
-      itemDescription: 'Heitor',
-      itemAmount: '2500000.99',
-      itemQuantity: '1',
-      itemWeight: '500',
-    }
-  })
+  // axios({
+  //   method: 'post',
+  //   url: 'https://ws.sandbox.pagseguro.uol.com.br/v2/checkout?email=higorb2000@gmail.com&token=683807F15631406FA20906CFA09C3763',
+  //   headers: { 
+  //     'Content-Type': 'application/x-www-form-urlencoded',
+  //   },
+  //   data: {
+  //     currency: 'BRL',
+  //     itemId: '1',
+  //     itemDescription: 'Heitor',
+  //     itemAmount: '2500000.99',
+  //     itemQuantity: '1',
+  //     itemWeight: '500',
+  //   }
+  // })
 
   axios(config)
   .then(function (response) {
