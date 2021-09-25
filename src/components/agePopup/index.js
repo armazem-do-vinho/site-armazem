@@ -1,19 +1,21 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import './style.scss'
 
 function AgePopup() {
 
-    const [ageVerify, setAgeVerify] = useState(false);
+    const [displayPopup, setDisplayPopup] = useState('flex');
+    const ageVerify = localStorage.getItem('userAge')
 
     function changeModal() {
 
-        setAgeVerify(true);
+        localStorage.setItem('userAge', true)
+        setDisplayPopup('none')
 
     }
 
-    if(ageVerify === true) {
+    if(ageVerify == 'true') {
 
-        return (null)
+        return null
 
     } else {
 
@@ -26,7 +28,7 @@ function AgePopup() {
                     <h2>Seja bem-vindo(a) ao Armazém do vinho!</h2>
                     <h3>Você tem mais de 18 anos?</h3>
     
-                    <div className="buttonsPopup">
+                    <div className="buttonsPopup" style={{ display: displayPopup }}>
     
                         <a onClick={() => {changeModal()}} id="ageHigher">Sim</a>
                         <a href="https://google.com" id="ageLower">Não</a>

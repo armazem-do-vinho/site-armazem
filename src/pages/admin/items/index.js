@@ -20,7 +20,7 @@ function Items() {
         desc: '',
         price: '',
         itemAvailability: 0,
-        unityPrice: '',
+        itemWeight: '',
         country: '',
         type: '',
         sweetness: '',
@@ -40,7 +40,7 @@ function Items() {
         desc: '',
         price: '',
         itemAvailability: 0,
-        unityPrice: '',
+        itemWeight: '',
         country: '',
         type: '',
         sweetness: '',
@@ -53,38 +53,37 @@ function Items() {
         if (!firebase.apps.length)
             firebase.initializeApp(firebaseConfig);
 
-        firebase.database().ref('items').get('/items')
-            .then(function (snapshot) {
+        var firebaseRef = firebase.database().ref('items/');
 
-                if (snapshot.exists()) {
+        firebaseRef.on('value', (snapshot) => {
+    
+            if (snapshot.exists()) {
 
-                    var data = snapshot.val()
-                    var temp = Object.keys(data).map((key) => data[key])
-                    setDataAdmin(temp)
-                }
-                else {
-                    console.log("No data available");
-                }
-            })
+                var data = snapshot.val()
+                var temp = Object.keys(data).map((key) => data[key])
+                setDataAdmin(temp.sort((a,b)=> {
+
+                  return (a.title > b.title) ? 1 : ((b.title > a.title) ? -1 : 0)
+
+                }))
+            }
+            else {
+              console.log("No data available");
+            }
+        })
 
     }, [])
 
     useEffect(() => {
 
-        if (!firebase.apps.length)
-            firebase.initializeApp(firebaseConfig);
+        if(dataAdmin) {
 
-        var ref = firebase.database().ref("items");
+            var keys = []
+            dataAdmin.map((item) => keys.push(item.id))
+            setDataKeysAdm(keys)
+        }
 
-        var keys = []
-
-        ref.orderByKey().on("child_added", function (snapshot) {
-            keys.push(snapshot.key);
-        });
-
-        setDataKeysAdm(keys)
-
-    }, []);
+    }, [dataAdmin]);
 
     function handleInputAdminChange(event) {
 
@@ -113,8 +112,12 @@ function Items() {
     function handleSelectItem(event) {
 
         setSelectItem(event.target.value)
+  
+        setDataAlterItem(dataAdmin[event.target.value])
 
-    }
+        // console.log(dataAdmin[event.target.value])
+  
+      }
 
     function handleSelectItemToDelete(event) {
 
@@ -134,6 +137,7 @@ function Items() {
             price: newDataAdmin.price,
             id: id,
             itemAvailability: newDataAdmin.itemAvailability,
+            itemWeight: newDataAdmin.itemWeight,
             country: newDataAdmin.country,
             type: newDataAdmin.type,
             sweetness: newDataAdmin.sweetness,
@@ -143,8 +147,9 @@ function Items() {
         }
 
         firebase.database().ref('items/' + id)
-            .set(data)
-            .then(err => console.log(err))
+        .set(data)
+        .then(err => console.log(err))
+
         setNewDataAdmin({
 
             imageSrc: '',
@@ -152,37 +157,39 @@ function Items() {
             desc: '',
             price: '',
             itemAvailability: 0,
+            itemWeight: '',
             country: '',
             type: '',
             sweetness: '',
 
         })
+
         alert("Item inserido com sucesso!")
+        window.location.reload()
 
     }
 
     function updateItem() {
 
-        if (wasChanged) {
+        const newItem = {
 
-            firebase.database()
-                .ref('items/' + dataKeysAdm[selectItem])
-                .update({
-
-                    imageSrc: alteredImageUrl !== '' ? alteredImageUrl : dataAdmin[selectItem].imageSrc,
-                    title: dataAlterItem.title !== '' ? dataAlterItem.title : dataAdmin[selectItem].title,
-                    desc: dataAlterItem.desc !== '' ? dataAlterItem.desc : dataAdmin[selectItem].desc,
-                    price: dataAlterItem.price !== 0 ? dataAlterItem.price : dataAdmin[selectItem].price,
-                    itemAvailability: dataAlterItem.itemAvailability !== 0 ? dataAlterItem.itemAvailability : dataAdmin[selectItem].itemAvailability,
-                    country: dataAlterItem.country !== 0 ? dataAlterItem.country : dataAdmin[selectItem].country,
-                    type: dataAlterItem.type !== 0 ? dataAlterItem.type : dataAdmin[selectItem].type,
-                    sweetness: dataAlterItem.sweetness !== 0 ? dataAlterItem.sweetness : dataAdmin[selectItem].sweetness,
-                    amountInStock: dataAlterItem.amountInStock !== 0 ? dataAlterItem.amountInStock : dataAdmin[selectItem].amountInStock,
-
-                })
-                .then(() => alert("Item atualizado com sucesso!"))
-
+        imageSrc: alteredImageUrl !== '' ? alteredImageUrl : dataAdmin[selectItem].imageSrc,
+        title: dataAlterItem.title !== '' ? dataAlterItem.title : dataAdmin[selectItem].title,
+        desc: dataAlterItem.desc !== '' ? dataAlterItem.desc : dataAdmin[selectItem].desc,
+        itemWeight: dataAlterItem.itemWeight !== '' ? dataAlterItem.itemWeight : dataAdmin[selectItem].itemWeight,
+        price: dataAlterItem.price !== 0 ? dataAlterItem.price : dataAdmin[selectItem].price,
+        itemAvailability: dataAlterItem.itemAvailability !== 0 ? dataAlterItem.itemAvailability : dataAdmin[selectItem].itemAvailability,
+        country: dataAlterItem.country !== 0 ? dataAlterItem.country : dataAdmin[selectItem].country,
+        type: dataAlterItem.type !== 0 ? dataAlterItem.type : dataAdmin[selectItem].type,
+        sweetness: dataAlterItem.sweetness !== 0 ? dataAlterItem.sweetness : dataAdmin[selectItem].sweetness,
+        amountInStock: dataAlterItem.amountInStock !== 0 ? dataAlterItem.amountInStock : dataAdmin[selectItem].amountInStock,
         }
+        firebase.database()
+        .ref('items/' + dataKeysAdm[selectItem])
+        .update(newItem)
+        .then(() => alert("Item atualizado com sucesso!"))
+        window.location.reload()
+
 
     }
 
@@ -247,6 +254,8 @@ function Items() {
 
                         <input name='desc' onChange={handleInputAdminChange} placeholder='Descrição' value={newDataAdmin.desc} />
 
+                        <input name='itemWeight' onChange={handleInputAdminChange} placeholder='Peso (em mL)' type='number' value={newDataAdmin.itemWeight} />
+
                         <input name='price' onChange={handleInputAdminChange} placeholder='Valor' type='number' value={newDataAdmin.price} />
 
                         <input name='amountInStock' onChange={handleInputAdminChange} placeholder='Quantidade em estoque' type='number' value={newDataAdmin.amountInStock} />
@@ -305,7 +314,7 @@ function Items() {
                             <h2>Alterar item</h2>
                         </legend>
 
-                        <select onChange={handleSelectItem} >
+                        <select onChange={(e)=>handleSelectItem(e)} >
 
                             <option>Selecione o item</option>
 
@@ -323,27 +332,60 @@ function Items() {
 
                         <h4>Preencha o que deseja alterar</h4>
 
-                        <input name='title' onChange={handleInputAdminChangeAlter} placeholder='Nome' />
+                        <input 
+                            name='title' 
+                            onChange={handleInputAdminChangeAlter} 
+                            placeholder='Nome'
+                            value={dataAlterItem.title}
+                        />
 
-                        <input name='desc' onChange={handleInputAdminChangeAlter} placeholder='Descrição' />
+                        <input
+                            name='desc'
+                            onChange={handleInputAdminChangeAlter}
+                            placeholder='Descrição'
+                            value={dataAlterItem.desc}
+                        />
 
-                        <input name='price' onChange={handleInputAdminChangeAlter} placeholder='Preço' type='number' />
+                        <input
+                            name='itemWeight'
+                            onChange={handleInputAdminChangeAlter}
+                            placeholder='Peso (em mL)'
+                            value={dataAlterItem.itemWeight}
+                        />
 
-                        <input type='file' onChange={uploadImageAltered} accept="image/png, image/jpeg" placeholder='Imagem' />
+                        <input
+                            name='price'
+                            type='number'
+                            placeholder='Preço'
+                            value={dataAlterItem.price}
+                            onChange={handleInputAdminChangeAlter}
+                        />
 
-                        <input name='amountInStock' onChange={handleInputAdminChangeAlter} placeholder='Quantidade em estoque' />
+                        <input 
+                          type='file'
+                          onChange={uploadImageAltered}
+                          accept="image/png, image/jpeg"
+                          placeholder='Imagem'
+                        />
+
+                        <input
+                          name='amountInStock'
+                          onChange={handleInputAdminChangeAlter}
+                          placeholder='Quantidade em estoque'
+                          value={dataAlterItem.amountInStock}
+                        />
+
 
                         <select onChange={handleInputAdminChangeAlter} name='itemAvailability' >
-
+           
                             <option value={0} >Disponibilidade</option>
                             <option value={true} >Disponível</option>
                             <option value={false} >Indisponível</option>
-
+                        
                         </select>
 
-                        <select onChange={handleInputAdminChangeAlter} name='country' value={newDataAdmin.country} >
+                        <select onChange={handleInputAdminChangeAlter} name='country' value={dataAdmin[selectItem]?.country} >
 
-                            <option value={0} >País</option>
                             <option value="Argentina" >Argentina</option>
                             <option value="Brasil" >Brasil</option>
                             <option value="Chile" >Chile</option>
@@ -353,7 +395,7 @@ function Items() {
 
                         </select>
 
-                        <select onChange={handleInputAdminChangeAlter} name='type' value={newDataAdmin.type} >
+                        <select onChange={handleInputAdminChangeAlter} name='type' value={dataAdmin[selectItem]?.type} >
 
                             <option value={0} >Tipo</option>
                             <option value="Branco" >Branco</option>
@@ -363,7 +405,7 @@ function Items() {
 
                         </select>
 
-                        <select onChange={handleInputAdminChangeAlter} name='sweetness' value={newDataAdmin.sweetness} >
+                        <select onChange={handleInputAdminChangeAlter} name='sweetness' value={dataAdmin[selectItem]?.sweetness} >
                         
                             <option value={0} >Doçura</option>
                             <option value="Seco" >Seco</option>
