@@ -1,41 +1,59 @@
 import React from 'react';
+import axios from 'axios';
 import { useState, useEffect } from 'react';
 
-import Header from '../../components/header'
-import Footer from '../../components/footer'
+import './style.scss';
 
-import mercadopago from 'mercadopago'
-
-import './style.scss'
+import Header from '../../components/header';
+import Footer from '../../components/footer';
 
 function PaymentForm() {
 
-  useEffect(() => {
-    const mercadopago = require ('mercadopago');
+  var axios = require('axios');
+  var qs = require('qs');
 
-    mercadopago.configure({
-      access_token:'TEST-7958052856366423-082721-e6e9735bff14c755b0c0f5af97bb4489-129407879'
-    });
+  var data = qs.stringify({
+    'currency': '',
+    'itemId': '',
+    'itemDescription': 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAtristezaAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA',
+    'itemAmount': '',
+    'itemQuantity': '',
+    'itemWeight': '',
+  });
 
-    let preference = {
-      items: [
-        {
-          title: 'Meu produto',
-          unit_price: 100,
-          quantity: 1,
-        }
-      ]
-    };
-    
-    mercadopago.preferences.create(preference)
-    .then(function(response){
-    // Este valor substituirá a string "<%= global.id %>" no seu HTML
-      global.id = response.body.id;
-    }).catch(function(error){
-      console.log(error);
-    });
+  var config = {
+    method: 'post',
+    url: 'https://ws.sandbox.pagseguro.uol.com.br/v2/checkout?email=higorb2000@gmail.com&token=683807F15631406FA20906CFA09C3763',
+    headers: { 
+      'Content-Type': 'application/x-www-form-urlencoded',
+    },
+    data: data
+  };
 
-  },[]);
+  // axios({
+  //   method: 'post',
+  //   url: 'https://ws.sandbox.pagseguro.uol.com.br/v2/checkout?email=higorb2000@gmail.com&token=683807F15631406FA20906CFA09C3763',
+  //   headers: { 
+  //     'Content-Type': 'application/x-www-form-urlencoded',
+  //   },
+  //   data: {
+  //     currency: 'BRL',
+  //     itemId: '1',
+  //     itemDescription: 'Heitor',
+  //     itemAmount: '2500000.99',
+  //     itemQuantity: '1',
+  //     itemWeight: '500',
+  //   }
+  // })
+
+  axios(config)
+  .then(function (response) {
+    console.log(JSON.stringify(response.data));
+  })
+
+  .catch(function (error) {
+    console.log(error);
+  });
 
   return (
 
@@ -43,7 +61,7 @@ function PaymentForm() {
 
       <Header />
 
-        <button className="cho-container" >Pagar</button>
+        <button id="paymentBtn">Pagar</button>
         
       <Footer />
 
