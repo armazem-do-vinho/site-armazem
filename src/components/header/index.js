@@ -168,11 +168,11 @@ export default function Header (props) {
 
                 <ul>
 
-                    <li> <Link to='/' > Início </Link> </li>
-                    <li> <Link to='/quemsomos'> Quem Somos </Link> </li>
-                    <li> <Link to='/Carrinho'> Carrinho </Link> </li>
-                    <li> <Link to='/contato'> Contato </Link> </li>
-                    <li> <Link to='/Entrar'> Login/Perfil </Link> </li>
+                    <a href="/"> Início </a>
+                    <a href="/quemsomos"> Quem Somos </a>
+                    <a href="/Carrinho"> Carrinho </a>
+                    <a href="/Contato"> Contato </a>
+                    <a href="/Entrar"> Login/Perfil </a>
 
                 </ul>
 
