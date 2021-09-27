@@ -220,7 +220,8 @@ function Cart() {
 
         if (confirm) {
 
-            localStorage.setItem('products', '{}')
+            localStorage.setItem('products', null)
+            setDataExists(false)
             window.location.reload()
 
         }
@@ -299,7 +300,7 @@ function Cart() {
 
                                                 <h4>{item.title}</h4>
 
-                                                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsam praesentium atque itaque!</p>
+                                                <p>{item.desc}</p>
 
                                                 <span>{item.country} • {item.type} • {item.sweetness} </span>
 

@@ -1,6 +1,11 @@
 import React, { useState, useRef, useEffect } from 'react';
 // import axios from 'axios';
 
+import firebase from 'firebase/app'
+import 'firebase/auth'
+import 'firebase/database'
+import firebaseConfig from '../../FirebaseConfig.js'
+
 import './style.scss';
 import vinho from '../../img/vinho rosé.png'
 
@@ -12,7 +17,119 @@ function PaymentForm() {
   const [paidFor, setPaidForm] = useState(false);
   const [loaded, setLoaded] = useState(false);
 
+  const [data, setData] = useState([]);
+  const [seller, setSeller] = useState([]);
+  const [dataUsers, setDataUsers] = useState([]);
+  const [isSeller, setIsSeller] = useState(false);
+  const [totalValue, setTotalValue] = useState(0);
+  const [dataAccount, setDataAccount] = useState([]);
+  const [dataExists, setDataExists] = useState(false);
+  const [userIsLogged, setUserIsLogged] = useState(false);
+  const [selectedClient, setSelectedClient] = useState('');
+  const [clientNote, setClientNote] = useState('');
+  const [displayButtonClear, setDisplayButtonClear] = useState('none');
+
   let paypalRef = useRef();
+
+  function onAuthStateChanged(user) {
+
+    firebase.auth().onAuthStateChanged((user) => {
+        if (user)
+            setUserIsLogged(true)
+    });
+
+}
+
+  useEffect(async () => {
+
+    const verify = await JSON.parse(localStorage.getItem('products'))
+
+    if (verify !== null) {
+
+      var temp = Object.keys(verify).map((key) => verify[key])
+
+      setData(temp)
+      setDataExists(true)
+      setDisplayButtonClear('block')
+
+      var total = 0
+
+      temp.map((item) => {
+
+        var value = (Number(item.price) * Number(item.amount))
+        total = value + total
+
+        setTotalValue(total)
+      })
+
+    }
+    else
+      setDataExists(false)
+
+  }, [])
+
+  useEffect(() => {
+
+    window.scrollTo(0, 0);
+
+    if (!firebase.apps.length)
+      firebase.initializeApp(firebaseConfig);
+    onAuthStateChanged()
+
+  }, [])
+
+  useEffect(() => {
+
+    const userEmail = localStorage.getItem('userEmail')
+
+    firebase.database().ref('users/').get('/users')
+      .then(function (snapshot) {
+
+        if (snapshot.exists()) {
+
+          var data = snapshot.val()
+          var temp = Object.keys(data).map((key) => data[key])
+
+          setDataUsers(temp)
+
+          temp.map((item) => {
+
+            if (item.email === userEmail) {
+              setDataAccount(item)
+            }
+
+          })
+
+        } else
+
+          console.log("No data available");
+
+      })
+
+    firebase.database().ref('sellers/').get('/sellers')
+      .then(function (snapshot) {
+
+        if (snapshot.exists()) {
+
+          var data = snapshot.val()
+          var temp = Object.keys(data).map((key) => data[key])
+
+          temp.map((item) => {
+
+            if (item.email === userEmail) {
+              setSeller(item)
+              setIsSeller(true)
+            }
+
+          })
+
+        } else
+
+          console.log("No data available");
+
+      })
+
+  }, []);
 
   const product = {
 
@@ -25,14 +142,14 @@ function PaymentForm() {
   useEffect(() => {
 
     const script = document.createElement("script");
-    script.src= "https://www.paypal.com/sdk/js?client-id=AZAsiBXlnYmk2HXDpGkZgYx7zWvFpak2iKq473EPHi9LrnM2lAbAHIzVaxns_-jmD34dYqpuTSaRFWy0"
+    script.src = "https://www.paypal.com/sdk/js?client-id=AZAsiBXlnYmk2HXDpGkZgYx7zWvFpak2iKq473EPHi9LrnM2lAbAHIzVaxns_-jmD34dYqpuTSaRFWy0"
     script.addEventListener("load", () => setLoaded(true));
     document.body.appendChild(script);
 
     if (loaded) {
 
       setTimeout(() => {
-      
+
         window.paypal
           .Buttons({
 
@@ -54,7 +171,6 @@ function PaymentForm() {
 
               const order = await actions.order.capture();
               setPaidForm(true)
-              console.log(order)
 
             },
 
@@ -84,9 +200,9 @@ function PaymentForm() {
         </>
 
       )
-    
-    
-    }
+
+
+      }
 
     </div>
 
@@ -163,7 +279,7 @@ export default PaymentForm
 //       <Header />
 
 //         <button id="paymentBtn">Pagar</button>
-        
+
 //       <Footer />
 
 //     </section>
