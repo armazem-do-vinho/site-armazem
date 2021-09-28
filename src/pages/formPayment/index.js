@@ -142,7 +142,7 @@ function PaymentForm() {
   useEffect(() => {
 
     const script = document.createElement("script");
-    script.src = "https://www.paypal.com/sdk/js?client-id=AZAsiBXlnYmk2HXDpGkZgYx7zWvFpak2iKq473EPHi9LrnM2lAbAHIzVaxns_-jmD34dYqpuTSaRFWy0"
+    script.src = "https://www.paypal.com/sdk/js?client-id=AZAsiBXlnYmk2HXDpGkZgYx7zWvFpak2iKq473EPHi9LrnM2lAbAHIzVaxns_-jmD34dYqpuTSaRFWy0&currency=BRL"
     script.addEventListener("load", () => setLoaded(true));
     document.body.appendChild(script);
 
@@ -160,7 +160,7 @@ function PaymentForm() {
                   {
                     description: product.description,
                     amount: {
-                      currency_code: "USD",
+                      currency_code: "BRL",
                       value: product.price
                     }
                   }
