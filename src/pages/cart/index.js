@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { Link } from "react-router-dom";
 import { useHistory } from 'react-router-dom'
 
@@ -26,8 +26,10 @@ function Cart() {
     const [selectedClient, setSelectedClient] = useState('');
     const [clientNote, setClientNote] = useState('');
     const [displayButtonClear, setDisplayButtonClear] = useState('none');
-
     const [selectedPayment, setSelectedPayment] = useState('');
+
+    const [paidFor, setPaidForm] = useState(false);
+    const [loaded, setLoaded] = useState(false);
 
     const [redirect, setRedirect] = useState(useHistory());
 
@@ -215,7 +217,7 @@ function Cart() {
     }
 
     function cleanCart() {
-        
+
         var confirm = window.confirm('Tem certeza que deseja esvaziar o carrinho?')
 
         if (confirm) {
@@ -260,115 +262,190 @@ function Cart() {
 
         }
 
-
     }
+
+    let paypalRef = useRef();
+
+    useEffect(() => {
+
+        const script = document.createElement("script");
+        script.src = "https://www.paypal.com/sdk/js?client-id=AZAsiBXlnYmk2HXDpGkZgYx7zWvFpak2iKq473EPHi9LrnM2lAbAHIzVaxns_-jmD34dYqpuTSaRFWy0&currency=BRL"
+        script.addEventListener("load", () => setLoaded(true));
+        document.body.appendChild(script);
+
+        if (loaded) {
+
+            setTimeout(() => {
+
+                window.paypal
+                    .Buttons({
+
+                        createOrder: (data, actions) => {
+
+                            return actions.order.create({
+                                purchase_units: [
+                                    {
+                                        // description: product.description,
+                                        amount: {
+                                            currency_code: "BRL",
+                                            value: totalValue
+                                        }
+                                    }
+                                ]
+                            })
+                        },
+                        onApprove: async (data, actions) => {
+
+                            const order = await actions.order.capture();
+                            setPaidForm(true)
+                            sendOrder();
+
+                            //enviar detalhes do pedido ao finalizar aqui
+
+                        },
+
+                    })
+                    .render(paypalRef)
+            })
+        }
+    })
 
     if (dataExists) {
 
         return (
 
-            <section id="CartSection">
+            <>
 
-                <Header />
+                <div className="paymentForm">
 
-                <div className="cartPage">
+                    {paidFor ? (
 
-                    <div className="cartIntro">
+                        <div>
 
-                        <h3>Após revisar os itens, clique no botão para prosseguir com a sua compra</h3>
+                            <h2>Compra realizada com sucesso!</h2>
 
-                    </div>
+                        </div>
 
-                    <section id='SectionCartProducts'>
+                    ) : (
 
-                        {
-                            data.map((item, index) => {
+                        <>
 
-                                return (
+                            <section id="CartSection">
 
-                                    <div className="showCartContainer">
+                                <Header />
 
-                                        <div className="showProductCardCart">
+                                <div className="cartPage">
 
-                                            <div className="imageProductWrapperCart">
+                                    <div className="cartIntro">
 
-                                                <img src={item.imageSrc} alt="" />
+                                        <h3>Após revisar os itens, clique no botão para prosseguir com a sua compra</h3>
 
-                                            </div>
+                                    </div>
 
-                                            <div className="descriptionProductCart">
+                                    <section id='SectionCartProducts'>
 
-                                                <h4>{item.title}</h4>
+                                        {
+                                            data.map((item, index) => {
 
-                                                <p>{item.desc}</p>
+                                                return (
 
-                                                <span>{item.country} • {item.type} • {item.sweetness} </span>
+                                                    <div className="showCartContainer">
 
-                                            </div>
+                                                        <div className="showProductCardCart">
 
-                                            <div className='priceProductCard'>
+                                                            <div className="imageProductWrapperCart">
 
-                                                <h5>Quantidade: {item.amount}</h5>
-                                                <h4>Valor total: R$ {((item.price) * item.amount).toFixed(2)}</h4>
+                                                                <img src={item.imageSrc} alt="" />
 
-                                            </div>
+                                                            </div>
 
-                                            <div className="trashCanWrapper">
+                                                            <div className="descriptionProductCart">
 
-                                                <img
-                                                    src={trashCan}
-                                                    className="imgRemoveIconCart"
-                                                    alt='Remover item'
-                                                    onClick={() => {
-                                                        removeItemInCart(index)
-                                                    }}
-                                                />
+                                                                <h4>{item.title}</h4>
 
-                                            </div>
+                                                                <p>{item.desc}</p>
+
+                                                                <span>{item.country} • {item.type} • {item.sweetness} </span>
+
+                                                            </div>
+
+                                                            <div className='priceProductCard'>
+
+                                                                <h5>Quantidade: {item.amount}</h5>
+                                                                <h4>Valor: R$ {((item.price) * item.amount).toFixed(2)}</h4>
+
+                                                            </div>
+
+                                                            <div className="trashCanWrapper">
+
+                                                                <img
+                                                                    src={trashCan}
+                                                                    className="imgRemoveIconCart"
+                                                                    alt='Remover item'
+                                                                    onClick={() => {
+                                                                        removeItemInCart(index)
+                                                                    }}
+                                                                />
+
+                                                            </div>
+
+                                                        </div>
+
+                                                    </div>
+                                                )
+
+                                            })
+                                        }
+
+                                        <div className="cartProductsFinal">
+
+                                            <button style={{ display: displayButtonClear }} onClick={() => cleanCart()}>Esvaziar carrinho</button>
+
+                                            <h3>Valor total: R$ {totalValue.toFixed(2)}</h3>
 
                                         </div>
 
+                                    </section>
+
+                                    <div className="finishOrder">
+
+                                        <select className="paymentSelect" onChange={handleSelectPayment} >
+
+                                            <option value=''>Selecione o tipo de pagamento</option>
+                                            <option value="Dinheiro" >Dinheiro</option>
+                                            <option value="Débito" >Cartão de débito</option>
+                                            <option value="Crédito" >Cartão de crédito</option>
+                                            <option value="Pix" >PIX</option>
+
+                                        </select>
+
+                                        <div className="paypalButtons" ref={v => (paypalRef = v)} />
+
+                                        <input className="clientNoteInput" onChange={handleClientNote} placeholder='Escreva aqui alguma observação sobre seu pedido (opcional)' />
+
                                     </div>
-                                )
 
-                            })
-                        }
+                                    <div className='checkOut' >
 
-                        <button style={{ display: displayButtonClear }} id="buttonClear" onClick={()=>cleanCart()}>Esvaziar carrinho</button>
+                                        <Link to='/produtos'>Continuar comprando</Link>
 
-                        <h3>Valor total: R$ {totalValue.toFixed(2)}</h3>
+                                        <button onClick={() => sendOrder()} >Finalizar pedido</button>
 
-                    </section>
+                                    </div>
 
-                    <div className="finishOrder">
+                                </div>
 
-                        <select className="paymentSelect" onChange={handleSelectPayment} >
+                                <Footer />
 
-                            <option value=''>Selecione o tipo de pagamento</option>
-                            <option value="Dinheiro" >Dinheiro</option>
-                            <option value="Débito" >Cartão de débito</option>
-                            <option value="Crédito" >Cartão de crédito</option>
-                            <option value="Pix" >PIX</option>
+                            </section>
+                        </>
 
-                        </select>
+                    )
 
-                        <input className="clientNoteInput" onChange={handleClientNote} placeholder='Escreva aqui alguma observação sobre seu pedido (opcional)' />
 
-                    </div>
-
-                    <div className='checkOut' >
-
-                        <Link to='/produtos'>Continuar comprando</Link>
-
-                        <button onClick={()=>sendOrder()} >Finalizar pedido</button>
-
-                    </div>
-
+                    }
                 </div>
-
-                <Footer />
-
-            </section>
+            </>
         )
 
     } else {

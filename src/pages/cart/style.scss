@@ -119,27 +119,42 @@
             
         }
 
-        #buttonClear {
+        .cartProductsFinal {
 
             display: flex;
-            background-color: transparent;
-            outline: none;
-            border: none;
-            text-decoration: none;
-            padding: 0 2rem;
-            margin: 2rem 0;
-            font-size: 1rem;
-            color: $vinhoPink;
-            cursor: pointer;
+            margin: 0 auto;
+            position: relative;
+            margin-bottom: 3rem;
 
-            &:hover {
+            button {
 
-                color: $branco;
+                display: flex;
+                background-color: transparent;
+                outline: none;
+                border: none;
+                text-decoration: none;
+                padding: 0 2rem;
+                margin: 2rem 0;
+                font-size: 1rem;
+                color: $vinhoPink;
+                cursor: pointer;
+
+                &:hover {
+
+                    color: $branco;
+
+                }
+    
+            }
+
+            h3 {
+
+                position: absolute;
+                right: 2rem;
 
             }
-    
-        }
 
+        }
     }
     
     .finishOrder {
@@ -165,6 +180,13 @@
         input::placeholder {
 
             color: $branco;
+
+        }
+
+        .paypalButtons {
+
+            display: flex;
+            width: 100%;
 
         }
 
@@ -224,6 +246,5 @@
         }
 
     }
-    
     
 }

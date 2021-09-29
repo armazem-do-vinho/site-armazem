@@ -158,10 +158,10 @@ function PaymentForm() {
               return actions.order.create({
                 purchase_units: [
                   {
-                    // description: product.description,
+                    description: product.description,
                     amount: {
                       currency_code: "BRL",
-                      value: totalValue
+                      value: product.price
                     }
                   }
                 ]
