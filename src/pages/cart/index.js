@@ -371,11 +371,44 @@ function Cart() {
 
                     {paidFor ? (
 
-                        <div>
+                        <main>
 
-                            <h2>Compra realizada com sucesso!</h2>
+                            <section id="purchaseDetails">
 
-                        </div>
+                                <h1>Compra confirmada com sucesso!</h1>
+
+                                    <div className="purchaseWrapper">
+
+                                        <h5>Detalhes da compra</h5>
+
+                                        <table>
+
+                                            <tr>
+
+                                                <td>Produto</td>
+                                                <td>Quantidade</td>
+                                                <td>Valor</td>
+
+                                            </tr>
+
+                                            <tr>
+
+                                                <td>A</td>
+                                                <td>3</td>
+                                                <td>44,55</td>
+
+                                            </tr>
+
+                                        </table>
+
+                                        <h3>Total: R$ 999,99</h3>
+
+                                    </div>
+
+                            </section>
+
+                        </main>
+
 
                     ) : (
 

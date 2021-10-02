@@ -248,3 +248,72 @@
     }
     
 }
+
+.paymentForm {
+
+    main {
+
+        width: 100vw;
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        background-color: #1D222C;
+
+        #purchaseDetails {
+
+            align-items: center;
+            display: flex;
+            justify-content: center;
+            flex-direction: column;
+
+            h1 {
+
+                margin-bottom: 2rem;
+                font-size: 1.45rem;
+                color: $branco;
+
+            }
+
+            .purchaseWrapper{
+
+                display: flex;
+                flex-direction: column;
+                height: 70vh;
+                width: 35vw;
+                background-color: #e1e1e1;
+                position: relative;
+
+                h5 {
+
+                    border-bottom: 1px solid rgb(194, 194, 194);
+
+                }
+
+                table {
+
+                    width: 100%;
+                    margin-top: .5rem;
+                    text-align: center;
+
+                    tr {
+
+
+                    }
+
+                }
+
+                h3 {
+
+                    position: absolute;
+                    right: 3%;
+                    bottom: 0;
+
+                }
+
+            }
+
+        }
+    }
+}
