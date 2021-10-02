@@ -190,6 +190,59 @@ function Cart() {
 
     }
 
+    function sendOrderPaypal() {
+
+        if (userIsLogged) {
+
+                const id = firebase.database().ref().child('posts').push().key
+                const now = new Date()
+
+                const dataToSend = {
+
+                    id: id,
+                    listItem: data,
+                    totalValue: totalValue.toFixed(2),
+                    userName: dataAccount.name,
+                    phoneNumber: dataAccount.phoneNumber,
+                    address: dataAccount.address,
+                    houseNumber: dataAccount.houseNumber,
+                    district: dataAccount.district,
+                    cepNumber: dataAccount.cepNumber,
+                    complement: dataAccount.complement,
+                    paymentType: 'Paypal',
+                    clientNote: clientNote,
+                    userEmail: dataAccount.email,
+                    // adminNote: '',
+                    dateToCompare: new Date().toDateString(),
+                    date: `${now.getUTCDate()}/${now.getMonth()}/${now.getFullYear()}-${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}`
+
+                }
+
+                firebase.database().ref('requests/' + id).set(dataToSend)
+                    .then(() => {
+                        localStorage.setItem('products', '{}')
+                    })
+
+                firebase.database().ref('reportsSales/' + id).set(dataToSend)
+                    .then(() => {
+                        localStorage.setItem('products', '{}')
+                        alert("Pedido finalizado com sucesso!.")
+                    })
+
+        }
+        else {
+
+            var confirm = window.confirm("Você precisa ter uma conta para finalizar um pedido!.")
+
+            if (confirm)
+                redirect.push("/Cadastrar")
+
+        }
+
+        return 0;
+
+    }
+
     function sendOrderSeller() {
 
         const id = firebase.database().ref().child('posts').push().key
@@ -298,9 +351,7 @@ function Cart() {
 
                             const order = await actions.order.capture();
                             setPaidForm(true)
-                            sendOrder();
-
-                            //enviar detalhes do pedido ao finalizar aqui
+                            sendOrderPaypal();
 
                         },
 
@@ -413,11 +464,13 @@ function Cart() {
 
                                             <option value=''>Selecione o tipo de pagamento</option>
                                             <option value="Dinheiro" >Dinheiro</option>
-                                            <option value="Débito" >Cartão de débito</option>
-                                            <option value="Crédito" >Cartão de crédito</option>
+                                            <option value="Débito" >Cartão de débito (máquina)</option>
+                                            <option value="Crédito" >Cartão de crédito (máquina)</option>
                                             <option value="Pix" >PIX</option>
 
                                         </select>
+
+                                        <h3>Pague com PayPal sem sair do conforto de sua casa</h3>
 
                                         <div className="paypalButtons" ref={v => (paypalRef = v)} />
 
