@@ -66,7 +66,7 @@ function About() {
                             <div className="content">
                                 <h2>Portugal</h2>
                                 <h3>Trapezzio, Latitud33</h3>
-                                <p><span className="firstLetter">O</span>s vinhos portugueses são de qualidade incomparável, etc etc.. Lorem ipsum dolor sit amet consectetur adipisicing elit. Nisi consequatur similique ullam laborum sequi velit repudiandae a non, alias delectus animi deleniti sunt consequuntur nihil aut modi. Repellendus, natus ad. Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
+                                <p><span className="firstLetter">O</span>s vinhos portugueses são de qualidade incomparável, etc etc.. Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
                                 <a href="/">Comprar</a>
                             </div>
 
@@ -81,7 +81,7 @@ function About() {
 
                                 <h2>Argentina</h2>
                                 <h3>Monte da Raposinha</h3>
-                                <p><span className="firstLetter">V</span>inhos argentinos são ideais para celebrar o mais simples dos momentos. Lorem ipsum dolor sit amet consectetur adipisicing elit. Nisi consequatur similique ullam laborum sequi velit repudiandae a non, alias delectus animi deleniti sunt consequuntur nihil aut modi. Repellendus, natus ad. Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
+                                <p><span className="firstLetter">V</span>inhos argentinos são ideais para celebrar o mais simples dos momentos. Lorem ipsum dolor sit amet consectetur adipisicing elit. </p>
                                 <a href="/">Comprar</a>
 
                             </div>
@@ -96,7 +96,7 @@ function About() {
                             <div className="content">
                                 <h2>Chile</h2>
                                 <h3>Trapezzio, Latitud33</h3>
-                                <p><span className="firstLetter">O</span>s vinhos portugueses são de qualidade incomparável, etc etc.. Lorem ipsum dolor sit amet consectetur adipisicing elit. Nisi consequatur similique ullam laborum sequi velit repudiandae a non, alias delectus animi deleniti sunt consequuntur nihil aut modi. Repellendus, natus ad. Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
+                                <p><span className="firstLetter">O</span>s vinhos portugueses são de qualidade incomparável, etc etc.. Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
                                 <a href="/">Comprar</a>
                             </div>
 
@@ -111,7 +111,7 @@ function About() {
                             <div className="content">
                                 <h2>Espanha</h2>
                                 <h3>Trapezzio, Latitud33</h3>
-                                <p><span className="firstLetter">O</span>s vinhos portugueses são de qualidade incomparável, etc etc.. Lorem ipsum dolor sit amet consectetur adipisicing elit. Nisi consequatur similique ullam laborum sequi velit repudiandae a non, alias delectus animi deleniti sunt consequuntur nihil aut modi. Repellendus, natus ad. Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
+                                <p><span className="firstLetter">O</span>s vinhos portugueses são de qualidade incomparável, etc etc.. Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
                                 <a href="/">Comprar</a>
                             </div>
 
@@ -126,7 +126,7 @@ function About() {
                             <div className="content">
                                 <h2>França</h2>
                                 <h3>Trapezzio, Latitud33</h3>
-                                <p><span className="firstLetter">O</span>s vinhos portugueses são de qualidade incomparável, etc etc.. Lorem ipsum dolor sit amet consectetur adipisicing elit. Nisi consequatur similique ullam laborum sequi velit repudiandae a non, alias delectus animi deleniti sunt consequuntur nihil aut modi. Repellendus, natus ad. Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
+                                <p><span className="firstLetter">O</span>s vinhos portugueses são de qualidade incomparável, etc etc.. Lorem ipsum dolor sit amet consectetur adipisicing elit.  </p>
                                 <a href="/">Comprar</a>
                             </div>
 
@@ -141,7 +141,7 @@ function About() {
                             <div className="content">
                                 <h2>Brasil</h2>
                                 <h3>Trapezzio, Latitud33</h3>
-                                <p><span className="firstLetter">O</span>s vinhos portugueses são de qualidade incomparável, etc etc.. Lorem ipsum dolor sit amet consectetur adipisicing elit. Nisi consequatur similique ullam laborum sequi velit repudiandae a non, alias delectus animi deleniti sunt consequuntur nihil aut modi. Repellendus, natus ad. Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
+                                <p><span className="firstLetter">O</span>s vinhos portugueses são de qualidade incomparável, etc etc.. Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
                                 <a href="/">Comprar</a>
                             </div>
 

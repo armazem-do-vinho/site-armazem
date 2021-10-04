@@ -165,9 +165,13 @@
       justify-content: center;
       align-items: center;
       text-align: center;
-      display: flex;
+      //display: flex;
+      width: 100%;
+      display: grid;
+      grid-template-columns: 700px 700px;
 
       .wineCard {
+            
             margin-top: 1.75rem;
             position: relative;
             width: 710px;
@@ -176,6 +180,7 @@
             display: flex;
             transition: .5s;
             align-items: center;
+            margin-right: 2rem;
 
             .wineCircle {
                   position: absolute;
@@ -351,6 +356,7 @@
       .wineContainer {
             width: 80vw;
             flex-direction: column;
+            display: flex;
             padding: 0;
             margin: 0;
             margin-bottom: 2rem;
@@ -466,6 +472,7 @@
       .wineContainer {
             width: 80vw;
             flex-direction: column;
+            display: flex;
             padding: 0;
             margin: 0;
             margin-bottom: 2rem;
