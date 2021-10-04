@@ -127,3 +127,106 @@
 
 }
 
+@media screen and (max-width: 768px) {
+
+    .titleAdmin {
+        
+        margin: 25px;
+        text-align: center;
+    
+    }
+    
+    .optionAdminPage ul {
+
+        width: 100%;
+        align-items: center;
+
+    }
+    
+    .optionAdminPage a{
+    
+        width: 70%;
+    
+    }
+    
+    .adminRegister {
+
+        .titleAdmin {
+
+            text-align: center;
+            font-size: 14px;
+            margin-top: 4rem;
+
+        }
+
+        fieldset {
+    
+            border: none;
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            align-items: center;
+    
+        }
+    
+        h1 {
+            color: $deepVinho;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 10px;
+        }
+    
+        input {
+    
+            border: none;
+            width: 50%;
+            padding: 15px;
+            margin: 10px 0;
+            color: $branco;
+            background-color: $cinza;
+            border-radius: 5px;
+            box-shadow: inset 0px 0px 7px 0px rgba(0,0,0,0.6);
+            outline: none;
+    
+        }
+    
+        ::placeholder {
+            color: $branco;
+        }
+    
+        fieldset {
+            margin-top: 1rem;
+        }
+    }
+    
+    .buttonsFormRegister {
+    
+        width: 80%;
+        margin-top: 30px;
+        display: flex;
+        justify-content: center;
+    
+        #enterButtonSignIn {
+    
+            color: $branco;
+            padding: 1rem;
+            background: $deepVinho;
+            border: 1px solid $deepVinho;
+            text-decoration: none;
+            border-radius: .3rem;
+            transition: .24s;
+        
+            &:hover,
+                &:focus {
+                    box-shadow: inset 0 0 0 35px var(--branco);
+                    color: $deepVinho;
+                }
+        
+        }
+    
+    }
+
+}
+

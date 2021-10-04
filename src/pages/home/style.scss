@@ -1,5 +1,10 @@
 @import '../../global.scss';
 
+* {
+    margin: 0;
+    padding: 0;
+}
+
 .HomePage {
 
     width: 100vw;
@@ -28,7 +33,7 @@
             justify-content: space-around;
             flex-direction: row;
     
-            span{
+            span {
                 
                 object-fit: contain;
                 align-items: center;
@@ -198,7 +203,7 @@
 
     }
 
-#optionSection{
+#optionSection {
 
     h4 {
 
@@ -263,3 +268,83 @@
 }
 }
 
+@media screen and (max-width: 768px) {
+    
+    .HomePage {
+        width: 100vw;
+
+        #heroSection .optionsHero {
+            flex-direction: column;
+            height: 40vh;
+        }
+    
+        #featuredProdutcsSection {
+            width: 100vw;
+            height: 72vh;
+
+            div.featuredProductsText {
+                margin-top: 3.5rem;
+                //display: flex;
+                flex-direction: column;
+                //height: 10vh;
+                .viewAll {
+                    h4, img {
+                        margin-top: 2rem;
+                    }
+                }
+            }
+
+            .featuredProducts {
+                grid-template-columns: 500px;
+
+                .featuredProductsCard {
+
+                    // margin-bottom: 4rem;
+                    // grid-gap: 1rem;
+
+                    // asdasjdankjxasxk sa
+
+                }
+            }
+            
+        }
+
+        #optionSection {
+            h4 {
+                padding: 0 1rem;
+                margin-bottom: 2rem;
+            }
+
+            .optionsInfos {
+                width: 100vw;
+                height: 46vh;
+
+                .optionsWrapper {
+
+                    img {
+                        width: 100vw;
+                        height: auto;
+                    }
+
+                }
+    
+
+
+                .optionsSelection {
+                    width: 100%;
+                    grid-template-columns: 210px 210px;
+                    align-items: center;
+                    justify-content: center;
+
+                    .cardsOptionsSelection {
+                        background-color: #424242;
+                    }
+        
+                }
+            }
+
+            
+        }
+    }
+    
+}
