@@ -19,7 +19,8 @@
         display: flex;
         flex-direction: column;
         width: 100vw;
-        height: 75vh;
+/*         height: 75vh; */
+        margin-bottom: 20px;
         align-items: center;
     
         .optionsHero {
@@ -235,16 +236,18 @@
             position: absolute;
             height: 100%;
             right:0;
-            width: 52vw;
+            width: 100vw; //antes 52vw;
             display: grid;
             grid-template-columns: 210px 210px 210px;
+            padding-left: 3.5rem;
             align-items: center;
+            justify-content: center;
 
             .cardsOptionsSelection {
 
                 display: flex;
                 height: 70px;
-                width: 150px;
+                width: 150px; //antes 150px;
                 border-radius: 60px 0 60px 0;
                 background-color:#333333;
                 align-items: center;
@@ -272,18 +275,27 @@
     
     .HomePage {
         width: 100vw;
+        overflow-x: hidden;
 
-        #heroSection .optionsHero {
-            flex-direction: column;
-            height: 40vh;
-        }
+        #heroSection {
+
+            .optionsHero {
+                flex-direction: column;
+                height: 60vh;
+    
+                span {
+                    margin: .3rem 0 .3rem 0;
+                    font-size: .975rem;
+                }
+            }
+        } 
     
         #featuredProdutcsSection {
             width: 100vw;
             height: 72vh;
 
             div.featuredProductsText {
-                margin-top: 3.5rem;
+                margin-top: 5rem;
                 //display: flex;
                 flex-direction: column;
                 //height: 10vh;
@@ -299,10 +311,7 @@
 
                 .featuredProductsCard {
 
-                    // margin-bottom: 4rem;
-                    // grid-gap: 1rem;
-
-                    // asdasjdankjxasxk sa
+                    
 
                 }
             }
@@ -335,6 +344,10 @@
                     grid-template-columns: 210px 210px;
                     align-items: center;
                     justify-content: center;
+
+                    h3 {
+                        font-size: 1rem;
+                    }
 
                     .cardsOptionsSelection {
                         background-color: #424242;

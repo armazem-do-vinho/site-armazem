@@ -317,3 +317,29 @@
         }
     }
 }
+
+@media screen and (max-width: 768px) {
+
+    .cartPage {
+        //width: 100vw;
+        #SectionCartProducts {
+            .showCartContainer {
+
+                .showProductCardCart {
+                    flex-direction: column;
+                    width: 80vw;
+                    min-height: 60vh;
+
+                    .descriptionProductCart {
+                        position: absolute;
+                        padding-left: 4rem;
+                    }
+
+                    //socorro
+
+                }
+            }
+        }
+    }
+
+}

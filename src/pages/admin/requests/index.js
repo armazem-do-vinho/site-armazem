@@ -267,7 +267,7 @@ function Request() {
                             }
 
                             <p>ID do pedido: <b>{item.id}</b></p>
-                            <p>Valor Total do pedido: <b>R$ {Number(item.totalValue).toFixed(2)}</b></p>
+                            <p>Valor Total: <b>R$ {Number(item.totalValue).toFixed(2)}</b></p>
                             
                             {
                                 item.deliveryman !== undefined ?

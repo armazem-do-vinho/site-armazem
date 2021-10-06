@@ -254,7 +254,7 @@ function Items() {
 
                         <input name='desc' onChange={handleInputAdminChange} placeholder='Descrição' value={newDataAdmin.desc} />
 
-                        <input name='itemWeight' onChange={handleInputAdminChange} placeholder='Peso (em mL)' type='number' value={newDataAdmin.itemWeight} />
+                        <input name='itemWeight' onChange={handleInputAdminChange} placeholder='Litros' type='number' value={newDataAdmin.itemWeight} />
 
                         <input name='price' onChange={handleInputAdminChange} placeholder='Valor' type='number' value={newDataAdmin.price} />
 
@@ -349,7 +349,7 @@ function Items() {
                         <input
                             name='itemWeight'
                             onChange={handleInputAdminChangeAlter}
-                            placeholder='Peso (em mL)'
+                            placeholder='Litros'
                             value={dataAlterItem.itemWeight}
                         />
 
