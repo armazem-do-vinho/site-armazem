@@ -292,7 +292,7 @@ function Request() {
                                     
                                 <div className="sendMessage"> 
                                     <a onClick={()=>{sendNoteAdmin(indexItem)}} >Enviar Recado</a>
-                                    <a onClick={() => { handleModalInfos(item) }}>Designar Entregador</a>
+                                    {/* <a onClick={() => { handleModalInfos(item) }}>Designar Entregador</a> */}
                                 </div>
                             </div>
 
