@@ -285,3 +285,173 @@
         }
     }
 }
+
+@media screen and (max-width: 768px) {
+
+    .Products {
+    
+        #productsSelectList {
+    
+            .optionsList {
+        
+                width: 100vw;
+                height: 80vw;
+                flex-direction: column;
+                margin-bottom: 1rem;
+        
+            }
+    
+        }
+    
+        #productsSearchSection {
+    
+            display: flex;
+            flex-direction: column;
+    
+            .leftSideProducts {
+    
+                width: 100%;
+                height: 100%;
+    
+                .textInfoProducts {
+    
+                    color: $branco;
+                    margin-bottom: 2rem;
+    
+                    h1 {
+    
+                        font-size: 1.5rem;
+    
+                    }
+    
+                    span {
+    
+                        color: #6b6e75;
+    
+                    }   
+    
+                }
+    
+                .searchProduct {
+    
+                    color: $branco;
+    
+                    .buttonFinishOrder{
+    
+                        button {
+    
+                            display:flex;
+                            cursor: pointer;
+                            color: $branco;
+                            padding: 1rem;
+                            margin: 0 0 2rem 0;
+                            background-color: transparent;
+                            text-decoration: none;
+                            border-radius: 50px;
+                            transition: .24s;
+                            border: 1px solid $vinhoPink;
+                            justify-content:center;
+                            font-weight: 500;
+                            font-size: 1rem;
+                            margin: 0 auto;
+                                
+                            &:hover,
+                            &:focus {
+                
+                                box-shadow: inset 0 0 0 35px #2b303A;
+                                color: $vinhoPink;
+                
+                            }
+    
+                        }
+    
+                    }
+    
+                    .search {
+    
+                        input {
+    
+                            width: 85%;
+    
+                        }
+    
+                    }
+    
+                }
+    
+            }
+    
+            .rightSideProducts {
+    
+                display: flex;
+                flex-direction: column;
+                width: 100vw;
+                height: 100%;
+    
+                .showProductContainer {
+    
+                    display: flex;
+                    // grid-template-columns: 200px 200px;
+                    margin-bottom: 2rem;
+                    align-items: center;
+                    justify-content: center;
+                    width: 100vw;
+    
+                    .showProductCard {
+    
+                        display: flex;
+                        flex-direction: column;
+                        width: 90vw;
+                        height: auto;
+                        background-color: #2b303A;
+                        border-radius: 7px;
+    
+                        .imageProductWrapper {
+    
+                            display: flex;
+                            height: 10%;
+                            width: 100%;
+
+                            img {
+
+                                width: 20%;
+    
+                            }
+    
+                        }
+    
+                        .descriptionProduct {
+    
+                            width: 100%;
+                            text-align: center;
+
+                        }
+    
+                        .priceProduct {
+    
+                            width: 100%;
+                            text-align: center;
+                            padding: 0;
+                            margin-bottom: 1rem;
+    
+                            .amountProduct {
+    
+                                display: flex;
+                                width: 100px;
+                                height: 30px;
+                                justify-content: center;
+                                align-items: center;
+                                margin: 0 auto;
+                                margin-top: 1.5rem;
+    
+                            }
+    
+                            }
+    
+                        }
+    
+                    }
+                }
+            }
+        }
+    }    
