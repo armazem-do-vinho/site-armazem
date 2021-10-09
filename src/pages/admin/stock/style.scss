@@ -125,143 +125,57 @@
 
 }
 
-// .Stock main {
+@media screen and (max-width: 768px) {
 
-//     width: 90vw;
-//     column-count: 3;
-//     margin: 20px 0;
-
-// }
-
-// .Stock section {
-
-//     width: 100vw;
-//     padding-top: 3vh;
-//     display: flex;
-//     align-items: flex-start;
-//     justify-content: center;
-
-// }
-
-// .Stock section > div{
-
-//     width: 100vw;
-//     display: flex;
-//     align-items: center;
-//     justify-content: center;
-//     flex-direction: column;
-
-// }
-
-// .Stock section > div > div{
-
-//     display: flex;
-//     align-items: center;
-//     justify-content: space-between;
-
-// }
-
-// .Stock section > div > div a{
-
-//     margin: 0 15px;
-
-// }
-
-// .Stock section select {
-
-//     width: 42vw;
-//     border: none;
-//     padding: 15px;
-//     color: white;
-//     margin: 10px 0;
-//     border-radius: 5px;
-//     background-color: #662210;
-
-// }
-
-// .Stock section input {
-
-//     width: 40vw;
-//     border: none;
-//     padding: 15px;
-//     color: white;
-//     margin: 10px 0;
-//     border-radius: 5px;
-//     background-color: #662210;
-
-// }
-
-// .Stock section a {
-
-//     cursor: pointer;
-//     padding: 15px;
-//     color: white;
-//     margin: 10px 0;
-//     border-radius: 5px;
-//     background-color: #662210;
-
-// }
-
-// .Stock main > div {
-
-//     padding: 10px;
-//     color: white;
-//     margin: 10px 0;
-//     border-radius: 10px;
-//     break-inside: avoid-column ;
-//     background-color: #ffc05c;
-//     font-size: 1vmax;
-
-//     display: flex;
-//     align-items: center;
-//     justify-content: center;
-//     flex-direction: column;
-
-// }
-
-// .Stock main > div span{
-
-//     font-size: 10px;
-
-// }
+    #Stock {
+        overflow-x: hidden;
 
 
-// .Stock main > div:nth-child(1) {
+        .stockControl {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
 
-//     margin-top: 0;
+            .stockProductsSelect {
 
-// }
+                width: 80vw;
 
-// @media screen and (max-width: 768px) {
+                select, input {
+                    width: 80vw;
+                    padding: 10px;
+                }
 
-//     .Stock main {
+            }
 
-//         column-count: 1;
+            .stockProductsSearch {
+                width: 80vw;
 
-//     }
+                input {
+                    width: 80vw;
+                }
 
-//     .Stock section {
+                button {
+                    height: 4em;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                }
+            }
+        }
 
-//         flex-direction: column;
-    
-//     }
+        #stockProducts {
 
-//     .Stock section select {
+            .stockProductsDisplay {
+                display: flex;
+                flex-direction: column;
+                width: 100%;
 
-//         width: 87vw;
-    
-//     }
-    
-//     .Stock section input {
-    
-//         width: 80vw;
-    
-//     }
+                .stockItens {
+                    width:80vw;
+                }
+            }
 
-//     .Stock main > div {
+        }
+    }
 
-//         font-size: 2vmax;
-
-//     }
-
-// }
+}

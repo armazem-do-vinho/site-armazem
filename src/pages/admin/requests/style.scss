@@ -153,7 +153,93 @@
 }
 
 @media screen and (max-width: 768px) {
+    
+    .boxOrder {
+        flex-direction: column;
+        width: 90%;
+    }
+    
+    .leftSizeBoxOrder {
+        padding: 0px;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+    
+        .rowItens {
+            display: flex;
+            flex-direction: row;
 
+            b, p {
 
+                font-size: .9rem;
 
+            }
+        }
+    }
+    
+    .rightSizeBoxOrder {
+        padding: 0px;
+    }
+    
+    .flexDisplayRequestPage {
+        display: flex;
+        flex-direction: row;
+        justify-content: left;
+        align-items: center;
+        list-style: none;
+    }
+    
+    .flexDisplayRequestPage li {
+        color: white;
+        margin: 0.5vw;
+    }
+    
+    .flexDisplayRequestPage img {
+        width: 6vw;
+        cursor: pointer;
+        margin-left: .6rem;
+    }
+    
+    .rightSizeBoxOrder p {
+        font-size: .9rem;
+    }
+    
+    .rightSizeBoxOrder b {
+        font-size: .9rem;
+    }
+    
+    .clientMessage {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+    
+    .clientMessage input {
+        margin-bottom: 1rem;
+    }
+    
+    .sendMessage {
+        width: 100%;
+    }
+    
+    .sendMessage a {
+        padding: 10px;
+        border-radius: 5px;
+        border: none;
+        background-color: $offwhite;
+        text-align: center;
+        margin: 10px 0;
+        width: 100%;
+        cursor: pointer;
+    }
+    
+    .finalizarPedido {
+        width: 90%;
+    }
+    
+    .finalizarPedido h3 {
+        margin: 10px;
+    }
+    
 }

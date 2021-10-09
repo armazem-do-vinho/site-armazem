@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { Link } from "react-router-dom";
 import { useHistory } from 'react-router-dom'
 
@@ -26,8 +26,10 @@ function Cart() {
     const [selectedClient, setSelectedClient] = useState('');
     const [clientNote, setClientNote] = useState('');
     const [displayButtonClear, setDisplayButtonClear] = useState('none');
-
     const [selectedPayment, setSelectedPayment] = useState('');
+
+    const [paidFor, setPaidForm] = useState(false);
+    const [loaded, setLoaded] = useState(false);
 
     const [redirect, setRedirect] = useState(useHistory());
 
@@ -188,6 +190,59 @@ function Cart() {
 
     }
 
+    function sendOrderPaypal() {
+
+        if (userIsLogged) {
+
+                const id = firebase.database().ref().child('posts').push().key
+                const now = new Date()
+
+                const dataToSend = {
+
+                    id: id,
+                    listItem: data,
+                    totalValue: totalValue.toFixed(2),
+                    userName: dataAccount.name,
+                    phoneNumber: dataAccount.phoneNumber,
+                    address: dataAccount.address,
+                    houseNumber: dataAccount.houseNumber,
+                    district: dataAccount.district,
+                    cepNumber: dataAccount.cepNumber,
+                    complement: dataAccount.complement,
+                    paymentType: 'Paypal',
+                    clientNote: clientNote,
+                    userEmail: dataAccount.email,
+                    // adminNote: '',
+                    dateToCompare: new Date().toDateString(),
+                    date: `${now.getUTCDate()}/${now.getMonth()}/${now.getFullYear()}-${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}`
+
+                }
+
+                firebase.database().ref('requests/' + id).set(dataToSend)
+                    .then(() => {
+                        localStorage.setItem('products', '{}')
+                    })
+
+                firebase.database().ref('reportsSales/' + id).set(dataToSend)
+                    .then(() => {
+                        localStorage.setItem('products', '{}')
+                        alert("Pedido finalizado com sucesso!.")
+                    })
+
+        }
+        else {
+
+            var confirm = window.confirm("Você precisa ter uma conta para finalizar um pedido!.")
+
+            if (confirm)
+                redirect.push("/Cadastrar")
+
+        }
+
+        return 0;
+
+    }
+
     function sendOrderSeller() {
 
         const id = firebase.database().ref().child('posts').push().key
@@ -215,12 +270,13 @@ function Cart() {
     }
 
     function cleanCart() {
-        
+
         var confirm = window.confirm('Tem certeza que deseja esvaziar o carrinho?')
 
         if (confirm) {
 
-            localStorage.setItem('products', '{}')
+            localStorage.setItem('products', null)
+            setDataExists(false)
             window.location.reload()
 
         }
@@ -259,115 +315,223 @@ function Cart() {
 
         }
 
-
     }
+
+    let paypalRef = useRef();
+
+    useEffect(() => {
+
+        const script = document.createElement("script");
+        script.src = "https://www.paypal.com/sdk/js?client-id=AZAsiBXlnYmk2HXDpGkZgYx7zWvFpak2iKq473EPHi9LrnM2lAbAHIzVaxns_-jmD34dYqpuTSaRFWy0&currency=BRL"
+        script.addEventListener("load", () => setLoaded(true));
+        document.body.appendChild(script);
+
+        if (loaded) {
+
+            setTimeout(() => {
+
+                window.paypal
+                    .Buttons({
+
+                        createOrder: (data, actions) => {
+
+                            return actions.order.create({
+                                purchase_units: [
+                                    {
+                                        // description: product.description,
+                                        amount: {
+                                            currency_code: "BRL",
+                                            value: totalValue
+                                        }
+                                    }
+                                ]
+                            })
+                        },
+                        onApprove: async (data, actions) => {
+
+                            const order = await actions.order.capture();
+                            setPaidForm(true)
+                            sendOrderPaypal();
+
+                        },
+
+                    })
+                    .render(paypalRef)
+            })
+        }
+    })
 
     if (dataExists) {
 
         return (
 
-            <section id="CartSection">
+            <>
 
-                <Header />
+                <div className="paymentForm">
 
-                <div className="cartPage">
+                    {paidFor ? (
 
-                    <div className="cartIntro">
+                        <main>
 
-                        <h3>Após revisar os itens, clique no botão para prosseguir com a sua compra</h3>
+                            <section id="purchaseDetails">
 
-                    </div>
+                                <h1>Compra confirmada com sucesso!</h1>
 
-                    <section id='SectionCartProducts'>
+                                    <div className="purchaseWrapper">
 
-                        {
-                            data.map((item, index) => {
+                                        <h5>Detalhes da compra</h5>
 
-                                return (
+                                        <table>
 
-                                    <div className="showCartContainer">
+                                            <tr>
 
-                                        <div className="showProductCardCart">
+                                                <td>Produto</td>
+                                                <td>Quantidade</td>
+                                                <td>Valor</td>
 
-                                            <div className="imageProductWrapperCart">
+                                            </tr>
 
-                                                <img src={item.imageSrc} alt="" />
+                                            <tr>
 
-                                            </div>
+                                                <td>A</td>
+                                                <td>3</td>
+                                                <td>44,55</td>
 
-                                            <div className="descriptionProductCart">
+                                            </tr>
 
-                                                <h4>{item.title}</h4>
+                                        </table>
 
-                                                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsam praesentium atque itaque!</p>
+                                        <h3>Total: R$ 999,99</h3>
 
-                                                <span>{item.country} • {item.type} • {item.sweetness} </span>
+                                    </div>
 
-                                            </div>
+                            </section>
 
-                                            <div className='priceProductCard'>
+                        </main>
 
-                                                <h5>Quantidade: {item.amount}</h5>
-                                                <h4>Valor total: R$ {((item.price) * item.amount).toFixed(2)}</h4>
 
-                                            </div>
+                    ) : (
 
-                                            <div className="trashCanWrapper">
+                        <>
 
-                                                <img
-                                                    src={trashCan}
-                                                    className="imgRemoveIconCart"
-                                                    alt='Remover item'
-                                                    onClick={() => {
-                                                        removeItemInCart(index)
-                                                    }}
-                                                />
+                            <section id="CartSection">
 
-                                            </div>
+                                <Header />
+
+                                <div className="cartPage">
+
+                                    <div className="cartIntro">
+
+                                        <h3>Após revisar os itens, clique no botão para prosseguir com a sua compra</h3>
+
+                                    </div>
+
+                                    <section id='SectionCartProducts'>
+
+                                        {
+                                            data.map((item, index) => {
+
+                                                return (
+
+                                                    <div className="showCartContainer">
+
+                                                        <div className="showProductCardCart">
+
+                                                            <div className="imageProductWrapperCart">
+
+                                                                <img src={item.imageSrc} alt="" />
+
+                                                            </div>
+
+                                                            <div className="descriptionProductCart">
+
+                                                                <h4>{item.title}</h4>
+
+                                                                <p>{item.desc}</p>
+
+                                                                <span>{item.country} • {item.type} • {item.sweetness} </span>
+
+                                                            </div>
+
+                                                            <div className='priceProductCard'>
+
+                                                                <h5>Quantidade: {item.amount}</h5>
+                                                                <h4>Valor: R$ {((item.price) * item.amount).toFixed(2)}</h4>
+
+                                                            </div>
+
+                                                            <div className="trashCanWrapper">
+
+                                                                <img
+                                                                    src={trashCan}
+                                                                    className="imgRemoveIconCart"
+                                                                    alt='Remover item'
+                                                                    onClick={() => {
+                                                                        removeItemInCart(index)
+                                                                    }}
+                                                                />
+
+                                                            </div>
+
+                                                        </div>
+
+                                                    </div>
+                                                )
+
+                                            })
+                                        }
+
+                                        <div className="cartProductsFinal">
+
+                                            <button style={{ display: displayButtonClear }} onClick={() => cleanCart()}>Esvaziar carrinho</button>
+
+                                            <h3>Valor total: R$ {totalValue.toFixed(2)}</h3>
 
                                         </div>
 
+                                    </section>
+
+                                    <div className="finishOrder">
+
+                                        <select className="paymentSelect" onChange={handleSelectPayment} >
+
+                                            <option value=''>Selecione o tipo de pagamento</option>
+                                            <option value="Dinheiro" >Dinheiro</option>
+                                            <option value="Débito" >Cartão de débito (máquina)</option>
+                                            <option value="Crédito" >Cartão de crédito (máquina)</option>
+                                            <option value="Pix" >PIX</option>
+
+                                        </select>
+
+                                        <h3>Pague com PayPal sem sair do conforto de sua casa</h3>
+
+                                        <div className="paypalButtons" ref={v => (paypalRef = v)} />
+
+                                        <input className="clientNoteInput" onChange={handleClientNote} placeholder='Escreva aqui alguma observação sobre seu pedido (opcional)' />
+
                                     </div>
-                                )
 
-                            })
-                        }
+                                    <div className='checkOut' >
 
-                        <button style={{ display: displayButtonClear }} id="buttonClear" onClick={()=>cleanCart()}>Esvaziar carrinho</button>
+                                        <Link to='/produtos'>Continuar comprando</Link>
 
-                        <h3>Valor total: R$ {totalValue.toFixed(2)}</h3>
+                                        <button onClick={() => sendOrder()} >Finalizar pedido</button>
 
-                    </section>
+                                    </div>
 
-                    <div className="finishOrder">
+                                </div>
 
-                        <select className="paymentSelect" onChange={handleSelectPayment} >
+                                <Footer />
 
-                            <option value=''>Selecione o tipo de pagamento</option>
-                            <option value="Dinheiro" >Dinheiro</option>
-                            <option value="Débito" >Cartão de débito</option>
-                            <option value="Crédito" >Cartão de crédito</option>
-                            <option value="Pix" >PIX</option>
+                            </section>
+                        </>
 
-                        </select>
+                    )
 
-                        <input className="clientNoteInput" onChange={handleClientNote} placeholder='Escreva aqui alguma observação sobre seu pedido (opcional)' />
 
-                    </div>
-
-                    <div className='checkOut' >
-
-                        <Link to='/produtos'>Continuar comprando</Link>
-
-                        <button onClick={()=>sendOrder()} >Finalizar pedido</button>
-
-                    </div>
-
+                    }
                 </div>
-
-                <Footer />
-
-            </section>
+            </>
         )
 
     } else {

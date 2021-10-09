@@ -119,27 +119,42 @@
             
         }
 
-        #buttonClear {
+        .cartProductsFinal {
 
             display: flex;
-            background-color: transparent;
-            outline: none;
-            border: none;
-            text-decoration: none;
-            padding: 0 2rem;
-            margin: 2rem 0;
-            font-size: 1rem;
-            color: $vinhoPink;
-            cursor: pointer;
+            margin: 0 auto;
+            position: relative;
+            margin-bottom: 3rem;
 
-            &:hover {
+            button {
 
-                color: $branco;
+                display: flex;
+                background-color: transparent;
+                outline: none;
+                border: none;
+                text-decoration: none;
+                padding: 0 2rem;
+                margin: 2rem 0;
+                font-size: 1rem;
+                color: $vinhoPink;
+                cursor: pointer;
+
+                &:hover {
+
+                    color: $branco;
+
+                }
+    
+            }
+
+            h3 {
+
+                position: absolute;
+                right: 2rem;
 
             }
-    
-        }
 
+        }
     }
     
     .finishOrder {
@@ -165,6 +180,13 @@
         input::placeholder {
 
             color: $branco;
+
+        }
+
+        .paypalButtons {
+
+            display: flex;
+            width: 100%;
 
         }
 
@@ -225,5 +247,99 @@
 
     }
     
-    
+}
+
+.paymentForm {
+
+    main {
+
+        width: 100vw;
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        background-color: #1D222C;
+
+        #purchaseDetails {
+
+            align-items: center;
+            display: flex;
+            justify-content: center;
+            flex-direction: column;
+
+            h1 {
+
+                margin-bottom: 2rem;
+                font-size: 1.45rem;
+                color: $branco;
+
+            }
+
+            .purchaseWrapper{
+
+                display: flex;
+                flex-direction: column;
+                height: 70vh;
+                width: 35vw;
+                background-color: #e1e1e1;
+                position: relative;
+
+                h5 {
+
+                    border-bottom: 1px solid rgb(194, 194, 194);
+
+                }
+
+                table {
+
+                    width: 100%;
+                    margin-top: .5rem;
+                    text-align: center;
+
+                    tr {
+
+
+                    }
+
+                }
+
+                h3 {
+
+                    position: absolute;
+                    right: 3%;
+                    bottom: 0;
+
+                }
+
+            }
+
+        }
+    }
+}
+
+@media screen and (max-width: 768px) {
+
+    .cartPage {
+        //width: 100vw;
+        #SectionCartProducts {
+            .showCartContainer {
+
+                .showProductCardCart {
+                    flex-direction: column;
+                    width: 80vw;
+                    min-height: 60vh;
+
+                    .descriptionProductCart {
+                        position: absolute;
+                        padding-left: 4rem;
+                    }
+
+                    //socorro
+
+                }
+            }
+        }
+    }
+
 }

@@ -149,3 +149,148 @@
     }
 
 }
+
+@media screen and (max-width: 768px) {
+
+    .changeSection {
+
+        width: 100vw;
+        top: 6.5rem;
+        justify-content: center;
+        display: flex;
+        flex-direction: row;
+    
+        .userDataChange {
+    
+            display: flex;
+            width: 100vw;
+            position: relative;
+            justify-content: center;
+            flex-direction: column;
+            align-items: center;
+            margin: 0 auto;
+            padding: 0;
+    
+            h3 {
+    
+                margin: 2rem 0;
+                font-weight: 500;
+                text-align: center;
+                padding: 0 2rem;
+    
+            }
+    
+            a {
+    
+                text-decoration: none;
+                color: #aa0f0f;
+    
+            }
+    
+            .cardDataChange {
+    
+                display: flex;
+                width: 100%;
+                flex-direction: column;
+                margin-top: 1rem;
+                align-items: center;
+    
+                h4 {
+    
+                    margin-bottom: 1rem;
+    
+                }
+    
+                #personalData {
+    
+                    margin-top: 1rem;
+    
+                }
+    
+                .profileDataChange {
+    
+                    display: flex;
+                    flex-direction: column;
+                    background-color: $branco;
+                    width: 90vw;
+                    height: 100%;
+                    border-radius: 10px;
+                    box-shadow: 0 1px 3px rgba(0,0,0,0.35);
+    
+                    select {
+    
+                        border: none;
+                        margin-left: 1rem;
+                        outline: none;
+    
+                    }
+    
+                    span {
+                        
+                        display: flex;
+                        align-items: center;
+                        justify-content: space-between;
+                        padding: 13px 18px;
+                        line-height: 2rem;
+                        border-bottom: 1px solid #eee;
+    
+                    }
+    
+                    span:last-child {
+    
+                        border-bottom: none;
+    
+                    }
+    
+                    input {
+    
+                        border-radius: .2rem;
+                        border: none;
+                        height: 2.5rem;
+                        width: 15rem;
+                        margin-left: 1rem;
+                        outline: none;
+
+                    }
+    
+                }
+    
+                .profileDataChange:last-child {
+    
+                    margin-bottom: 4rem;
+    
+                }
+    
+            }
+    
+            button {
+    
+                display:flex;
+                cursor: pointer;
+                color: $branco;
+                padding: 1rem;
+                margin: 0 0 2rem 0;
+                background: $deepVinho;
+                text-decoration: none;
+                border-radius: .3rem;
+                transition: .24s;
+                border: 1px solid $deepVinho;
+                justify-content:center;
+                font-weight: 500;
+                font-size: 1rem;
+                    
+                &:hover,
+                &:focus {
+    
+                    box-shadow: inset 0 0 0 35px $offwhite;
+                    color: $deepVinho;
+    
+                }
+    
+            }
+        
+        }
+    
+    }
+
+}

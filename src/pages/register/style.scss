@@ -186,3 +186,21 @@
     }
 
 }
+
+@media screen and (max-width: 768px) {
+    .formsWrapper {
+        .leftSideRegisterForms {
+            width: 100vw;
+        }
+
+        .rightSideRegisterForms {
+            display: none;
+
+            .wrapperDiv {
+                img {
+                    display: none;
+                }
+            }
+        }
+    }
+}

@@ -118,8 +118,9 @@ export default function Header (props) {
 
                                 <li> <Link to='/' > Início </Link> </li>
                                 <li> <Link to='/Admin'> Admin </Link> </li>
-                                <li> <Link to='/quemsomos'> Quem Somos </Link> </li>
+                                <li> <Link to='/produtos' > Produtos </Link> </li>
                                 <li> <Link to='/carrinho'> Carrinho </Link> </li>
+                                <li> <Link to='/quemsomos'> Quem Somos </Link> </li>
                                 <li> <Link to='/contato'> Contato </Link> </li>
                                 <li> <Link to='/entrar'> Login/Perfil </Link> </li>
 
@@ -132,8 +133,9 @@ export default function Header (props) {
                         <>
                             <ul>
                                 <li> <Link to='/' > Início </Link> </li>
-                                <li> <Link to='/quemsomos'> Quem Somos </Link> </li>
+                                <li> <Link to='/produtos' > Produtos </Link> </li>
                                 <li> <Link to='/carrinho'> Carrinho </Link> </li>
+                                <li> <Link to='/quemsomos'> Quem Somos </Link> </li>
                                 <li> <Link to='/contato'> Contato </Link> </li>
                                 <li> <Link to='/entrar'> Login/Perfil </Link> </li>
                             </ul>
@@ -166,15 +168,39 @@ export default function Header (props) {
 
             <div className='menu-mobile' ref = {menuMobile} >
 
-                <ul>
+                {isAdmin ?
+                    <>
 
-                    <li> <Link to='/' > Início </Link> </li>
-                    <li> <Link to='/quemsomos'> Quem Somos </Link> </li>
-                    <li> <Link to='/Carrinho'> Carrinho </Link> </li>
-                    <li> <Link to='/contato'> Contato </Link> </li>
-                    <li> <Link to='/Entrar'> Login/Perfil </Link> </li>
+                        <ul>
 
-                </ul>
+                            <a href="/"> Início </a>
+                            <a href='/Admin'> Admin </a>
+                            <a href="/produtos"> Produtos </a>
+                            <a href="/Carrinho"> Carrinho </a>
+                            <a href="/quemsomos"> Quem Somos </a>
+                            <a href="/Contato"> Contato </a>
+                            <a href="/Entrar"> Login/Perfil </a>
+
+                        </ul>
+
+                    </>
+
+                    :
+
+                    <>
+                        <ul>
+
+                            <a href="/"> Início </a>
+                            <a href="/produtos"> Produtos </a>
+                            <a href="/Carrinho"> Carrinho </a>
+                            <a href="/quemsomos"> Quem Somos </a>
+                            <a href="/Contato"> Contato </a>
+                            <a href="/Entrar"> Login/Perfil </a>
+
+                        </ul>
+                    </>
+
+                }
 
             </div>
 

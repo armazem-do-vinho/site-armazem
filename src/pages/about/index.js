@@ -8,6 +8,10 @@ import logoArmazem from '../../img/logo-armazem-do-vinho.png'
 import taca_armazem from '../../img/taca_armazem.png'
 import portugal from '../../img/portugal.png'
 import argentina from '../../img/argentina.png'
+import chile from '../../img/chile.png'
+import brasil from '../../img/brasil.png'
+import frança from '../../img/franca.png'
+import espanha from '../../img/espanha.png'
 
 function About() {
     return (
@@ -62,7 +66,7 @@ function About() {
                             <div className="content">
                                 <h2>Portugal</h2>
                                 <h3>Trapezzio, Latitud33</h3>
-                                <p><span className="firstLetter">O</span>s vinhos portugueses são de qualidade incomparável, etc etc.. Lorem ipsum dolor sit amet consectetur adipisicing elit. Nisi consequatur similique ullam laborum sequi velit repudiandae a non, alias delectus animi deleniti sunt consequuntur nihil aut modi. Repellendus, natus ad. Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
+                                <p><span className="firstLetter">O</span>s vinhos portugueses são de qualidade incomparável, etc etc.. Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
                                 <a href="/">Comprar</a>
                             </div>
 
@@ -77,12 +81,72 @@ function About() {
 
                                 <h2>Argentina</h2>
                                 <h3>Monte da Raposinha</h3>
-                                <p><span className="firstLetter">V</span>inhos argentinos são ideais para celebrar o mais simples dos momentos. Lorem ipsum dolor sit amet consectetur adipisicing elit. Nisi consequatur similique ullam laborum sequi velit repudiandae a non, alias delectus animi deleniti sunt consequuntur nihil aut modi. Repellendus, natus ad. Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
+                                <p><span className="firstLetter">V</span>inhos argentinos são ideais para celebrar o mais simples dos momentos. Lorem ipsum dolor sit amet consectetur adipisicing elit. </p>
                                 <a href="/">Comprar</a>
 
                             </div>
                             <img className="bandeira" src={argentina} alt="Argentina"/>
                             <img className="tacaVinho" src={taca_armazem} alt="Taça de vinho"/>
+                        </div>
+
+                        <div className="wineCard">
+                           
+                            <div className="wineCircle"><h4>Vinhos Chilenos</h4></div>
+
+                            <div className="content">
+                                <h2>Chile</h2>
+                                <h3>Trapezzio, Latitud33</h3>
+                                <p><span className="firstLetter">O</span>s vinhos portugueses são de qualidade incomparável, etc etc.. Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
+                                <a href="/">Comprar</a>
+                            </div>
+
+                            <img className="tacaVinho" src={taca_armazem} alt="Taça de vinho"/>
+                            <img className="bandeira" src={chile} alt="Chile"/>
+                        </div>
+
+                        <div className="wineCard">
+                           
+                            <div className="wineCircle"><h4>Vinhos Espanhóis</h4></div>
+
+                            <div className="content">
+                                <h2>Espanha</h2>
+                                <h3>Trapezzio, Latitud33</h3>
+                                <p><span className="firstLetter">O</span>s vinhos portugueses são de qualidade incomparável, etc etc.. Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
+                                <a href="/">Comprar</a>
+                            </div>
+
+                            <img className="tacaVinho" src={taca_armazem} alt="Taça de vinho"/>
+                            <img className="bandeira" src={espanha} alt="Espanha"/>
+                        </div>
+
+                        <div className="wineCard">
+                           
+                            <div className="wineCircle"><h4>Vinhos Franceses</h4></div>
+
+                            <div className="content">
+                                <h2>França</h2>
+                                <h3>Trapezzio, Latitud33</h3>
+                                <p><span className="firstLetter">O</span>s vinhos portugueses são de qualidade incomparável, etc etc.. Lorem ipsum dolor sit amet consectetur adipisicing elit.  </p>
+                                <a href="/">Comprar</a>
+                            </div>
+
+                            <img className="tacaVinho" src={taca_armazem} alt="Taça de vinho"/>
+                            <img className="bandeira" src={frança} alt="França"/>
+                        </div>
+
+                        <div className="wineCard">
+                           
+                            <div className="wineCircle"><h4>Vinhos Brasileiros</h4></div>
+
+                            <div className="content">
+                                <h2>Brasil</h2>
+                                <h3>Trapezzio, Latitud33</h3>
+                                <p><span className="firstLetter">O</span>s vinhos portugueses são de qualidade incomparável, etc etc.. Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
+                                <a href="/">Comprar</a>
+                            </div>
+
+                            <img className="tacaVinho" src={taca_armazem} alt="Taça de vinho"/>
+                            <img className="bandeira" src={brasil} alt="Brasil"/>
                         </div>
 
                     </div>

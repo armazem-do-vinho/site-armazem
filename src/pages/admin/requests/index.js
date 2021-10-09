@@ -267,7 +267,7 @@ function Request() {
                             }
 
                             <p>ID do pedido: <b>{item.id}</b></p>
-                            <p>Valor Total do pedido: <b>R$ {Number(item.totalValue).toFixed(2)}</b></p>
+                            <p>Valor Total: <b>R$ {Number(item.totalValue).toFixed(2)}</b></p>
                             
                             {
                                 item.deliveryman !== undefined ?
@@ -292,7 +292,7 @@ function Request() {
                                     
                                 <div className="sendMessage"> 
                                     <a onClick={()=>{sendNoteAdmin(indexItem)}} >Enviar Recado</a>
-                                    <a onClick={() => { handleModalInfos(item) }}>Designar Entregador</a>
+                                    {/* <a onClick={() => { handleModalInfos(item) }}>Designar Entregador</a> */}
                                 </div>
                             </div>
 
