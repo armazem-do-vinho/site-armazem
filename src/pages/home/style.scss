@@ -251,13 +251,13 @@
                 justify-content: center;
                 text-transform: uppercase;
                 color: $branco;
-                cursor: pointer;
+                cursor: default;
 
-                :hover{
+                // :hover{
 
-                    color: $vinhoPink;
+                //     color: $vinhoPink;
 
-                }
+                // }
 
             }
 

@@ -77,7 +77,7 @@ function Home() {
             <AgePopup />
 
             <section id="heroSection">
-
+{/* 
                 <div className="optionsHero">
 
                     <span>Tintos</span>
@@ -89,7 +89,7 @@ function Home() {
                     <span>Kits</span>
                     <span>Outros</span>
 
-                </div>
+                </div> */}
 
                 <div className="heroWrapper">
 

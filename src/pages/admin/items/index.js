@@ -289,6 +289,8 @@ function Items() {
                             <option value="Espumante" >Espumante</option>
                             <option value="Rosé" >Rosé</option>
                             <option value="Tinto" >Tinto</option>
+                            <option value="Kits" >Kits</option>
+                            <option value="Outros" >Outros</option>
 
                         </select>
 
@@ -402,6 +404,8 @@ function Items() {
                             <option value="Espumante" >Espumante</option>
                             <option value="Rosé" >Rosé</option>
                             <option value="Tinto" >Tinto</option>
+                            <option value="Kits" >Kits</option>
+                            <option value="Outros" >Outros</option>
 
                         </select>
 
