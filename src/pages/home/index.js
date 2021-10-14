@@ -1,5 +1,6 @@
 import { React } from 'react';
 import { useState, useEffect } from 'react';
+import { useHistory } from 'react-router-dom'
 
 import Slider from "react-slick";
 

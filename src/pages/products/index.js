@@ -274,6 +274,7 @@ function Products() {
                     <li onClick={handleSelectedProduct}>Suave</li>
                     <li onClick={handleSelectedProduct}>Kits</li>
                     <li onClick={handleSelectedProduct}>Outros</li>
+                    <li onClick={handleSelectedProduct}>Espanha</li>
 
                 </ul>
 
@@ -311,12 +312,13 @@ function Products() {
                                     type='number'
                                     onChange={(event) => setMinProductPrice(Number(event.target.value))}
                                     onKeyDown={handleMinProductPrice} />
-                                -
+
                                 <input
                                     placeholder='Max'
                                     type='number'
                                     onChange={(event) => setMaxProductPrice(Number(event.target.value))}
                                     onKeyDown={handleMaxProductPrice} />
+
                             </div>
 
                             <div className="buttonClearSearch">
@@ -342,8 +344,8 @@ function Products() {
                     {
                         data.map((item, index) => {
 
-                            if (item.itemAvailability === 'true' && (selectedProduct === item.type || selectedProduct === item.sweetness)) {
-
+                            if (item.itemAvailability === 'true' && (selectedProduct === item.type || selectedProduct === item.sweetness || selectedProduct === item.country)) { 
+                                // add o country pra tentar fazer a home funfar 
                                 return (
                                     
                                     <div className="showProductContainer">

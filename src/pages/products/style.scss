@@ -84,10 +84,26 @@
 
                 color: $branco;
 
+                .filtersInputs {
+
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-evenly;
+
+                    input {
+
+                        width: 49%;
+
+                    }
+
+                    
+                }
+
                 .buttonClearSearch{
 
                     display: flex;  
                     width: 100%;
+                    justify-content: center;
 
                     button {
 
@@ -95,7 +111,7 @@
                         cursor: pointer;
                         color: $branco;
                         padding: .5rem;
-                        margin: 0 0 4rem 0;
+                        margin: 0 0 1rem 0;
                         background-color: transparent;
                         text-decoration: none;
                         border-radius: 5px;
@@ -119,7 +135,7 @@
 
                 .buttonFinishOrder{
 
-                    margin-top: 1rem;
+                    margin: 1rem 0;
 
                     button {
 
@@ -347,6 +363,11 @@
     
                 width: 100%;
                 height: 100%;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                padding-left: 0;
     
                 .textInfoProducts {
     
@@ -356,6 +377,7 @@
                     h1 {
     
                         font-size: 1.5rem;
+                        margin-top: 1rem;
     
                     }
     
@@ -370,6 +392,33 @@
                 .searchProduct {
     
                     color: $branco;
+
+                    .filterProducts {
+                                 
+                    .search {
+
+                        input {
+                            
+                            width: 80vw;
+    
+                        }
+
+                    }
+
+                    }
+
+                    .filtersInputs {
+
+                        display: flex;
+                        flex-direction: column;
+
+                        input {
+
+                            width: 80vw;
+    
+                        }
+
+                    }
     
                     .buttonFinishOrder{
     
