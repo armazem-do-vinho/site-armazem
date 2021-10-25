@@ -10,6 +10,7 @@
     display: flex;
     flex-direction: row;
 
+
     .userData {
 
         display: flex;
@@ -101,10 +102,15 @@
     .dataSection {
 
         width: 100vw;
-        top: 6.5rem;
+        top: 0rem;
         justify-content: center;
         display: flex;
-        flex-direction: row;
+        flex-direction: column;
+
+        .sideBar {
+            width: 100%;
+            height: 60vh;
+        }
     
         .userData {
     
@@ -114,7 +120,7 @@
             justify-content: center;
             flex-direction: column;
             align-items: center;
-            margin: 0 auto;
+            margin: 0;
             padding: 0;
     
             h3 {

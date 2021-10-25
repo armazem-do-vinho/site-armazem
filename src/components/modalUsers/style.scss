@@ -15,7 +15,6 @@
     left: 0;
     right: 0;
     z-index: 300;
-    color: black;
     background-color: $offwhite;
     padding: 1rem;
 
@@ -27,22 +26,24 @@
         justify-content: center;
         text-align: center;
         flex-direction: column;
+        border-radius: 15px;
     
     }
 
 }
 
-
 .titleModalUser {
+
+    width: 100%;
 
     img {
         height: 150px;
     }
 
     h2 {
-        display: flex;
         text-align: center; 
-        justify-content: center;   
+        justify-content: center;
+        color: $branco;
     }
 
     h1 {
@@ -62,7 +63,7 @@
 
     h4 {
         text-align: center;
-        color:rgba(70, 70, 70, 0.6);
+        color: rgb(179, 179, 179);
         margin: 1rem;
         font-style: italic;
     }
@@ -73,7 +74,6 @@
         text-align: center;
         border: none;
         border-radius: 5px;
-        background: #adadad;
 
         h2 {
             display: flex;
@@ -86,13 +86,13 @@
         padding: 15px;
         width: 30%;
         border-radius: .2rem;
-        color: $vinho;
         border: 1px solid $preto;
         margin: 20px 0px;
         outline: none;
     }
 
     .updateButton {
+
         display: flex;
         justify-content: center;
 
@@ -136,11 +136,12 @@
     .modalUser {
 
         font-size: .7rem;
-        width: 80vw;
+        width: 90vw;
+        margin-top: 1rem;
 
         main {
 
-            width: 90%;
+            width: 100%;
             box-shadow: none;
             
             img {
@@ -152,21 +153,38 @@
     }
 
     fieldset {
-        width: 70vw;
+        width: 80vw;
+        display: flex;
+        flex-direction: column;
     }
 
     .userInfo {
         flex-direction: column;
+
+        input {
+
+            margin: 15px 0;
+
+        }
     }
 
+
     .editUser input {
-        width: 75%;
+        width: 100%;
 
     }
 
     .updateButton {
-        width: 70vw;
-        justify-content: center;
+
+        width: 100%;
+        align-items: center;
+
+        a {
+
+            width: 300px !important;
+
+        }
+
     }
 
     .titleModal {
@@ -188,6 +206,16 @@
             text-align: justify;
         
         }
+    }
+
+    .userAddress {
+
+        input {
+
+            margin: 15px 0;
+
+        }
+
     }
     
 }

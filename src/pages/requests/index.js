@@ -69,26 +69,33 @@ function Requests() {
 
                                     <div className="boxRequestsList">
 
-                                        <h4> <span>id do pedido: {request.id}</span></h4>
+                                        <h4><span>ID do pedido: {request.id}</span></h4>
+
+                                        <div className="requestItensWrapper">
 
                                         {request.listItem.map(item => {
 
                                             return (
 
-                                                <div>
+                                                <>
 
-                                                    <div>
 
-                                                        <b>{item.title} <span>({item.amount}) </span></b>
-                                                        <h4><span>R$ {item.price}</span></h4>
+                                                    <div className="requestItens">
+
+                                                        <b>{item.title} <span>({item.amount}) - R$ {item.price} </span></b>
 
                                                     </div>
 
-                                                </div>
+
+                                                </>
 
                                             )
 
                                         })}
+
+                                    <h3>Valor total: R$ {request.totalValue}</h3>
+
+                                    </div>
 
                                     </div>
 
