@@ -1,0 +1,151 @@
+@import "../../global.scss";
+@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+
+.requestsSection {
+
+    width: 100vw;
+    left: 20%;
+    top: 6.5rem;
+    justify-content: center;
+    display: flex;
+    flex-direction: row;
+    min-height: 100vh;
+
+    .requestsData {
+
+        display: flex;
+        width: 80vw;
+        position: relative;
+        flex-direction: column;
+        align-items: center;
+        margin: 0 auto;
+        padding: 0;
+
+        h3 {
+
+            margin: 2rem 0;
+            font-weight: 500;
+
+        }
+
+        .boxRequestsList {
+
+            width: 70vw;
+            color: white;
+            margin: .8rem 0;
+            padding: 1rem 2.5rem;
+            border-radius: 10px;
+            background-color: #2B303A;
+        
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+
+        }
+
+    }
+    
+}
+
+
+@media screen and (max-width: 768px) {
+
+    .dataSection {
+
+        width: 100vw;
+        top: 6.5rem;
+        justify-content: center;
+        display: flex;
+        flex-direction: row;
+    
+        .userData {
+    
+            display: flex;
+            width: 100vw;
+            position: relative;
+            justify-content: center;
+            flex-direction: column;
+            align-items: center;
+            margin: 0 auto;
+            padding: 0;
+    
+            h3 {
+    
+                margin: 2rem 0;
+                font-weight: 500;
+                text-align: center;
+                padding: 0 2rem;
+    
+            }
+    
+            a {
+    
+                text-decoration: none;
+                color: #aa0f0f;
+    
+            }
+    
+            .cardData {
+    
+                display: flex;
+                width: 90%;
+                flex-direction: column;
+                margin-top: 1rem;
+                align-items: center;
+                margin-bottom: 4rem;;
+    
+                h4 {
+    
+                    margin-bottom: 1rem;
+    
+                }
+    
+                #personalData {
+    
+                    margin-top: 1rem;
+    
+                }
+    
+                .profileData {
+    
+                    display: flex;
+                    flex-direction: column;
+                    background-color: $branco;
+                    width: 100%;
+                    height: 100%;
+                    border-radius: 10px;
+                    box-shadow: 0 1px 3px rgba(0,0,0,0.35);
+                    font-size: .8rem;
+    
+                    span {
+                        
+                        display: flex;
+                        align-items: center;
+                        justify-content: space-between;
+                        padding: 13px 18px;
+                        line-height: 2rem;
+    
+                    }
+    
+                    span {
+    
+                        border-bottom: 1px solid #eee;
+    
+                    }
+    
+                    span:last-child {
+    
+                        border-bottom: none;
+    
+                    }
+    
+                }
+    
+            }
+        
+        }
+    
+    }
+
+}
