@@ -443,33 +443,39 @@ function Cart() {
 
                                                             </div>
 
-                                                            <div className="descriptionProductCart">
+                                                            <div className="adjustItens">
 
-                                                                <h4>{item.title}</h4>
+                                                                <div className="descriptionProductCart">
 
-                                                                <p>{item.desc}</p>
+                                                                    <h4>{item.title}</h4>
 
-                                                                <span>{item.country} • {item.type} • {item.sweetness} </span>
+                                                                    <p>{item.desc}</p>
 
-                                                            </div>
+                                                                    <span>{item.country} • {item.type} • {item.sweetness} </span>
 
-                                                            <div className='priceProductCard'>
+                                                                </div>
 
-                                                                <h5>Quantidade: {item.amount}</h5>
-                                                                <h4>Valor: R$ {((item.price) * item.amount).toFixed(2)}</h4>
+                                                                <div className="adjustItens2">
+                                                                    <div className='priceProductCard'>
 
-                                                            </div>
+                                                                        <h5>Quantidade: {item.amount}</h5>
+                                                                        <h4>Valor: R$ {((item.price) * item.amount).toFixed(2)}</h4>
 
-                                                            <div className="trashCanWrapper">
+                                                                    </div>
 
-                                                                <img
-                                                                    src={trashCan}
-                                                                    className="imgRemoveIconCart"
-                                                                    alt='Remover item'
-                                                                    onClick={() => {
-                                                                        removeItemInCart(index)
-                                                                    }}
-                                                                />
+                                                                    <div className="trashCanWrapper">
+
+                                                                        <img
+                                                                            src={trashCan}
+                                                                            className="imgRemoveIconCart"
+                                                                            alt='Remover item'
+                                                                            onClick={() => {
+                                                                                removeItemInCart(index)
+                                                                            }}
+                                                                        />
+
+                                                                    </div>
+                                                                </div>
 
                                                             </div>
 
@@ -507,7 +513,7 @@ function Cart() {
 
                                         <div className="paypalButtons" ref={v => (paypalRef = v)} />
 
-                                        <input className="clientNoteInput" onChange={handleClientNote} placeholder='Escreva aqui alguma observação sobre seu pedido (opcional)' />
+                                        <input className="clientNoteInput" onChange={handleClientNote} placeholder='Observação sobre seu pedido (opcional)' />
 
                                     </div>
 
@@ -542,7 +548,7 @@ function Cart() {
 
                 <Header />
 
-                <div className="emptyCart" style={{ height: "60vh", display: "flex", alignItems: "center", justifyContent: "center" }} >
+                <div className="emptyCart" style={{ height: "60vh", display: "flex", alignItems: "center", justifyContent: "center", textAlign: "center" }} >
                     <h2>Seu carrinho de compras está vazio 😧 </h2>
                 </div>
 

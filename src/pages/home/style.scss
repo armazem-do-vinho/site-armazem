@@ -58,10 +58,18 @@
         .heroWrapper {
             
             width: 90vw;
-            height: 50vh;
+            height: auto;
             background-color: $deepVinho;
             margin-top: 1rem;
             border-radius: 8px;
+
+            .sliderImg {
+                img {
+                    display: flex;
+                    justify-content: center;
+                }
+            }
+
         
         }
     
@@ -88,7 +96,7 @@
                 display: flex;
                 flex-direction: row;
                 position: absolute;
-                right: 0;
+                right: 20px;
                 align-items: center;
                 justify-content: center;
                 text-decoration: none;
@@ -251,13 +259,13 @@
                 justify-content: center;
                 text-transform: uppercase;
                 color: $branco;
-                cursor: pointer;
+                cursor: default;
 
-                :hover{
+                // :hover{
 
-                    color: $vinhoPink;
+                //     color: $vinhoPink;
 
-                }
+                // }
 
             }
 
@@ -276,6 +284,13 @@
 
         #heroSection {
 
+            .heroWrapper {
+                width: 85vw;
+                img {
+                    width: 100%;
+                }
+            }
+
             .optionsHero {
                 flex-direction: column;
                 height: 60vh;
@@ -290,7 +305,7 @@
         #featuredProdutcsSection {
 
             flex-direction: column;
-            height: 110vh;
+            height: auto;
             width: 100vw;
 
             .featuredProductsText {
@@ -330,8 +345,24 @@
                 .featuredProductsCard {
 
                     width: 85%;
-                    height: 20%;
-                    margin-top: 2rem;
+                    height: 15%;
+                    margin-top: 0;
+
+                    .imgFeaturedWrapper {
+
+                        img {
+                            
+                            max-width: 40px;
+    
+                        }
+    
+                        #imgVinho {
+    
+                            width: 25px;
+    
+                        }
+    
+                    }
                     
                 }
             }

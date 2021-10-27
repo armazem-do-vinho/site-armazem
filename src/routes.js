@@ -6,6 +6,7 @@ import Contact from './pages/contact'
 import About from './pages/about'
 import SignIn from './pages/signIn'
 import PaymentForm from './pages/formPayment'
+import Requests from './pages/requests'
 import Admin from './pages/admin'
 import Register from './pages/register'
 import Request from './pages/admin/requests'
@@ -44,6 +45,7 @@ const Routes = () => {
             <Route component={Reports} path='/AdminRelatorios' />
             <Route component={ProviderProducts} path='/AdminProdutoFornecedor' />
             <Route component={PaymentForm} path='/formPayment' />
+            <Route component={Requests} path='/MeusPedidos' />
 
         </BrowserRouter>
 

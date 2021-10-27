@@ -209,3 +209,21 @@ header {
     }
 
 }
+
+@media (min-width: 768px) and (max-width: 1000px) {
+
+    .logo {
+        padding-left: 40px;
+        img {
+            height: 9vh;
+        }
+    }
+
+    .menu {
+        ul {
+            li {
+                font-size: .65rem;
+            }
+        }
+    }
+}

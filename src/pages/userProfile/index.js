@@ -157,6 +157,19 @@ function UserProfile() {
 
     }
 
+    const [isChecked, setIsChecked] = useState(false);
+
+    const menuMobile = createRef()
+
+    function showMenuMobile() {
+
+        if (isChecked)
+            menuMobile.current.style.display = 'none';
+        else
+            menuMobile.current.style.display = 'flex';
+
+    }
+
     return (
 
         <div className="profilePage">
@@ -164,8 +177,12 @@ function UserProfile() {
             <Header />
 
             <section className="dataSection">
-                
-            <SideBar />
+
+                <div className="sideBar">
+                    
+                    <SideBar />
+
+                </div>
 
                 <div className="userData">
 

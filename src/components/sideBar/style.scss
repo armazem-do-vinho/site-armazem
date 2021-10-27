@@ -5,13 +5,13 @@
 
     margin: 0;
     padding: 0;
-
+    
     .sideMenu {
 
         display: flex;
         position: relative;
         width: 20vw;
-        height:100%;
+        height: 120vh;
         background-color: $deepVinho;
         box-sizing: initial;
         transition: width 0.5s;
@@ -24,6 +24,8 @@
             width: 100%;
             padding-left: 5px;
             padding-top: 40px;
+            background-color: $deepVinho;
+            height: 100%;
 
             a, span {
 
@@ -56,7 +58,6 @@
                 position: relative;
                 display: block;
                 min-width: 60px;
-                height: 60px;
                 text-align: center;
                 line-height: 60px;
                 font-size: 1.2rem;
@@ -73,8 +74,76 @@
 
     .barElement {
 
-        display: none;
+        margin: 0;
+        padding: 0;
+    
+        .sideMenu {
+    
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100vw;
+            height: 60vh;
+            box-sizing: initial;
+            transition: width 0.5s;
+            margin: 0;
 
+    
+            ul {
+    
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                padding: 0;
+                background: linear-gradient(0deg, $vinho, $deepVinho);
+                height: 60vh;
+    
+                a, span {
+    
+                    position: relative;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    list-style: none;
+                    width: 100%;
+                    cursor: pointer;
+                    text-decoration: none;
+                    line-height: 4rem;
+                    font-family: 'Poppins';
+                    border-top-left-radius: 0px;
+                    border-bottom-left-radius: 0px;
+                    padding: 0;
+                    text-decoration: none;
+                    color: $branco;
+                    margin-bottom: 0px;
+
+                }
+    
+                a:hover, span:hover {
+    
+                    background-color: $offwhite;
+                    transition: 0.3s ease-out;
+                    color: #333;
+    
+                }
+    
+                i {
+    
+                    position: relative;
+                    display: block;
+                    min-width: 60px;
+                    text-align: center;
+                    line-height: 0px;
+                    font-size: 1.2rem;
+    
+                }
+    
+            }
+    
+        }
+    
     }
+    
 
 }

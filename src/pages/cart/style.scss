@@ -29,11 +29,23 @@
 
                 display: flex;
                 flex-direction: row;
-                width: 1200px;
+                width: 100%;
                 height: 150px;
                 background-color: #2B303A;
                 margin-bottom: 2rem;
                 border-radius: 7px;
+
+                .adjustItens {
+                    display: flex;
+                    flex-direction: row;
+
+                    .adjustItens2 {
+                        display: flex;
+                        flex-direction: row;
+                        align-items: space-between;
+                        justify-content: space-between;
+                    }
+                }
 
                 .imageProductWrapperCart {
 
@@ -86,7 +98,6 @@
                     display: flex;
                     flex-direction: column;
                     height: 100%;
-                    width: 30%;
                     padding: 2rem;
                     justify-content: center;
 
@@ -122,26 +133,28 @@
         .cartProductsFinal {
 
             display: flex;
-            margin: 0 auto;
-            position: relative;
+            align-items: center;
+            justify-content: space-around;
             margin-bottom: 3rem;
 
             button {
 
                 display: flex;
-                background-color: transparent;
+                justify-content: center;
+                align-items: center;
                 outline: none;
+                background-color: $vinho;
                 border: none;
                 text-decoration: none;
-                padding: 0 2rem;
-                margin: 2rem 0;
                 font-size: 1rem;
-                color: $vinhoPink;
+                color: $branco;
                 cursor: pointer;
+                padding: 0.5rem;
 
                 &:hover {
 
-                    color: $branco;
+                    color: $deepVinho;
+                    background-color: $branco;
 
                 }
     
@@ -149,8 +162,12 @@
 
             h3 {
 
-                position: absolute;
+                display: flex;
+                justify-content: center;
+                align-items: center;
                 right: 2rem;
+                text-align: center;
+                padding-top: 1rem;
 
             }
 
@@ -180,6 +197,7 @@
         input::placeholder {
 
             color: $branco;
+            opacity: .5;
 
         }
 
@@ -322,23 +340,161 @@
 
     .cartPage {
         //width: 100vw;
+
         #SectionCartProducts {
+
+            width: 90vw;
+
             .showCartContainer {
+                width: 95vw;
+                display: flex;
+                justify-content: center;
+                align-items: center;
 
                 .showProductCardCart {
-                    flex-direction: column;
-                    width: 80vw;
-                    min-height: 60vh;
 
-                    .descriptionProductCart {
-                        position: absolute;
-                        padding-left: 4rem;
+                    display: flex;
+                    flex-direction: column;
+                    height: 60vh;
+                    align-items: space-around;
+                    justify-content: center;
+
+                    .imageProductWrapperCart {
+
+                        display: flex;
+                        height: 25%;
+                        width: auto;
+                        margin-top: 2rem;
+
+                        img {
+
+                            width: auto;
+                            height: auto;
+                            padding: 0;
+
+                        }
+
                     }
 
-                    //socorro
+                    .adjustItens {
 
+                        flex-direction: column;
+                        margin: 0;
+                        padding: 0;
+
+                        .descriptionProductCart {
+
+                            width: 90vw;
+
+                        }
+
+                        .adjustItens2 {
+                            display: flex;
+                            flex-direction: column;
+                            margin-bottom: 2rem;
+                        }
+
+                    }
+
+                    .descriptionProductCart {
+
+                        padding: 1rem;
+                        align-items: center;
+                        text-align: center;
+                        
+                        h4, p {
+                            font-size: 1rem;
+                        }
+
+                        span {
+
+                            margin-top: 1rem;
+
+                        }
+
+                    }
+
+                    .priceProductCard {
+
+                        display: flex;
+                        width: 100%;
+                        padding: 0;
+                        align-items: center;
+                        margin-bottom: 2rem;
+                        
+                        h5, h4 {
+                            font-size: .9rem;
+                        }
+                    }
+
+                    .trashCanWrapper {
+                        width: 100%;
+                        padding: 0;
+                    }
                 }
             }
+
+
+        }
+
+        .cartProductsFinal {
+            display: flex;
+            flex-direction: column;     
+        }
+
+        .finishOrder {
+
+            select {
+
+                width: 80vw;
+
+            }
+
+            h3 {
+
+                margin: 1rem;
+
+            }
+
+            .paypalButtons {
+
+                width: 80%;
+
+            }
+
+            input {
+
+                width: 80vw;
+                
+            }
+
+        }
+
+        .checkOut {
+
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 1rem;
+
+            a {
+
+                text-align: center;
+                font-size: .8rem;
+
+            }
+
+            button {
+
+                padding: 1rem 3rem;
+
+            }
+
+            // a, button {
+                
+            //     width: 40%;
+
+            // }
+
         }
     }
 

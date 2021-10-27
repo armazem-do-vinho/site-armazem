@@ -1,0 +1,132 @@
+@import "../../global.scss";
+@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+
+.requestsSection {
+
+    width: 100vw;
+    left: 20%;
+    top: 6.5rem;
+    justify-content: center;
+    display: flex;
+    flex-direction: row;
+    min-height: 100vh;
+
+    .requestsData {
+
+        display: flex;
+        width: 80vw;
+        position: relative;
+        flex-direction: column;
+        align-items: center;
+        margin: 0 auto;
+        padding: 0;
+
+        h3 {
+
+            margin: 2rem 0;
+            font-weight: 500;
+
+        }
+
+        .boxRequestsList {
+
+            width: 70vw;
+            color: white;
+            margin: .8rem 0;
+            padding: 1rem 2.5rem;
+            border-radius: 10px;
+            background-color: #2B303A;
+        
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            .requestItensWrapper {
+
+                display: flex;
+                flex-direction: column;
+
+                .requestItens {
+
+                    display: flex;
+    
+                }
+
+
+            }
+
+           
+
+        }
+
+    }
+    
+}
+
+
+@media screen and (max-width: 768px) {
+
+    .requestsSection {
+
+        width: 100vw;
+        left: 20%;
+        top: 6.5rem;
+        justify-content: center;
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+    
+        .requestsData {
+    
+            display: flex;
+            width: 80vw;
+            position: relative;
+            flex-direction: column;
+            align-items: center;
+            margin: 0 auto;
+            padding: 0;
+    
+            h3 {
+    
+                margin: 2rem 0;
+                font-weight: 500;
+    
+            }
+    
+            .boxRequestsList {
+    
+                width: 70vw;
+                color: white;
+                margin: .8rem 0;
+                padding: 1rem 2.5rem;
+                border-radius: 10px;
+                background-color: #2B303A;
+            
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: space-between;
+    
+                .requestItensWrapper {
+    
+                    display: flex;
+                    flex-direction: column;
+    
+                    .requestItens {
+    
+                        display: flex;
+                        margin: .5rem;
+        
+                    }
+    
+    
+                }
+    
+               
+    
+            }
+    
+        }
+        
+    }
+}

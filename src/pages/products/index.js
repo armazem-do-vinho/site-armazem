@@ -25,6 +25,8 @@ function Products() {
     const [displayMobileSearch, setDisplayMobileSearch] = useState('none')
     const [displayButtonFinishOrder, setDisplayButtonFinishOrder] = useState('none')
     const [totalValue, setTotalValue] = useState(0)
+    const [selectedProduct, setSelectedProduct] = useState('')
+    const [totalProducts, setTotalProducts] = useState(0)
 
     useEffect(() => {
 
@@ -40,6 +42,7 @@ function Products() {
                 var data = snapshot.val()
                 var temp = Object.keys(data).map((key) => data[key])
                 setData(temp)
+                setDataBackup(temp)
 
             }
             else {
@@ -49,6 +52,16 @@ function Products() {
         });
 
     }, []);
+
+    useEffect(() => {
+
+        if (totalValue == 0) {
+
+            setDisplayButtonFinishOrder('none')
+
+        }
+
+    })
 
     function searchItem() {
 
@@ -103,6 +116,7 @@ function Products() {
 
         setDisplaySearchResult('none')
         setData(dataBackup)
+        setSelectedProduct('')
 
     }
 
@@ -194,6 +208,38 @@ function Products() {
 
     }
 
+    function handleSelectedProduct(event) {
+
+        setSelectedProduct(event.target.innerText)
+
+        var counter = 0
+
+        setTotalProducts(counter)
+    
+    }
+
+    useEffect(() => {
+
+        var counter = 0
+
+        data.map((item) => {
+
+            if (selectedProduct === item.type || selectedProduct === item.sweetness) {
+
+                counter ++
+                
+            } else if (selectedProduct === '') {
+
+                counter ++
+
+            }
+
+        })
+
+        setTotalProducts(counter)
+
+    })
+        
     // newItems.map(newItems => {
 
     //     listOfItems.map(listItems => {
@@ -218,18 +264,19 @@ function Products() {
 
             <section id="productsSelectList">
 
-                <div className="optionsList">
+                <ul className="optionsList">
 
-                    <span>Tintos</span>
-                    <span>Brancos</span>
-                    <span>Rosés</span>
-                    <span>Espumantes</span>
-                    <span>Seco</span>
-                    <span>Suave</span>
-                    <span>Kits</span>
-                    <span>Outros</span>
+                    <li onClick={handleSelectedProduct}>Tinto</li>
+                    <li onClick={handleSelectedProduct}>Branco</li>
+                    <li onClick={handleSelectedProduct}>Rosé</li>
+                    <li onClick={handleSelectedProduct}>Espumante</li>
+                    <li onClick={handleSelectedProduct}>Seco</li>
+                    <li onClick={handleSelectedProduct}>Suave</li>
+                    <li onClick={handleSelectedProduct}>Kits</li>
+                    <li onClick={handleSelectedProduct}>Outros</li>
+                    <li onClick={handleSelectedProduct}>Espanha</li>
 
-                </div>
+                </ul>
 
             </section>
 
@@ -239,8 +286,8 @@ function Products() {
 
                     <div className="textInfoProducts">
 
-                        <h1>Tipo (mudar)</h1>
-                        <span>n produtos encontrados</span>
+                        {selectedProduct !== '' ? <h1>{selectedProduct}</h1> : <h1>Todos produtos</h1>}
+                        {totalProducts > 1 ? <span>{totalProducts} produtos encontrados</span> : <span>{totalProducts} produto encontrado</span>}
 
                     </div>
 
@@ -259,17 +306,25 @@ function Products() {
                             <h4>Preço</h4>
 
                             <div className='filtersInputs'>
+
                                 <input
                                     placeholder='Mín'
                                     type='number'
                                     onChange={(event) => setMinProductPrice(Number(event.target.value))}
                                     onKeyDown={handleMinProductPrice} />
-                                -
+
                                 <input
                                     placeholder='Max'
                                     type='number'
                                     onChange={(event) => setMaxProductPrice(Number(event.target.value))}
                                     onKeyDown={handleMaxProductPrice} />
+
+                            </div>
+
+                            <div className="buttonClearSearch">
+
+                                <button onClick={() => { clearSearchItem() }}>Limpar pesquisa</button>
+
                             </div>
 
                         </div>
@@ -289,11 +344,74 @@ function Products() {
                     {
                         data.map((item, index) => {
 
-                            if (item.itemAvailability === 'true') {
+                            if (item.itemAvailability === 'true' && (selectedProduct === item.type || selectedProduct === item.sweetness || selectedProduct === item.country)) { 
+                                // add o country pra tentar fazer a home funfar 
+                                return (
+                                    
+                                    <div className="showProductContainer">
+
+                                        <div className="showProductCard">
+
+                                            <div className="imageProductWrapper">
+
+                                                <img src={item.imageSrc} alt="" />
+
+                                            </div>
+
+                                            <div className="descriptionProduct">
+
+                                                <h4>{item.title}</h4>
+
+                                                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsam praesentium atque itaque!</p>
+
+                                                <span>{item.country} • {item.type} • {item.sweetness} </span>
+
+                                            </div>
+
+                                            <div className="priceProduct">
+
+                                                <h3>R$ {Number(item.price).toFixed(2)}</h3>
+
+                                                <div className='amountProduct' >
+
+                                                    <div className="removeButton">
+
+                                                        <img
+                                                            src={removeButton}
+                                                            onClick={() => { remove(index) }}
+                                                            alt="Remover item"
+                                                        />
+
+                                                    </div>
+
+                                                    <b>{item.amount}</b>
+
+                                                    <div className="addButton">
+
+                                                        <img
+                                                            src={addButton}
+                                                            onClick={() => { add(index) }}
+                                                            alt="Adicionar item"
+                                                        />
+
+                                                    </div>
+
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+                                )
+
+                            } else if (item.itemAvailability === 'true' && selectedProduct === '') {
 
                                 return (
 
                                     <div className="showProductContainer">
+
 
                                         <div className="showProductCard">
 

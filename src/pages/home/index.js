@@ -1,5 +1,6 @@
 import { React } from 'react';
 import { useState, useEffect } from 'react';
+import { useHistory } from 'react-router-dom'
 
 import Slider from "react-slick";
 
@@ -66,6 +67,7 @@ function Home() {
         slidesToScroll: 1,
         autoplay: true,
         autoplaySpeed: 4000,
+        adaptiveHeight: true,
     };
 
     return (
@@ -77,7 +79,7 @@ function Home() {
             <AgePopup />
 
             <section id="heroSection">
-
+{/* 
                 <div className="optionsHero">
 
                     <span>Tintos</span>
@@ -89,28 +91,16 @@ function Home() {
                     <span>Kits</span>
                     <span>Outros</span>
 
-                </div>
+                </div> */}
 
                 <div className="heroWrapper">
 
                     <Slider {...carouselSettings}>
-                        <div>
+                        <div className="sliderImg">
                             <img src={banner} alt="banner dia dos pais" />
                         </div>
                         <div>
                             <img src={banner2} alt="banner kits" />
-                        </div>
-                        <div>
-                            <h3>3</h3>
-                        </div>
-                        <div>
-                            <h3>4</h3>
-                        </div>
-                        <div>
-                            <h3>5</h3>
-                        </div>
-                        <div>
-                            <h3>6</h3>
                         </div>
                     </Slider>
 
