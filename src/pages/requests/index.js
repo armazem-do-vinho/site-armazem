@@ -77,23 +77,17 @@ function Requests() {
 
                                             return (
 
-                                                <>
-
-
                                                     <div className="requestItens">
 
                                                         <b>{item.title} <span>({item.amount}) - R$ {item.price} </span></b>
 
                                                     </div>
 
-
-                                                </>
-
                                             )
 
                                         })}
 
-                                    <h3>Valor total: R$ {request.totalValue}</h3>
+                                    <h3>Valor total: <strong>R$ {request.totalValue}</strong></h3>
 
                                     </div>
 

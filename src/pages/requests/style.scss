@@ -4,11 +4,9 @@
 .requestsSection {
 
     width: 100vw;
-    left: 20%;
     top: 6.5rem;
     justify-content: center;
     display: flex;
-    flex-direction: row;
     min-height: 100vh;
 
     .requestsData {
@@ -17,6 +15,7 @@
         width: 80vw;
         position: relative;
         flex-direction: column;
+        justify-content: center;
         align-items: center;
         margin: 0 auto;
         padding: 0;
@@ -49,14 +48,17 @@
                 .requestItens {
 
                     display: flex;
+
+                    b {
+
+                        margin-top: 1rem;
+
+                    }
     
                 }
 
-
             }
-
            
-
         }
 
     }
