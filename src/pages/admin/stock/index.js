@@ -143,6 +143,7 @@ function Stock() {
                 <div className="stockProductsSelect">
 
                     <h2>Alterar estoque de produtos</h2>
+                    <h4 style={{margin: "1rem 0"}}>Insira abaixo a nova quantidade do estoque</h4>
 
                     <select onChange={handleSelectedItem}>
 

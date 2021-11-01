@@ -1,0 +1,155 @@
+@import '../../../global.scss';
+
+.AdminVouchers {
+
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+
+    .vouchersOptions {
+
+        width: 100%;
+        align-items: center;
+        margin: 0 auto;  
+        justify-content: center;
+        text-align: center;
+
+        fieldset {
+
+            border: none;
+
+        }
+
+        h1 {
+
+            margin: 3rem 0;
+            text-align: center;
+            width: auto;
+
+        }
+
+        input::placeholder {
+
+            color: $branco;
+
+        }
+
+        input {
+
+            background-color: $vinho;
+            color: $branco;
+            width: 65%;
+            margin-bottom: 1.5rem;
+            outline: none;
+            height: 3rem;
+            font-size: 14px;
+            padding-left: 1rem;
+            border: none;
+    
+        }
+
+        select {
+
+            background-color: $vinho;
+            color: $branco;
+            width: 65%;
+            margin-bottom: 1.5rem;
+            outline: none;
+            height: 3rem;
+            font-size: 14px;
+            padding-left: 1rem;
+            border: none;
+
+        }
+        
+        h2 {
+
+            margin-bottom: .5rem;
+            color: $preto;
+
+        }
+
+        h4 {
+
+            margin: 2rem 0 1rem 0;
+            text-align: center;
+
+        }
+
+        .buttonVoucher {
+
+            width: 100%;
+            display: flex;
+            justify-content: center;
+
+            a {
+                
+                display:flex;
+                cursor: pointer;
+                color: $branco;
+                padding: 1rem;
+                margin: 0 0 2rem 0;
+                background: $deepVinho;
+                text-decoration: none;
+                border-radius: .3rem;
+                transition: .24s;
+                border: 1px solid $deepVinho;
+                justify-content:center;
+                font-weight: 500;
+                width: 30%;
+                
+                &:hover,
+                &:focus {
+    
+                    box-shadow: inset 0 0 0 35px $offwhite;
+                    color: $deepVinho;
+    
+                }
+            }
+
+        }
+        
+    }
+        
+    #deleteButton {
+        
+        margin-bottom: 2rem;
+        
+    }
+    
+}
+
+@media screen and (max-width: 768px) {
+    
+    .AdminVouchers {
+
+        width: 100vw;
+
+        .vouchersOptions {
+
+            fieldset {
+
+                border: none;
+                width: 100%;
+
+            }
+
+            input {
+
+                width: 80%;
+        
+            }
+
+            select {
+
+                width: 80%;
+    
+            }
+
+        }
+
+    }
+
+}
+
+

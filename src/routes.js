@@ -19,6 +19,7 @@ import Cart from './pages/cart'
 import ProviderRegister from './pages/admin/providersRegister'
 import Stock from './pages/admin/stock'
 import Reports from './pages/admin/reports'
+import Vouchers from './pages/admin/vouchers'
 import ProviderProducts from './pages/admin/providersProducts'
 
 const Routes = () => {
@@ -46,6 +47,7 @@ const Routes = () => {
             <Route component={ProviderProducts} path='/AdminProdutoFornecedor' />
             <Route component={PaymentForm} path='/formPayment' />
             <Route component={Requests} path='/MeusPedidos' />
+            <Route component={Vouchers} path='/AdminCupons' />
 
         </BrowserRouter>
 
