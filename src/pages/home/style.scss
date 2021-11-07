@@ -58,16 +58,23 @@
         .heroWrapper {
             
             width: 90vw;
-            height: auto;
-            background-color: $deepVinho;
+            height: 65vh;
             margin-top: 1rem;
             border-radius: 8px;
 
             .sliderImg {
+
+                display: flex;
+                width: 90vw;
+                height: 65vh;
+
                 img {
-                    display: flex;
-                    justify-content: center;
+
+                    width: 100%;
+                    overflow: hidden;
+
                 }
+
             }
 
         

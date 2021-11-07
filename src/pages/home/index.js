@@ -34,6 +34,7 @@ import { Link } from 'react-router-dom';
 function Home() {
 
     const [data, setData] = useState([]);
+    const [dataBanner, setDataBanner] = useState([]);
 
     useEffect(() => {
 
@@ -49,6 +50,31 @@ function Home() {
                 var data = snapshot.val()
                 var temp = Object.keys(data).map((key) => data[key])
                 setData(temp)
+
+            }
+            else {
+                console.log("No data available");
+            }
+
+        });
+
+    }, []);
+
+    useEffect(() => {
+
+        if (!firebase.apps.length)
+            firebase.initializeApp(firebaseConfig);
+
+        var firebaseRef = firebase.database().ref('banners/');
+
+        firebaseRef.on('value', (snapshot) => {
+
+            if (snapshot.exists()) {
+
+                var data = snapshot.val()
+                var temp = Object.keys(data).map((key) => data[key])
+                setDataBanner(temp)
+                console.log(temp)
 
             }
             else {
@@ -96,12 +122,27 @@ function Home() {
                 <div className="heroWrapper">
 
                     <Slider {...carouselSettings}>
-                        <div className="sliderImg">
+                        {/* <div className="sliderImg">
                             <img src={banner} alt="banner dia dos pais" />
                         </div>
-                        <div>
+                        <div className="sliderImg">
                             <img src={banner2} alt="banner kits" />
-                        </div>
+                        </div> */}
+
+                        {dataBanner.map((item) => {
+
+                            return(
+
+                            <div className="sliderImg">
+
+                                <img src={item.imageSrc} alt="Banner" />
+                                
+                            </div>
+
+                            )
+
+                        })}
+
                     </Slider>
 
                 </div>

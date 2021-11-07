@@ -21,6 +21,7 @@ import Stock from './pages/admin/stock'
 import Reports from './pages/admin/reports'
 import Vouchers from './pages/admin/vouchers'
 import ProviderProducts from './pages/admin/providersProducts'
+import ContentChanges from './pages/admin/contentChanges'
 
 const Routes = () => {
 
@@ -48,6 +49,7 @@ const Routes = () => {
             <Route component={PaymentForm} path='/formPayment' />
             <Route component={Requests} path='/MeusPedidos' />
             <Route component={Vouchers} path='/AdminCupons' />
+            <Route component={ContentChanges} path='/AlterarConteudos' />
 
         </BrowserRouter>
 
