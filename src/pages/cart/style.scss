@@ -150,13 +150,8 @@
                 color: $branco;
                 cursor: pointer;
                 padding: 0.5rem;
-
-                &:hover {
-
-                    color: $deepVinho;
-                    background-color: $branco;
-
-                }
+                border-radius: 5px;
+                font-weight: 700;
     
             }
 
@@ -182,6 +177,13 @@
         text-align: center;
         justify-content: center;
 
+        label {
+
+            color: $branco;
+            font-size: 1.2rem;
+
+        }
+
         select, input {
 
             width: 40vw;
@@ -198,6 +200,25 @@
 
             color: $branco;
             opacity: .5;
+
+        }
+
+        button {
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            outline: none;
+            background-color: $vinho;
+            border: none;
+            text-decoration: none;
+            font-size: 1rem;
+            color: $branco;
+            cursor: pointer;
+            padding: 0.5rem 2rem;
+            border-radius: 5px;
+            font-weight: 700;
+            margin-bottom: 1rem;
 
         }
 

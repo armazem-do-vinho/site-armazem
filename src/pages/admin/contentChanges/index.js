@@ -548,264 +548,265 @@ export default function ContentChange() {
 
             <main>
 
-                <section id="ChangesSection">
+                <Header />
 
-                    <select onChange={(event) => handleSelectedOption(event)} >
+                <section id="ContentChangesMain">
+                    <section id="ChangesSection">
 
-                        <option selected disabled>Selecione o que deseja alterar</option>
-                        <option value="Home">Alterar página inicial</option>
-                        <option value="Quem Somos">Alterar conteúdo da página "Quem Somos"</option>
+                            <h2>Selecione a página a ser alterada</h2>
+                        <select onChange={(event) => handleSelectedOption(event)} >
+                            <option selected disabled>Selecione o que deseja alterar</option>
+                            <option value="Home">Alterar conteúdo da página inicial</option>
+                            <option value="Quem Somos">Alterar conteúdo da página "Quem Somos"</option>
 
-                    </select>
+                        </select>
 
-                </section>
+                    </section>
 
-                <section>
+                    <section id="OptionsSection">
 
-                    <div>
+                        <div>
 
-                        {selectedOption === "Home" ? 
+                            {selectedOption === "Home" ? 
 
-                            <section id="HomeChanges">
+                                <section id="HomeChanges">
 
-                                <fieldset className="addBanner">
+                                    <fieldset className="addBanner">
+                                        
+                                        <legend>Inserir novo banner</legend>
+
+                                        <input name='title' onChange={handleInputBannerChange} placeholder='Título' value={newDataBanner.title} />
+                                        <input type='file' onChange={uploadImage} accept="image/png, image/jpeg" placeholder='Imagem' />
+
+                                        <div className="buttonChanges">
+
+                                            <a onClick={() => { insertNewBanner() }} >Inserir</a>
+
+                                        </div>
+                                        
+                                    </fieldset>
                                     
-                                    <legend>Inserir novo banner</legend>
+                                    <fieldset className="updateBanner">
 
-                                    <input name='title' onChange={handleInputBannerChange} placeholder='Título' value={newDataBanner.title} />
-                                    <input type='file' onChange={uploadImage} accept="image/png, image/jpeg" placeholder='Imagem' />
+                                        <legend>Alterar Banner</legend>
 
-                                    <div className="buttonChanges">
+                                        <select onChange={(event)=>handleSelectedBanner(event)} >
 
-                                        <a onClick={() => { insertNewBanner() }} >Inserir</a>
+                                            <option selected disabled>Selecione o banner que deseja alterar</option>
 
-                                    </div>
-                                    
-                                </fieldset>
+                                            {dataBanner.map((item, index) => {
+
+                                                return (
+
+                                                    <option value={index} key={index}>{item.title}</option>
+
+                                                )
+
+                                            })}
+
+                                        </select>
+
+                                        <h4>Preencha o que deseja alterar</h4>
+
+                                        <input 
+                                            name='title' 
+                                            onChange={handleInputBannerChangeAlter} 
+                                            placeholder='Título'
+                                            value={dataAlterBanner.title}
+                                        />
+
+                                        <input 
+                                            type='file'
+                                            onChange={uploadImageAltered}
+                                            accept="image/png, image/jpeg"
+                                            placeholder='Imagem'
+                                        />
+
+                                        <div className="buttonChanges">
+
+                                            <a onClick={() => { updateBanner() }} >Alterar</a>
+
+                                        </div>
+
+                                    </fieldset>
+
+                                    <fieldset>
+
+                                        <legend>
+                                            <h2>Apagar banner</h2>
+                                        </legend>
+
+                                        <select onChange={handleSelectBannerToDelete} >
+
+                                            <option>Selecione o banner</option>
+
+                                            {dataBanner.map((item, index) => {
+
+                                                return (
+
+                                                    <option value={index} key={index}>{item.title}</option>
+
+                                                )
+
+                                            })}
+
+                                        </select>
+
+                                        <div className="buttonChanges">
+
+                                            <a onClick={() => { deleteBanner() }} >Apagar</a>
+
+                                        </div>
+
+                                    </fieldset>
+
+                                </section>
                                 
-                                <fieldset className="updateBanner">
-
-                                    <legend>Alterar Banner</legend>
-
-                                    <select onChange={(event)=>handleSelectedBanner(event)} >
-
-                                        <option selected disabled>Selecione o banner que deseja alterar</option>
-
-                                        {dataBanner.map((item, index) => {
-
-                                            return (
-
-                                                <option value={index} key={index}>{item.title}</option>
-
-                                            )
-
-                                        })}
-
-                                    </select>
-
-                                    <h4>Preencha o que deseja alterar</h4>
-
-                                    <input 
-                                        name='title' 
-                                        onChange={handleInputBannerChangeAlter} 
-                                        placeholder='Título'
-                                        value={dataAlterBanner.title}
-                                    />
-
-                                    <input 
-                                        type='file'
-                                        onChange={uploadImageAltered}
-                                        accept="image/png, image/jpeg"
-                                        placeholder='Imagem'
-                                    />
-
-                                    <div className="buttonChanges">
-
-                                        <a onClick={() => { updateBanner() }} >Alterar</a>
-
-                                    </div>
-
-                                </fieldset>
-
-                                <fieldset>
-
-                                    <legend>
-                                        <h2>Apagar banner</h2>
-                                    </legend>
-
-                                    <select onChange={handleSelectBannerToDelete} >
-
-                                        <option>Selecione o banner</option>
-
-                                        {dataBanner.map((item, index) => {
-
-                                            return (
-
-                                                <option value={index} key={index}>{item.title}</option>
-
-                                            )
-
-                                        })}
-
-                                    </select>
-
-                                    <div className="buttonChanges">
-
-                                        <a onClick={() => { deleteBanner() }} >Apagar</a>
-
-                                    </div>
-
-                                </fieldset>
-
-                            </section>
-                            
-                            : 
-                            
-                            <section id="AboutChanges">
-
-                                <fieldset className="updateHeroVideo">
-                                    
-                                    <legend>Alterar vídeo da página Quem Somos</legend>
-
-                                    <input 
-                                        type='file'
-                                        onChange={uploadVideoAltered}
-                                        accept="video/*"
-                                        placeholder='Vídeo'
-                                    />
-
-                                    <div className="buttonChanges">
-
-                                        <a onClick={() => { updateAbout() }} >Alterar</a>
-
-                                    </div>
-                                    
-                                </fieldset>
-
-                                <fieldset className="updateIntroText">
-
-                                    <legend>Alterar texto de Quem Somos</legend>
-
-                                    <input 
-                                        name='title' 
-                                        onChange={handleInputTextChangeAlter} 
-                                        placeholder='Título'
-                                    />
-
-                                    <div className="buttonChanges">
-
-                                        <a onClick={() => { updateAbout() }} >Alterar</a>
-
-                                    </div>
-
-                                </fieldset>
-
-                                <fieldset className="addCardWine">
-                                    
-                                    <legend>Inserir descrição de países</legend>
-
-                                    <input name='country' onChange={handleInputCardChange} placeholder='País' value={newDataCard.country} />
-                                    <input name='desc' onChange={handleInputCardChange} placeholder='Descrição' value={newDataCard.desc} />
-                                    <input type='file' onChange={uploadCardImage} accept="image/png, image/jpeg" placeholder='Imagem' />
-
-                                    <div className="buttonChanges">
-
-                                        <a onClick={() => { insertNewCard() }} >Inserir</a>
-
-                                    </div>
-                                    
-                                </fieldset>
+                                : 
                                 
-                                <fieldset className="updateBanner">
+                                <section id="AboutChanges">
 
-                                    <legend>Alterar descrição</legend>
+                                    <fieldset className="updateHeroVideo">
+                                        
+                                        <legend>Alterar vídeo da página "Quem Somos"</legend>
 
-                                    <select onChange={(event)=>handleSelectedCard(event)} >
+                                        <input 
+                                            type='file'
+                                            onChange={uploadVideoAltered}
+                                            accept="video/*"
+                                            placeholder='Vídeo'
+                                        />
 
-                                        <option selected disabled>Selecione o país que deseja alterar</option>
+                                        <div className="buttonChanges">
 
-                                        {dataCard.map((item, index) => {
+                                            <a onClick={() => { updateAbout() }} >Alterar</a>
 
-                                            return (
+                                        </div>
+                                        
+                                    </fieldset>
 
-                                                <option value={index} key={index}>{item.country}</option>
+                                    <fieldset className="updateIntroText">
 
-                                            )
+                                        <legend>Alterar texto de Quem Somos</legend>
 
-                                        })}
+                                        <input 
+                                            name='title' 
+                                            onChange={handleInputTextChangeAlter} 
+                                            placeholder='Descrição'
+                                        />
 
-                                    </select>
+                                        <div className="buttonChanges">
 
-                                    <h4>Preencha o que deseja alterar</h4>
+                                            <a onClick={() => { updateAbout() }} >Alterar</a>
 
-                                    <input 
-                                        name='country' 
-                                        onChange={handleInputCardChangeAlter} 
-                                        placeholder='Título'
-                                        value={dataAlterCard.country}
-                                    />
+                                        </div>
 
-                                    <input 
-                                        name='desc' 
-                                        onChange={handleInputCardChangeAlter} 
-                                        placeholder='Título'
-                                        value={dataAlterCard.desc}
-                                    />
+                                    </fieldset>
 
-                                    <input 
-                                        type='file'
-                                        onChange={uploadCardImageAltered}
-                                        accept="image/png, image/jpeg"
-                                        placeholder='Imagem'
-                                    />
+                                    <fieldset className="addCardWine">
+                                        
+                                        <legend>Inserir descrição de países</legend>
 
-                                    <div className="buttonChanges">
+                                        <input name='country' onChange={handleInputCardChange} placeholder='País' value={newDataCard.country} />
+                                        <input name='desc' onChange={handleInputCardChange} placeholder='Descrição' value={newDataCard.desc} />
+                                        <input type='file' onChange={uploadCardImage} accept="image/png, image/jpeg" placeholder='Imagem' />
 
-                                        <a onClick={() => { updateCard() }} >Alterar</a>
+                                        <div className="buttonChanges">
 
-                                    </div>
+                                            <a onClick={() => { insertNewCard() }} >Inserir</a>
 
-                                </fieldset>
+                                        </div>
+                                        
+                                    </fieldset>
+                                    
+                                    <fieldset className="updateBanner">
 
-                                <fieldset>
+                                        <legend >Alterar descrição dos países</legend>
 
-                                    <legend>
-                                        <h2>Apagar descrição</h2>
-                                    </legend>
+                                        <select className="alterCountryCard" onChange={(event)=>handleSelectedCard(event)} >
 
-                                    <select onChange={handleSelectCardToDelete} >
+                                            <option selected disabled>Selecione o país que deseja alterar</option>
 
-                                        <option>Selecione a descrição</option>
+                                            {dataCard.map((item, index) => {
 
-                                        {dataCard.map((item, index) => {
+                                                return (
 
-                                            return (
+                                                    <option value={index} key={index}>{item.country}</option>
 
-                                                <option value={index} key={index}>{item.country}</option>
+                                                )
 
-                                            )
+                                            })}
 
-                                        })}
+                                        </select>
 
-                                    </select>
+                                        <legend>Preencha o que deseja alterar</legend>
 
-                                    <div className="buttonChanges">
+                                        <input 
+                                            name='country' 
+                                            onChange={handleInputCardChangeAlter} 
+                                            placeholder='País'
+                                            value={dataAlterCard.country}
+                                        />
 
-                                        <a onClick={() => { deleteCard() }} >Apagar</a>
+                                        <input 
+                                            name='desc' 
+                                            onChange={handleInputCardChangeAlter} 
+                                            placeholder='Descrição'
+                                            value={dataAlterCard.desc}
+                                        />
 
-                                    </div>
+                                        <input 
+                                            type='file'
+                                            onChange={uploadCardImageAltered}
+                                            accept="image/png, image/jpeg"
+                                            placeholder='Imagem'
+                                        />
 
-                                </fieldset>
+                                        <div className="buttonChanges">
 
-                            </section>
-                        
-                        }
+                                            <a onClick={() => { updateCard() }} >Alterar país</a>
 
-                    </div>
+                                        </div>
 
+                                    </fieldset>
+
+                                    <fieldset>
+
+                                        <legend>Apagar descrição</legend>
+
+                                        <select onChange={handleSelectCardToDelete} >
+
+                                            <option>Selecione a descrição</option>
+
+                                            {dataCard.map((item, index) => {
+
+                                                return (
+
+                                                    <option value={index} key={index}>{item.country}</option>
+
+                                                )
+
+                                            })}
+
+                                        </select>
+
+                                        <div className="buttonChanges">
+
+                                            <a onClick={() => { deleteCard() }} >Apagar</a>
+
+                                        </div>
+
+                                    </fieldset>
+
+                                </section>
+                            
+                            }
+
+                        </div>
+
+                    </section>
                 </section>
-
-
+                <Footer />
             </main>
 
         )

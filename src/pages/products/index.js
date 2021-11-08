@@ -274,7 +274,6 @@ function Products() {
                     <li onClick={handleSelectedProduct}>Suave</li>
                     <li onClick={handleSelectedProduct}>Kits</li>
                     <li onClick={handleSelectedProduct}>Outros</li>
-                    <li onClick={handleSelectedProduct}>Espanha</li>
 
                 </ul>
 

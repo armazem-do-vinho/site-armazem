@@ -18,8 +18,10 @@ function Cart() {
     const [data, setData] = useState([]);
     const [seller, setSeller] = useState([]);
     const [dataUsers, setDataUsers] = useState([]);
+    const [dataVoucher, setDataVoucher] = useState([]);
     const [isSeller, setIsSeller] = useState(false);
     const [totalValue, setTotalValue] = useState(0);
+    const [finalValue, setFinalValue] = useState(0);
     const [dataAccount, setDataAccount] = useState([]);
     const [dataExists, setDataExists] = useState(false);
     const [userIsLogged, setUserIsLogged] = useState(false);
@@ -27,6 +29,8 @@ function Cart() {
     const [clientNote, setClientNote] = useState('');
     const [displayButtonClear, setDisplayButtonClear] = useState('none');
     const [selectedPayment, setSelectedPayment] = useState('');
+    const [userVoucher, setUserVoucher] = useState('');
+    const [userDiscount, setUserDiscount] = useState(0);
 
     const [paidFor, setPaidForm] = useState(false);
     const [loaded, setLoaded] = useState(false);
@@ -64,6 +68,7 @@ function Cart() {
                 total = value + total
 
                 setTotalValue(total)
+
             })
 
         }
@@ -79,6 +84,47 @@ function Cart() {
         if (!firebase.apps.length)
             firebase.initializeApp(firebaseConfig);
         onAuthStateChanged()
+
+    }, [])
+
+    useEffect(() => {
+
+        if(userDiscount !== 0) {
+
+            setFinalValue(totalValue - (totalValue * (userDiscount/100)))
+
+        } else {
+
+            setFinalValue(totalValue)
+
+        }
+
+    })
+
+
+    useEffect(() => {
+
+        if (!firebase.apps.length)
+            firebase.initializeApp(firebaseConfig);
+
+        var firebaseRef = firebase.database().ref('vouchers/');
+
+        firebaseRef.on('value', (snapshot) => {
+    
+            if (snapshot.exists()) {
+
+                var data = snapshot.val()
+                var temp = Object.keys(data).map((key) => data[key])
+                setDataVoucher(temp.sort((a,b)=> {
+
+                  return (a.title > b.title) ? 1 : ((b.title > a.title) ? -1 : 0)
+
+                }))
+            }
+            else {
+              console.log("No data available");
+            }
+        })
 
     }, [])
 
@@ -146,7 +192,7 @@ function Cart() {
 
                     id: id,
                     listItem: data,
-                    totalValue: totalValue.toFixed(2),
+                    totalValue: finalValue.toFixed(2),
                     userName: dataAccount.name,
                     phoneNumber: dataAccount.phoneNumber,
                     address: dataAccount.address,
@@ -201,7 +247,7 @@ function Cart() {
 
                     id: id,
                     listItem: data,
-                    totalValue: totalValue.toFixed(2),
+                    totalValue: finalValue.toFixed(2),
                     userName: dataAccount.name,
                     phoneNumber: dataAccount.phoneNumber,
                     address: dataAccount.address,
@@ -251,7 +297,7 @@ function Cart() {
 
             id: id,
             listItem: data,
-            totalValue: totalValue.toFixed(2),
+            totalValue: finalValue.toFixed(2),
             userName: dataUsers[selectedClient].name,
             phoneNumber: dataUsers[selectedClient].phoneNumber,
             street: dataUsers[selectedClient].street,
@@ -283,6 +329,26 @@ function Cart() {
 
     }
 
+    function verifyVoucher() {
+
+        const voucher = userVoucher;
+
+        dataVoucher.map((item) => {
+
+            if(voucher === item.title) {
+
+                setUserDiscount(item.discount)
+
+            } else {
+
+                window.alert('O cupom inserido é inválido. Verifique se escreveu corretamente')
+
+            }
+
+        })
+
+    }
+
     function handleSelectPayment(event) {
 
         setSelectedPayment(event.target.value)
@@ -298,6 +364,12 @@ function Cart() {
     function handleClientNote(event) {
 
         setClientNote(event.target.value)
+
+    }
+
+    function handleVoucher(event) {
+
+        setUserVoucher(event.target.value)
 
     }
 
@@ -491,13 +563,19 @@ function Cart() {
 
                                             <button style={{ display: displayButtonClear }} onClick={() => cleanCart()}>Esvaziar carrinho</button>
 
-                                            <h3>Valor total: R$ {totalValue.toFixed(2)}</h3>
+                                            <h3>Valor total: R$ {finalValue.toFixed(2)}</h3>
 
                                         </div>
 
                                     </section>
 
                                     <div className="finishOrder">
+
+                                        <label for="voucherInput">Inserir cupom de desconto</label>
+
+                                        <input onChange={handleVoucher} id="voucherInput" placeholder="Cupom" />
+
+                                        <button onClick={() => verifyVoucher()}>Inserir</button>
 
                                         <select className="paymentSelect" onChange={handleSelectPayment} >
 
