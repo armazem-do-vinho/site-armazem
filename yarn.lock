@@ -2918,7 +2918,7 @@
   "resolved" "https://registry.npmjs.org/axe-core/-/axe-core-4.3.2.tgz"
   "version" "4.3.2"
 
-"axios@^0.21.1", "axios@^0.21.4":
+"axios@^0.21.4":
   "integrity" "sha512-ut5vewkiu8jjGBdqpM44XxjuCjq9LAKeHVmoVfHVzy8eHgxxq8SbAVQNovDA8mVi05kP0Ea/n/UzcSHcTJQfNg=="
   "resolved" "https://registry.npmjs.org/axios/-/axios-0.21.4.tgz"
   "version" "0.21.4"
@@ -8072,14 +8072,6 @@
   "integrity" "sha1-hxDXrwqmJvj/+hzgAWhUUmMlV0g="
   "resolved" "https://registry.npmjs.org/media-typer/-/media-typer-0.3.0.tgz"
   "version" "0.3.0"
-
-"melhor-envio@^1.6.3":
-  "integrity" "sha512-Sv98orzK0rxYnvbMaOp7z+fa8JiDBBO7EwEimZzJtMEHxWGsOr0kfNxahFQcy+QA4GAv3p3Rho2z7QMHlq0ptw=="
-  "resolved" "https://registry.npmjs.org/melhor-envio/-/melhor-envio-1.6.3.tgz"
-  "version" "1.6.3"
-  dependencies:
-    "axios" "^0.21.1"
-    "form-data" "^3.0.0"
 
 "memory-fs@^0.4.1":
   "integrity" "sha1-OpoguEYlI+RHz7x+i7gO1me/xVI="
