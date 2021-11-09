@@ -11,6 +11,8 @@ import 'firebase/auth'
 import 'firebase/database'
 import firebaseConfig from '../../FirebaseConfig.js'
 
+import MelhorEnvio from "../../functions/MelhorEnvioAPI.js"
+
 import trashCan from '../../img/trash.svg'
 
 function Cart() {
@@ -36,6 +38,78 @@ function Cart() {
     const [loaded, setLoaded] = useState(false);
 
     const [redirect, setRedirect] = useState(useHistory());
+
+    // const MelhorEnvioSdk = require('melhor-envio')
+
+    // var request = require('request');
+    //     var options = {
+    //     'method': 'POST',
+    //     'url': 'https://melhorenvio.com.br/oauth/token',
+    //     'headers': {
+    //         'Accept': 'application/json',
+    //         'User-Agent': 'Armazém teste higorb2000@gmail.com'
+    //     },
+    //     formData: {
+    //         'grant_type': 'authorization_code',
+    //         'client_id': '5977',
+    //         'client_secret': 'T4ccIYmSnj0vsC3GROP0KSt9FKaAofylAwUQQlzt',
+    //         'redirect_uri': '{{callback}}',
+    //         'code': '{{code}}'
+    //     }
+    //     };
+    //     request(options, function (error, response) {
+    //     if (error) throw new Error(error);
+    //     console.log(response.body);
+    //     });
+
+    // const me = new MelhorEnvioSdk({
+
+    //     client_id: 'NoFIRJWYMjWbuW6ivVmzh6WkmGik5ZoMdy',
+    //     client_secret: 'HKwu8zOnl2B7IgsZzrc3IK3FGJXFS75x',
+    //     sandbox: true,
+    //     bearer:
+    //         'x06muiypOSXkqRJo7lT82gDamRpj9VLmfSYplyalk5jLdetbHdrupeme3qjnc17I8AH2bXFp1Isapykr8pmHT6zkmOqA1lO3484V19PewdfT5dfw',
+    //     redirect_uri: 'https://localhost:3000/callback',
+    //     request_scope:
+    //         'cart-read cart-write companies-read companies-write coupons-read coupons-write notifications-read orders-read products-read products-write purchases-read shipping-calculate shipping-cancel shipping-checkout shipping-companies shipping-generate shipping-preview shipping-print shipping-share shipping-tracking ecommerce-shipping transactions-read users-read users-write webhooks-read webhooks-write',
+    //     state: 'BPMDruWTWzd',
+
+    // })
+
+    // const url = me.auth.getAuth()
+
+    // function deliveryTest() {
+
+    //     me.shipment
+    //     .calculate({
+    //         from: {
+    //         postal_code: '31920333',
+    //         address: 'Rua Arco-íres',
+    //         number: '24',
+    //         },
+    //         to: {
+    //         postal_code: '90570020',
+    //         address: 'Rua Pomba Branca',
+    //         number: '18',
+    //         },
+    //         package: {
+    //         weight: 1,
+    //         width: 12,
+    //         height: 4,
+    //         length: 17,
+    //         },
+    //         options: {
+    //         insurance_value: 20.5,
+    //         receipt: false,
+    //         own_hand: false,
+    //         collect: false,
+    //         },
+    //     })
+    //     .then(({ data }) => console.log(data))
+    //     .catch((e) => console.log(e))
+
+    // }
+
 
     function onAuthStateChanged(user) {
 
@@ -338,10 +412,7 @@ function Cart() {
             if(voucher === item.title) {
 
                 setUserDiscount(item.discount)
-
-            } else {
-
-                window.alert('O cupom inserido é inválido. Verifique se escreveu corretamente')
+                window.alert('Cupom inserido com sucesso!')
 
             }
 
@@ -565,6 +636,18 @@ function Cart() {
 
                                             <h3>Valor total: R$ {finalValue.toFixed(2)}</h3>
 
+                                            {userDiscount ?
+
+                                                <>
+                                                    <h3>Desconto: {userDiscount}%</h3>
+                                                </>
+
+                                                : 
+                                                
+                                                <h3></h3>
+
+                                            }
+
                                         </div>
 
                                     </section>
@@ -600,6 +683,7 @@ function Cart() {
                                         <Link to='/produtos'>Continuar comprando</Link>
 
                                         <button onClick={() => sendOrder()} >Finalizar pedido</button>
+                                        <button onClick={() => MelhorEnvio.calculaFrete()} >teste</button>
 
                                     </div>
 

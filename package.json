@@ -9,6 +9,7 @@
     "axios": "^0.21.4",
     "emailjs-com": "^3.2.0",
     "firebase": "^8.7.1",
+    "melhor-envio": "^1.6.3",
     "mercadopago": "^1.5.8",
     "node-sass": "^4.14.1",
     "react": "^17.0.2",
