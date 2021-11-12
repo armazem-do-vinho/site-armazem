@@ -20,11 +20,14 @@ function Items() {
         desc: '',
         price: '',
         itemAvailability: 0,
-        itemWeight: '',
         country: '',
         type: '',
         sweetness: '',
-        amountInStock: ''
+        amountInStock: '',
+        itemWeight: '',
+        itemWidth: '',
+        itemHeight: '',
+        itemLength: '',
 
     })
 
@@ -40,11 +43,14 @@ function Items() {
         desc: '',
         price: '',
         itemAvailability: 0,
-        itemWeight: '',
         country: '',
         type: '',
         sweetness: '',
-        amountInStock: ''
+        amountInStock: '',
+        itemWeight: '',
+        itemWidth: '',
+        itemHeight: '',
+        itemLength: '',
 
     })
 
@@ -138,6 +144,9 @@ function Items() {
             id: id,
             itemAvailability: newDataAdmin.itemAvailability,
             itemWeight: newDataAdmin.itemWeight,
+            itemWidth: newDataAdmin.itemWidth,
+            itemHeight: newDataAdmin.itemHeight,
+            itemLength: newDataAdmin.itemLength,
             country: newDataAdmin.country,
             type: newDataAdmin.type,
             sweetness: newDataAdmin.sweetness,
@@ -158,6 +167,9 @@ function Items() {
             price: '',
             itemAvailability: 0,
             itemWeight: '',
+            itemWidth: '',
+            itemHeight: '',
+            itemLength: '',
             country: '',
             type: '',
             sweetness: '',
@@ -177,6 +189,9 @@ function Items() {
         title: dataAlterItem.title !== '' ? dataAlterItem.title : dataAdmin[selectItem].title,
         desc: dataAlterItem.desc !== '' ? dataAlterItem.desc : dataAdmin[selectItem].desc,
         itemWeight: dataAlterItem.itemWeight !== '' ? dataAlterItem.itemWeight : dataAdmin[selectItem].itemWeight,
+        itemWidth: dataAlterItem.itemWidth !== '' ? dataAlterItem.itemWidth : dataAdmin[selectItem].itemWidth,
+        itemHeight: dataAlterItem.itemHeight !== '' ? dataAlterItem.itemHeight : dataAdmin[selectItem].itemHeight,
+        itemLength: dataAlterItem.itemLength !== '' ? dataAlterItem.itemLength : dataAdmin[selectItem].itemLength,
         price: dataAlterItem.price !== 0 ? dataAlterItem.price : dataAdmin[selectItem].price,
         itemAvailability: dataAlterItem.itemAvailability !== 0 ? dataAlterItem.itemAvailability : dataAdmin[selectItem].itemAvailability,
         country: dataAlterItem.country !== 0 ? dataAlterItem.country : dataAdmin[selectItem].country,
@@ -254,7 +269,13 @@ function Items() {
 
                         <input name='desc' onChange={handleInputAdminChange} placeholder='Descrição' value={newDataAdmin.desc} />
 
-                        <input name='itemWeight' onChange={handleInputAdminChange} placeholder='Litros' type='number' value={newDataAdmin.itemWeight} />
+                        <input name='itemWeight' onChange={handleInputAdminChange} placeholder='Peso (em kg)' type='number' value={newDataAdmin.itemWeight} />
+
+                        <input name='itemWidth' onChange={handleInputAdminChange} placeholder='Largura (em cm)' type='number' value={newDataAdmin.itemWidth} />
+
+                        <input name='itemHeight' onChange={handleInputAdminChange} placeholder='Altura (em cm)' type='number' value={newDataAdmin.itemHeight} />
+
+                        <input name='itemLength' onChange={handleInputAdminChange} placeholder='Comprimento (em cm)' type='number' value={newDataAdmin.itemLength} />
 
                         <input name='price' onChange={handleInputAdminChange} placeholder='Valor' type='number' value={newDataAdmin.price} />
 
@@ -351,8 +372,29 @@ function Items() {
                         <input
                             name='itemWeight'
                             onChange={handleInputAdminChangeAlter}
-                            placeholder='Litros'
+                            placeholder='Peso (em kg)'
                             value={dataAlterItem.itemWeight}
+                        />
+
+                        <input
+                            name='itemWidth'
+                            onChange={handleInputAdminChangeAlter}
+                            placeholder='Largura (em cm)'
+                            value={dataAlterItem.itemWidth}
+                        />
+
+                        <input
+                            name='itemHeight'
+                            onChange={handleInputAdminChangeAlter}
+                            placeholder='Altura (em cm)'
+                            value={dataAlterItem.itemHeight}
+                        />
+
+                        <input
+                            name='itemLength'
+                            onChange={handleInputAdminChangeAlter}
+                            placeholder='Comprimento (em cm)'
+                            value={dataAlterItem.itemLength}
                         />
 
                         <input
@@ -376,7 +418,6 @@ function Items() {
                           placeholder='Quantidade em estoque'
                           value={dataAlterItem.amountInStock}
                         />
-
 
                         <select onChange={handleInputAdminChangeAlter} name='itemAvailability' >
            

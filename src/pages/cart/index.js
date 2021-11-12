@@ -30,86 +30,20 @@ function Cart() {
     const [selectedClient, setSelectedClient] = useState('');
     const [clientNote, setClientNote] = useState('');
     const [displayButtonClear, setDisplayButtonClear] = useState('none');
+    const [displayTransport, setDisplayTransport] = useState('none');
     const [selectedPayment, setSelectedPayment] = useState('');
     const [userVoucher, setUserVoucher] = useState('');
     const [userDiscount, setUserDiscount] = useState(0);
-
+    const [dataProduct, setDataProduct] = useState([]);
+    const [customerCep, setCustomerCep] = useState('');
+    const [transportData, setTransportData] = useState([]);
+    const [selectedTransportData, setSelectedTransportData] = useState([]);
+    const [isVoucher, setIsVoucher] = useState(false);
+    
     const [paidFor, setPaidForm] = useState(false);
     const [loaded, setLoaded] = useState(false);
 
     const [redirect, setRedirect] = useState(useHistory());
-
-    // const MelhorEnvioSdk = require('melhor-envio')
-
-    // var request = require('request');
-    //     var options = {
-    //     'method': 'POST',
-    //     'url': 'https://melhorenvio.com.br/oauth/token',
-    //     'headers': {
-    //         'Accept': 'application/json',
-    //         'User-Agent': 'Armazém teste higorb2000@gmail.com'
-    //     },
-    //     formData: {
-    //         'grant_type': 'authorization_code',
-    //         'client_id': '5977',
-    //         'client_secret': 'T4ccIYmSnj0vsC3GROP0KSt9FKaAofylAwUQQlzt',
-    //         'redirect_uri': '{{callback}}',
-    //         'code': '{{code}}'
-    //     }
-    //     };
-    //     request(options, function (error, response) {
-    //     if (error) throw new Error(error);
-    //     console.log(response.body);
-    //     });
-
-    // const me = new MelhorEnvioSdk({
-
-    //     client_id: 'NoFIRJWYMjWbuW6ivVmzh6WkmGik5ZoMdy',
-    //     client_secret: 'HKwu8zOnl2B7IgsZzrc3IK3FGJXFS75x',
-    //     sandbox: true,
-    //     bearer:
-    //         'x06muiypOSXkqRJo7lT82gDamRpj9VLmfSYplyalk5jLdetbHdrupeme3qjnc17I8AH2bXFp1Isapykr8pmHT6zkmOqA1lO3484V19PewdfT5dfw',
-    //     redirect_uri: 'https://localhost:3000/callback',
-    //     request_scope:
-    //         'cart-read cart-write companies-read companies-write coupons-read coupons-write notifications-read orders-read products-read products-write purchases-read shipping-calculate shipping-cancel shipping-checkout shipping-companies shipping-generate shipping-preview shipping-print shipping-share shipping-tracking ecommerce-shipping transactions-read users-read users-write webhooks-read webhooks-write',
-    //     state: 'BPMDruWTWzd',
-
-    // })
-
-    // const url = me.auth.getAuth()
-
-    // function deliveryTest() {
-
-    //     me.shipment
-    //     .calculate({
-    //         from: {
-    //         postal_code: '31920333',
-    //         address: 'Rua Arco-íres',
-    //         number: '24',
-    //         },
-    //         to: {
-    //         postal_code: '90570020',
-    //         address: 'Rua Pomba Branca',
-    //         number: '18',
-    //         },
-    //         package: {
-    //         weight: 1,
-    //         width: 12,
-    //         height: 4,
-    //         length: 17,
-    //         },
-    //         options: {
-    //         insurance_value: 20.5,
-    //         receipt: false,
-    //         own_hand: false,
-    //         collect: false,
-    //         },
-    //     })
-    //     .then(({ data }) => console.log(data))
-    //     .catch((e) => console.log(e))
-
-    // }
-
 
     function onAuthStateChanged(user) {
 
@@ -142,6 +76,7 @@ function Cart() {
                 total = value + total
 
                 setTotalValue(total)
+                setFinalValue(total)
 
             })
 
@@ -161,20 +96,54 @@ function Cart() {
 
     }, [])
 
-    useEffect(() => {
+    useEffect(async () => {
 
-        if(userDiscount !== 0) {
+        const verify = await JSON.parse(localStorage.getItem('products'))
 
-            setFinalValue(totalValue - (totalValue * (userDiscount/100)))
+        if (verify !== null) {
 
-        } else {
+            var temp = Object.keys(verify).map((key) => verify[key])
 
-            setFinalValue(totalValue)
+            let aux = [];
 
+            temp.map((product) => {
+
+                const productInfos = {
+
+                    "id": product.id,
+                    "width": product.itemWidth,
+                    "height": product.itemHeight,
+                    "length": product.itemLength,
+                    "weight": product.itemWeight,
+                    "insurance_value": product.price,
+                    "quantity": product.amount,
+
+                }
+
+                aux.push(productInfos)
+                setDataProduct(aux)
+
+            })
         }
+        else
+            setDataExists(false)
 
-    })
+    }, [])
 
+    // useEffect(() => {
+
+    //     if (userDiscount !== 0) {
+
+    //         setFinalValue(totalValue - (totalValue * (userDiscount / 100)))
+
+    //     } else {
+
+    //         setFinalValue(totalValue)
+    //         console.log('aaa', selectedTransportData)
+
+    //     }
+
+    // }, [])
 
     useEffect(() => {
 
@@ -184,19 +153,19 @@ function Cart() {
         var firebaseRef = firebase.database().ref('vouchers/');
 
         firebaseRef.on('value', (snapshot) => {
-    
+
             if (snapshot.exists()) {
 
                 var data = snapshot.val()
                 var temp = Object.keys(data).map((key) => data[key])
-                setDataVoucher(temp.sort((a,b)=> {
+                setDataVoucher(temp.sort((a, b) => {
 
-                  return (a.title > b.title) ? 1 : ((b.title > a.title) ? -1 : 0)
+                    return (a.title > b.title) ? 1 : ((b.title > a.title) ? -1 : 0)
 
                 }))
             }
             else {
-              console.log("No data available");
+                console.log("No data available");
             }
         })
 
@@ -314,40 +283,40 @@ function Cart() {
 
         if (userIsLogged) {
 
-                const id = firebase.database().ref().child('posts').push().key
-                const now = new Date()
+            const id = firebase.database().ref().child('posts').push().key
+            const now = new Date()
 
-                const dataToSend = {
+            const dataToSend = {
 
-                    id: id,
-                    listItem: data,
-                    totalValue: finalValue.toFixed(2),
-                    userName: dataAccount.name,
-                    phoneNumber: dataAccount.phoneNumber,
-                    address: dataAccount.address,
-                    houseNumber: dataAccount.houseNumber,
-                    district: dataAccount.district,
-                    cepNumber: dataAccount.cepNumber,
-                    complement: dataAccount.complement,
-                    paymentType: 'Paypal',
-                    clientNote: clientNote,
-                    userEmail: dataAccount.email,
-                    // adminNote: '',
-                    dateToCompare: new Date().toDateString(),
-                    date: `${now.getUTCDate()}/${now.getMonth()}/${now.getFullYear()}-${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}`
+                id: id,
+                listItem: data,
+                totalValue: finalValue.toFixed(2),
+                userName: dataAccount.name,
+                phoneNumber: dataAccount.phoneNumber,
+                address: dataAccount.address,
+                houseNumber: dataAccount.houseNumber,
+                district: dataAccount.district,
+                cepNumber: dataAccount.cepNumber,
+                complement: dataAccount.complement,
+                paymentType: 'Paypal',
+                clientNote: clientNote,
+                userEmail: dataAccount.email,
+                // adminNote: '',
+                dateToCompare: new Date().toDateString(),
+                date: `${now.getUTCDate()}/${now.getMonth()}/${now.getFullYear()}-${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}`
 
-                }
+            }
 
-                firebase.database().ref('requests/' + id).set(dataToSend)
-                    .then(() => {
-                        localStorage.setItem('products', '{}')
-                    })
+            firebase.database().ref('requests/' + id).set(dataToSend)
+                .then(() => {
+                    localStorage.setItem('products', '{}')
+                })
 
-                firebase.database().ref('reportsSales/' + id).set(dataToSend)
-                    .then(() => {
-                        localStorage.setItem('products', '{}')
-                        alert("Pedido finalizado com sucesso!.")
-                    })
+            firebase.database().ref('reportsSales/' + id).set(dataToSend)
+                .then(() => {
+                    localStorage.setItem('products', '{}')
+                    alert("Pedido finalizado com sucesso!.")
+                })
 
         }
         else {
@@ -405,18 +374,27 @@ function Cart() {
 
     function verifyVoucher() {
 
-        const voucher = userVoucher;
+        const verify = isVoucher;
 
         dataVoucher.map((item) => {
 
-            if(voucher === item.title) {
+            if (userVoucher === item.title) {
 
                 setUserDiscount(item.discount)
+                setIsVoucher(true)
+                setFinalValue(totalValue - (totalValue * (item.discount / 100)))
+
                 window.alert('Cupom inserido com sucesso!')
 
-            }
+            } 
 
         })
+
+        if (verify === false) {
+
+            window.alert('Cupom inválido')
+
+        }
 
     }
 
@@ -432,9 +410,21 @@ function Cart() {
 
     }
 
+    function handleSelectedTransport(event, item) {
+
+        setSelectedTransportData(item)
+
+    }
+
     function handleClientNote(event) {
 
         setClientNote(event.target.value)
+
+    }
+
+    function handleInputCep(event) {
+
+        setCustomerCep(event.target.value)
 
     }
 
@@ -459,6 +449,36 @@ function Cart() {
         }
 
     }
+
+    const dataToSend = {
+        "from": {
+            "postal_code": "96020360"
+        },
+        "to": {
+            "postal_code": customerCep
+        },
+        "products": dataProduct
+    }
+
+    const calculaFrete = async () => {
+
+        await fetch('https://melhorenvio.com.br/api/v2/me/shipment/calculate', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${process.env.REACT_APP_BEARER_KEY} `,
+                'User-Agent': 'Armazém teste higorb2000@gmail.com'
+            },
+            body: JSON.stringify(dataToSend)
+        }).then((response) => {
+            return response.json();
+        }).then((data) => {
+            setTransportData(data)
+            setDisplayTransport('flex')
+            console.log(data)
+        }).catch(err => console.log(err))
+    };
 
     let paypalRef = useRef();
 
@@ -520,33 +540,33 @@ function Cart() {
 
                                 <h1>Compra confirmada com sucesso!</h1>
 
-                                    <div className="purchaseWrapper">
+                                <div className="purchaseWrapper">
 
-                                        <h5>Detalhes da compra</h5>
+                                    <h5>Detalhes da compra</h5>
 
-                                        <table>
+                                    <table>
 
-                                            <tr>
+                                        <tr>
 
-                                                <td>Produto</td>
-                                                <td>Quantidade</td>
-                                                <td>Valor</td>
+                                            <td>Produto</td>
+                                            <td>Quantidade</td>
+                                            <td>Valor</td>
 
-                                            </tr>
+                                        </tr>
 
-                                            <tr>
+                                        <tr>
 
-                                                <td>A</td>
-                                                <td>3</td>
-                                                <td>44,55</td>
+                                            <td>A</td>
+                                            <td>3</td>
+                                            <td>44,55</td>
 
-                                            </tr>
+                                        </tr>
 
-                                        </table>
+                                    </table>
 
-                                        <h3>Total: R$ 999,99</h3>
+                                    <h3>Total: R$ 999,99</h3>
 
-                                    </div>
+                                </div>
 
                             </section>
 
@@ -642,8 +662,8 @@ function Cart() {
                                                     <h3>Desconto: {userDiscount}%</h3>
                                                 </>
 
-                                                : 
-                                                
+                                                :
+
                                                 <h3></h3>
 
                                             }
@@ -658,14 +678,53 @@ function Cart() {
 
                                         <input onChange={handleVoucher} id="voucherInput" placeholder="Cupom" />
 
-                                        <button onClick={() => verifyVoucher()}>Inserir</button>
+                                        <button onClick={() => verifyVoucher()}>Inserir cupom</button>
+
+                                        <input onChange={handleInputCep} placeholder="CEP" />
+
+                                        <button onClick={() => { calculaFrete() }}>Calcular frete</button>
+
+                                        <div className="transportInfos" style={{ display: displayTransport }}>
+
+                                            <h1>Selecione a transportadora abaixo</h1>
+
+                                            {transportData.map((item) => {
+
+                                                if (item.id === 1 || item.id === 2 || item.id === 3) {
+
+                                                return (
+
+                                                    <div onClick={(e)=>handleSelectedTransport(e, item)} key={item.id} value={item.name} className="optionsTransport">
+
+                                                        <div className="transportLogoWrapper">
+
+                                                            <img src={item.company.picture} alt={item.company.name} />
+
+                                                        </div>
+
+                                                        <div className="textTransportInfos">
+
+                                                            <span>{item.company.name} ({item.name})</span>
+                                                            <span><strong>R${item.custom_price}</strong></span>
+                                                            <span>Prazo de entrega: <strong>{item.custom_delivery_time} dias úteis</strong></span>
+
+                                                        </div>
+
+                                                    </div>
+
+                                                    )
+                                                }
+
+                                            })}
+
+                                        </div>
 
                                         <select className="paymentSelect" onChange={handleSelectPayment} >
 
                                             <option value=''>Selecione o tipo de pagamento</option>
-                                            <option value="Dinheiro" >Dinheiro</option>
-                                            <option value="Débito" >Cartão de débito (máquina)</option>
-                                            <option value="Crédito" >Cartão de crédito (máquina)</option>
+                                            <option value="Dinheiro" >Dinheiro (apenas para entregas na região)</option>
+                                            <option value="Débito (máquina)" >Cartão de débito (apenas para entregas na região)</option>
+                                            <option value="Crédito (máquina)" >Cartão de crédito (apenas para entregas na região)</option>
                                             <option value="Pix" >PIX</option>
 
                                         </select>
@@ -683,7 +742,6 @@ function Cart() {
                                         <Link to='/produtos'>Continuar comprando</Link>
 
                                         <button onClick={() => sendOrder()} >Finalizar pedido</button>
-                                        <button onClick={() => MelhorEnvio.calculaFrete()} >teste</button>
 
                                     </div>
 
