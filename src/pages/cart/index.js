@@ -32,6 +32,7 @@ function Cart() {
     const [displayButtonClear, setDisplayButtonClear] = useState('none');
     const [displayTransport, setDisplayTransport] = useState('none');
     const [selectedPayment, setSelectedPayment] = useState('');
+    const [pickupSelect, setPickupSelect] = useState('');
     const [userVoucher, setUserVoucher] = useState('');
     const [userDiscount, setUserDiscount] = useState(0);
     const [dataProduct, setDataProduct] = useState([]);
@@ -39,6 +40,7 @@ function Cart() {
     const [transportData, setTransportData] = useState([]);
     const [selectedTransportData, setSelectedTransportData] = useState([]);
     const [isVoucher, setIsVoucher] = useState(false);
+    const [displayCepSearch, setDisplayCepSearch] = useState('none');
     
     const [paidFor, setPaidForm] = useState(false);
     const [loaded, setLoaded] = useState(false);
@@ -404,15 +406,45 @@ function Cart() {
 
     }
 
+    function handlePickupSelect(event) {
+
+        const pickup = event.target.value
+
+        setPickupSelect(pickup)
+
+        if (pickup === 'Frete') {
+
+            setDisplayCepSearch('flex');
+
+        } else {
+
+            setDisplayCepSearch('none');
+
+        }
+
+    }
+
     function handleSelectedClient(event) {
 
         setSelectedClient(event.target.value)
 
     }
 
-    function handleSelectedTransport(event, item) {
+    function handleSelectedTransport(event, item, index) {
 
         setSelectedTransportData(item)
+        console.log(item)
+
+        // if(item.id === index + 1) {
+
+        //     setSelectedTransportOption('#e5e5e5');
+
+        // } else {
+
+        //     setSelectedTransportOption('#fff');
+
+        // }
+ 
 
     }
 
@@ -680,21 +712,36 @@ function Cart() {
 
                                         <button onClick={() => verifyVoucher()}>Inserir cupom</button>
 
-                                        <input onChange={handleInputCep} placeholder="CEP" />
+                                        <select className="pickupSelect" onChange={handlePickupSelect} >
 
-                                        <button onClick={() => { calculaFrete() }}>Calcular frete</button>
+                                            <option value=''>Selecione como deseja receber sua encomenda</option>
+                                            <option value="Motoboy" >Entrega por motoboy (apenas região)</option>
+                                            <option value="Frete" >Entrega por transportadora</option>
+                                            <option value="Retirada física" >Retirada em ponto físico</option>
+
+                                        </select>
+
+                                        <input style={{display: displayCepSearch}} onChange={handleInputCep} placeholder="CEP" />
+
+                                        <button style={{display: displayCepSearch}} onClick={() => { calculaFrete() }}>Calcular frete</button>
 
                                         <div className="transportInfos" style={{ display: displayTransport }}>
 
-                                            <h1>Selecione a transportadora abaixo</h1>
+                                            <h1>Selecione a opção de envio abaixo</h1>
 
-                                            {transportData.map((item) => {
+                                            {transportData.map((item, index) => {
 
                                                 if (item.id === 1 || item.id === 2 || item.id === 3) {
 
                                                 return (
 
-                                                    <div onClick={(e)=>handleSelectedTransport(e, item)} key={item.id} value={item.name} className="optionsTransport">
+                                                    <div className="optionsTransport">
+
+                                                        <div className="radioButton">
+
+                                                            <input onClick={(e)=>handleSelectedTransport(e, item, index)} type="radio" name="selectedTransport" key={item.id} value={item.name} />
+
+                                                        </div>
 
                                                         <div className="transportLogoWrapper">
 
@@ -705,7 +752,7 @@ function Cart() {
                                                         <div className="textTransportInfos">
 
                                                             <span>{item.company.name} ({item.name})</span>
-                                                            <span><strong>R${item.custom_price}</strong></span>
+                                                            <span><strong>R$ {item.custom_price}</strong></span>
                                                             <span>Prazo de entrega: <strong>{item.custom_delivery_time} dias úteis</strong></span>
 
                                                         </div>
