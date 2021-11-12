@@ -99,7 +99,7 @@ function About() {
 
                     return (
 
-                        <p><span className="firstLetter">C</span>{item.text}</p>
+                        <p>{item.text}</p>
 
                     )
 

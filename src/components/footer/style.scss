@@ -5,6 +5,7 @@ footer {
 
     width: 100vw;
     overflow-y: hidden;
+    overflow-x: hidden;
     color: var(--branco);
     background-color: $deepVinho;
     display: flex;
@@ -54,7 +55,7 @@ footer {
 
 .footerContacts img {
 
-    height: 100px;
+    height: 8vh;
     margin-bottom: 15px;
 
 }
@@ -112,6 +113,9 @@ footer {
 
         flex-direction: column;
         padding-bottom: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
 
     }
 
@@ -123,57 +127,69 @@ footer {
         margin-top: 15px;
         margin-bottom: 20px;
         align-items: center;
-        border-top: 1px solid white;
+        justify-content: center;
+        font-size: .8rem;
+        //border-top: 1px solid white;
         display: flex;
 
+        img {
+
+            height: 6vh;
+    
+        }
+
     }
 
-    .copyright img {
-
-        height: 50px;
-
-    }
-
-    .footerContacts{
+    .footerContacts {
 
         width: 90vw;
         height: auto;
         text-align: justify;
         margin: 0px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
         /* max-height: none; */
 
-    }
+        ul {
 
-    .footerContacts ul {
+            width: 90vw;
+            justify-content: space-between;
+            padding: 0;
+            margin: 0;
+    
+        }
 
-        width: 90vw;
-        justify-content: space-between;
-        padding: 0;
+        li {
 
-    }
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 9.5pt;
+    
+        }
 
-    .footerContacts li {
+        p {
 
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 9pt;
-
-    }
-
-    .footerContacts p {
-
-        font-size: 9pt;
+            font-size: 9.5pt;
+    
+        }
 
     }
 
     .socialMedias {
 
         width: 100vw;
-        height: 10vh;
+        height: 6vh;
         align-items: center;
         justify-content: center;
         padding: 0;
+        margin: 0;
+        margin-top: 1rem;
+
+        img {
+            height: 5vh;
+        }
 
     }
 

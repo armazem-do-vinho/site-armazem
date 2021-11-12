@@ -630,7 +630,7 @@ export default function ContentChange() {
 
                                     </fieldset>
 
-                                    <fieldset>
+                                    <fieldset className="deleteBanner">
 
                                         <legend>
                                             <h2>Apagar banner</h2>
@@ -770,7 +770,7 @@ export default function ContentChange() {
 
                                     </fieldset>
 
-                                    <fieldset>
+                                    <fieldset className="deleteDescription">
 
                                         <legend>Apagar descrição</legend>
 

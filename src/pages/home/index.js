@@ -331,6 +331,16 @@ function Home() {
 
             </section>
 
+            <section id="infosSection">
+
+                <div className="infosImageWrapper">
+
+                    <img src={vinhoImg4} alt="a" />
+
+                </div>
+
+            </section>
+
             <WhatsAppButton />
             <Footer />
 

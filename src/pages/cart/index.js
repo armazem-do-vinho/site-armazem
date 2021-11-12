@@ -376,25 +376,26 @@ function Cart() {
 
     function verifyVoucher() {
 
-        const verify = isVoucher;
+        var verify = false
 
         dataVoucher.map((item) => {
 
             if (userVoucher === item.title) {
 
+                verify = true
+
                 setUserDiscount(item.discount)
-                setIsVoucher(true)
                 setFinalValue(totalValue - (totalValue * (item.discount / 100)))
 
                 window.alert('Cupom inserido com sucesso!')
 
-            } 
+            }
 
         })
 
         if (verify === false) {
 
-            window.alert('Cupom inválido')
+            window.alert('O cupom inserido é inválido ou não está mais disponível')
 
         }
 
