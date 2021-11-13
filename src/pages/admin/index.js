@@ -69,15 +69,6 @@ function Admin() {
         
     }
 
-/*     useEffect(() => {
-        
-        window.scrollTo(0, 0);
-
-        if(!firebase.apps.length)
-            firebase.initializeApp(firebaseConfig)
-
-    }, []); */
-
     useEffect(() => {
 
         var userEmail = localStorage.getItem('userEmail')

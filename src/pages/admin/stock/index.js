@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import Header from '../../../components/header'
 import Footer from '../../../components/footer'
 import './style.scss'
+import { Link } from 'react-router-dom'
 
 import firebase from 'firebase/app'
 import 'firebase/auth'
@@ -132,79 +133,211 @@ function Stock() {
 
     }
 
-    return (
+    const [loginData,setLoginData] = useState({
 
-        <section id='Stock'>
+        email: '',
+        password: ''
 
-            <Header />
+    })
+    const [userIsLogged, setUserIsLogged] = useState(false);
 
-            <div className="stockControl">
 
-                <div className="stockProductsSelect">
+    function makeLogin () {
 
-                    <h2>Alterar estoque de produtos</h2>
-                    <h4 style={{margin: "1rem 0"}}>Insira abaixo a nova quantidade do estoque</h4>
+        firebase.auth().signInWithEmailAndPassword(loginData.email, loginData.password)
+        .then(() => {
 
-                    <select onChange={handleSelectedItem}>
+            var userEmail = localStorage.getItem('userEmail')
+        
+            firebase.database().ref('admins').get('/admins')
+            .then(function (snapshot) {
 
-                        <option value='' >Selecionar produto</option>
+                if (snapshot.exists()) {
 
+                    var data = snapshot.val()
+                    var temp = Object.keys(data).map((key) => data[key])
+
+                    temp.map((item) => {
+
+                        if(item.email === userEmail)
+                            setUserIsLogged(true)
+
+                    })
+                }
+                else {
+                    console.log("No data available");
+                }
+            })
+            
+            
+            localStorage.setItem('userEmail',loginData.email)
+
+        })
+        .catch((error) => {
+            var errorCode = error.code;
+            var errorMessage = error.message;
+            alert(errorMessage)
+        }); 
+        
+    }
+
+    function handleInputLoginChange(event) {
+
+        const {name, value} = event.target
+
+        setLoginData ({
+
+            ...loginData, [name]: value
+
+        })
+        
+    }
+
+    useEffect(() => {
+
+        var userEmail = localStorage.getItem('userEmail')
+        
+        firebase.database().ref('admins').get('/admins')
+        .then(function (snapshot) {
+
+            if (snapshot.exists()) {
+
+                var data = snapshot.val()
+                var temp = Object.keys(data).map((key) => data[key])
+
+                temp.map((item) => {
+
+                    if(item.email === userEmail)
+                        setUserIsLogged(true)
+
+                })
+            }
+            else {
+                console.log("No data available");
+            }
+        })
+
+    }, []);
+
+    if (userIsLogged) {
+        return (
+
+            <section id='Stock'>
+    
+                <Header />
+    
+                <div className="stockControl">
+    
+                    <div className="stockProductsSelect">
+    
+                        <h2>Alterar estoque de produtos</h2>
+                        <h4 style={{margin: "1rem 0"}}>Insira abaixo a nova quantidade do estoque</h4>
+    
+                        <select onChange={handleSelectedItem}>
+    
+                            <option value='' >Selecionar produto</option>
+    
+                            {
+                                items.map((item, index) => (
+    
+                                    <option value={item.id}>{item.title}: {item.amountInStock}</option>
+    
+                                ))
+                            }
+    
+                        </select>
+    
+                        <input placeholder='Quantidade' type='number' onChange={handleSelectedAmount} />
+    
+                        <button onClick={() => { alterProduct() }}>Alterar</button>
+    
+                    </div>
+    
+                    <div className="stockProductsSearch">
+    
+                        <h2>Pesquisar produtos</h2>
+    
+                        <input placeholder='Pesquisar' onChange={handleSearchInput} />
+    
+                        <div className="stockProductsButtons">
+    
+                            <button onClick={() => { clearSearchItem() }}>Limpar pesquisa</button>
+                            <button onClick={() => { searchItem() }}>Pesquisar</button>
+    
+                        </div>
+    
+                    </div>
+    
+                </div>
+    
+                <section id="stockProducts">
+    
+                    <h2>Produtos</h2>
+    
+                    <div className="stockProductsDisplay">
+    
                         {
-                            items.map((item, index) => (
-
-                                <option value={item.id}>{item.title}: {item.amountInStock}</option>
-
+                            items.map(item => (
+                                <div className="stockItens">
+                                    <h4>{item.title}: {item.amountInStock}</h4>
+                                </div>
                             ))
                         }
-
-                    </select>
-
-                    <input placeholder='Quantidade' type='number' onChange={handleSelectedAmount} />
-
-                    <button onClick={() => { alterProduct() }}>Alterar</button>
-
-                </div>
-
-                <div className="stockProductsSearch">
-
-                    <h2>Pesquisar produtos</h2>
-
-                    <input placeholder='Pesquisar' onChange={handleSearchInput} />
-
-                    <div className="stockProductsButtons">
-
-                        <button onClick={() => { clearSearchItem() }}>Limpar pesquisa</button>
-                        <button onClick={() => { searchItem() }}>Pesquisar</button>
-
+    
                     </div>
+    
+                </section>
+    
+                <Footer />
+    
+            </section>
+    
+        )
+    } else {
 
-                </div>
+        return (
 
+            <div className='Admin'>
+
+                <Header />
+
+                    <main id='mainRegister'> 
+
+                        <div className='adminRegister'>
+
+                            <div className='titleAdmin' >
+                                <h1>Bem vindos, equipe Armazém do Vinho 🍷</h1>
+                            </div>
+
+                            <fieldset>
+
+                                <h1>Entrar</h1>
+
+                                <input name='email' onChange={handleInputLoginChange} placeholder='E-mail' />
+
+                                <input name='password' type='password' onChange={handleInputLoginChange} placeholder='Senha' />
+
+                            </fieldset>
+
+                            <div className='buttonsFormRegister' >
+
+                                <Link id='enterButtonSignIn' onClick={makeLogin}>Entrar</Link>
+
+                            </div>
+
+                        </div>
+
+                    </main>
+
+                <Footer />
+                
             </div>
 
-            <section id="stockProducts">
+        )
+    
+    }
 
-                <h2>Produtos</h2>
-
-                <div className="stockProductsDisplay">
-
-                    {
-                        items.map(item => (
-                            <div className="stockItens">
-                                <h4>{item.title}: {item.amountInStock}</h4>
-                            </div>
-                        ))
-                    }
-
-                </div>
-
-            </section>
-
-            <Footer />
-
-        </section>
-
-    )
+    
 
 }
 

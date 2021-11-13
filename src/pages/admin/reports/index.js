@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import Header from '../../../components/header'
 import Footer from '../../../components/footer'
 import './style.scss'
-
+import { Link } from 'react-router-dom'
 import firebase from 'firebase/app'
 import 'firebase/auth'
 import 'firebase/database'
@@ -167,226 +167,358 @@ function Reports() {
         
     }
 
-    return (
+    const [loginData,setLoginData] = useState({
 
-        <div className='Reports'>
+        email: '',
+        password: ''
 
-            <Header />
+    })
+    const [userIsLogged, setUserIsLogged] = useState(false);
 
-            <div className="sectionReports">
 
-                <p className="tipHome" >Clique em um período para consultar as vendas</p>
+    function makeLogin () {
 
-                <a><h3>Vendas esta semana: R${totalValueThisWeek.toFixed(2)}</h3></a>
+        firebase.auth().signInWithEmailAndPassword(loginData.email, loginData.password)
+        .then(() => {
 
-                {
-                    thisWeek.map((item)=> {
+            var userEmail = localStorage.getItem('userEmail')
+        
+            firebase.database().ref('admins').get('/admins')
+            .then(function (snapshot) {
 
-                        return (
+                if (snapshot.exists()) {
 
-                            <div className='boxSallerReports' >
+                    var data = snapshot.val()
+                    var temp = Object.keys(data).map((key) => data[key])
 
-                                <div>
+                    temp.map((item) => {
 
-                                    <h4>{item.userName}: </h4>
-
-                                    {
-                                        item.listItem.length > 1 ?
-
-                                            item.listItem.map(product => (
-                                                <p>{product.title} ({`${product.amount}) - R$ ${Number(product.price * product.amount).toFixed(2)}`}</p>
-                                            ))
-
-                                        :
-                                            <p>{item.listItem[0].title} ({`${item.listItem[0].amount}) - R$ ${item.listItem[0].price}`}</p>
-                                            
-                                    }
-
-                                </div>
-
-                                <h4>Data da venda: <span>{item.date}</span></h4>
-                                <h4>Valor total: <span>R$ {item.totalValue}</span></h4>
-                                
-                            </div>
-
-                        )
+                        if(item.email === userEmail)
+                            setUserIsLogged(true)
 
                     })
                 }
-
-                
-                <a onClick={()=>salesThisMonth()}><h3>Vendas este mês: R${totalValueThisMonth.toFixed(2)}</h3></a>
-
-                {
-
-                    thisMonth !== [] ?
-
-                        thisMonth.map((item)=> {
-
-                            return (
-
-                                <div className='boxSallerReports' >
-
-                                    <div>
-
-                                        <h4>{item.userName}: </h4>
-
-                                        {
-                                        item.listItem.length > 1 ?
-
-                                            item.listItem.map(product => (
-                                                <p>{product.title} ({`${product.amount}) - R$ ${Number(product.price * product.amount).toFixed(2)}`}</p>
-                                            ))
-
-                                        :
-                                            <p>{item.listItem[0].title} ({`${item.listItem[0].amount}) - R$ ${item.listItem[0].price}`}</p>
-                                            
-                                    }
-
-                                    </div>
-
-                                    <h4>Data da venda: <span>{item.date}</span>  </h4>
-                                    <h4>Valor total: <span>R$ {item.totalValue}</span>  </h4>
-                                </div>
-
-                            )
-
-                        })
-                    :
-                    <p></p>
+                else {
+                    console.log("No data available");
                 }
+            })
+            
+            
+            localStorage.setItem('userEmail',loginData.email)
 
-                <a onClick={()=>salesThreeMonths()}><h3>Último trimestre: R${totalValueThreeMonths.toFixed(2)}</h3></a>
+        })
+        .catch((error) => {
+            var errorCode = error.code;
+            var errorMessage = error.message;
+            alert(errorMessage)
+        }); 
+        
+    }
 
-                {
+    function handleInputLoginChange(event) {
 
-                    sixMonths !== [] ?
+        const {name, value} = event.target
 
-                        threeMonths.map((item)=> {
+        setLoginData ({
 
+            ...loginData, [name]: value
+
+        })
+        
+    }
+
+    useEffect(() => {
+
+        var userEmail = localStorage.getItem('userEmail')
+        
+        firebase.database().ref('admins').get('/admins')
+        .then(function (snapshot) {
+
+            if (snapshot.exists()) {
+
+                var data = snapshot.val()
+                var temp = Object.keys(data).map((key) => data[key])
+
+                temp.map((item) => {
+
+                    if(item.email === userEmail)
+                        setUserIsLogged(true)
+
+                })
+            }
+            else {
+                console.log("No data available");
+            }
+        })
+
+    }, []);
+
+    if(userIsLogged) {
+        return (
+
+            <div className='Reports'>
+    
+                <Header />
+    
+                <div className="sectionReports">
+    
+                    <p className="tipHome" >Clique em um período para consultar as vendas</p>
+    
+                    <a><h3>Vendas esta semana: R${totalValueThisWeek.toFixed(2)}</h3></a>
+    
+                    {
+                        thisWeek.map((item)=> {
+    
                             return (
-
+    
                                 <div className='boxSallerReports' >
-
+    
                                     <div>
-
+    
                                         <h4>{item.userName}: </h4>
-
+    
                                         {
-                                        item.listItem.length > 1 ?
-
-                                            item.listItem.map(product => (
-                                                <p>{product.title} ({`${product.amount}) - R$ ${Number(product.price * product.amount).toFixed(2)}`}</p>
-                                            ))
-
-                                        :
-                                            <p>{item.listItem[0].title} ({`${item.listItem[0].amount}) - R$ ${item.listItem[0].price}`}</p>
-                                            
-                                    }
-
+                                            item.listItem.length > 1 ?
+    
+                                                item.listItem.map(product => (
+                                                    <p>{product.title} ({`${product.amount}) - R$ ${Number(product.price * product.amount).toFixed(2)}`}</p>
+                                                ))
+    
+                                            :
+                                                <p>{item.listItem[0].title} ({`${item.listItem[0].amount}) - R$ ${item.listItem[0].price}`}</p>
+                                                
+                                        }
+    
                                     </div>
-
-                                    <h4>Data da venda: <span>{item.date}</span>  </h4>
-                                    <h4>Valor total: <span>R$ {item.totalValue}</span>  </h4>
-                                </div>
-
-                            )
-
-                        })
-                    :
-                    <p></p>
-                }
-
-                <a onClick={()=>salesSixMonths()}><h3>Último semestre: R${totalValueSixMonths.toFixed(2)}</h3></a>
-
-                {
-
-                    sixMonths !== [] ?
-
-                    sixMonths.map((item)=> {
-
-                            return (
-
-                                <div className='boxSallerReports' >
-
-                                    <div>
-
-                                        <h4>{item.userName}: </h4>
-
-                                        {
-                                        item.listItem.length > 1 ?
-
-                                            item.listItem.map(product => (
-                                                <p>{product.title} ({`${product.amount}) - R$ ${Number(product.price * product.amount).toFixed(2)}`}</p>
-                                            ))
-
-                                        :
-                                            <p>{item.listItem[0].title} ({`${item.listItem[0].amount}) - R$ ${item.listItem[0].price}`}</p>
-                                            
-                                    }
-
-                                    </div>
-
-                                    <h4>Data da venda: <span>{item.date}</span>  </h4>
-                                    <h4>Valor total: <span>R$ {item.totalValue}</span>  </h4>
-                                </div>
-
-                            )
-
-                        })
-                    :
-                    <p></p>
-                }
-
-                <a onClick={()=>salesAllMonths()}><h3>Todas as vendas: R${totalValue.toFixed(2)}</h3></a>
-
-                {
-
-                    allMonthsIsSelected ?
-
-                        data.map((item)=> {
-
-                            return (
-
-                                <div className='boxSallerReports' >
-
-                                    <div>
-
-                                        <h4>{item.userName}: </h4>
-
-                                        {
-                                        item.listItem.length > 1 ?
-
-                                            item.listItem.map(product => (
-                                                <p>{product.title} ({`${product.amount}) - R$ ${Number(product.price * product.amount).toFixed(2)}`}</p>
-                                            ))
-
-                                        :
-                                            <p>{item.listItem[0].title} ({`${item.listItem[0].amount}) - R$ ${item.listItem[0].price}`}</p>
-                                            
-                                    }
-
-                                    </div>
-
+    
                                     <h4>Data da venda: <span>{item.date}</span></h4>
                                     <h4>Valor total: <span>R$ {item.totalValue}</span></h4>
                                     
                                 </div>
-
+    
                             )
-
+    
                         })
-                    :
-                    <p></p>
-                }
+                    }
+    
+                    
+                    <a onClick={()=>salesThisMonth()}><h3>Vendas este mês: R${totalValueThisMonth.toFixed(2)}</h3></a>
+    
+                    {
+    
+                        thisMonth !== [] ?
+    
+                            thisMonth.map((item)=> {
+    
+                                return (
+    
+                                    <div className='boxSallerReports' >
+    
+                                        <div>
+    
+                                            <h4>{item.userName}: </h4>
+    
+                                            {
+                                            item.listItem.length > 1 ?
+    
+                                                item.listItem.map(product => (
+                                                    <p>{product.title} ({`${product.amount}) - R$ ${Number(product.price * product.amount).toFixed(2)}`}</p>
+                                                ))
+    
+                                            :
+                                                <p>{item.listItem[0].title} ({`${item.listItem[0].amount}) - R$ ${item.listItem[0].price}`}</p>
+                                                
+                                        }
+    
+                                        </div>
+    
+                                        <h4>Data da venda: <span>{item.date}</span>  </h4>
+                                        <h4>Valor total: <span>R$ {item.totalValue}</span>  </h4>
+                                    </div>
+    
+                                )
+    
+                            })
+                        :
+                        <p></p>
+                    }
+    
+                    <a onClick={()=>salesThreeMonths()}><h3>Último trimestre: R${totalValueThreeMonths.toFixed(2)}</h3></a>
+    
+                    {
+    
+                        sixMonths !== [] ?
+    
+                            threeMonths.map((item)=> {
+    
+                                return (
+    
+                                    <div className='boxSallerReports' >
+    
+                                        <div>
+    
+                                            <h4>{item.userName}: </h4>
+    
+                                            {
+                                            item.listItem.length > 1 ?
+    
+                                                item.listItem.map(product => (
+                                                    <p>{product.title} ({`${product.amount}) - R$ ${Number(product.price * product.amount).toFixed(2)}`}</p>
+                                                ))
+    
+                                            :
+                                                <p>{item.listItem[0].title} ({`${item.listItem[0].amount}) - R$ ${item.listItem[0].price}`}</p>
+                                                
+                                        }
+    
+                                        </div>
+    
+                                        <h4>Data da venda: <span>{item.date}</span>  </h4>
+                                        <h4>Valor total: <span>R$ {item.totalValue}</span>  </h4>
+                                    </div>
+    
+                                )
+    
+                            })
+                        :
+                        <p></p>
+                    }
+    
+                    <a onClick={()=>salesSixMonths()}><h3>Último semestre: R${totalValueSixMonths.toFixed(2)}</h3></a>
+    
+                    {
+    
+                        sixMonths !== [] ?
+    
+                        sixMonths.map((item)=> {
+    
+                                return (
+    
+                                    <div className='boxSallerReports' >
+    
+                                        <div>
+    
+                                            <h4>{item.userName}: </h4>
+    
+                                            {
+                                            item.listItem.length > 1 ?
+    
+                                                item.listItem.map(product => (
+                                                    <p>{product.title} ({`${product.amount}) - R$ ${Number(product.price * product.amount).toFixed(2)}`}</p>
+                                                ))
+    
+                                            :
+                                                <p>{item.listItem[0].title} ({`${item.listItem[0].amount}) - R$ ${item.listItem[0].price}`}</p>
+                                                
+                                        }
+    
+                                        </div>
+    
+                                        <h4>Data da venda: <span>{item.date}</span>  </h4>
+                                        <h4>Valor total: <span>R$ {item.totalValue}</span>  </h4>
+                                    </div>
+    
+                                )
+    
+                            })
+                        :
+                        <p></p>
+                    }
+    
+                    <a onClick={()=>salesAllMonths()}><h3>Todas as vendas: R${totalValue.toFixed(2)}</h3></a>
+    
+                    {
+    
+                        allMonthsIsSelected ?
+    
+                            data.map((item)=> {
+    
+                                return (
+    
+                                    <div className='boxSallerReports' >
+    
+                                        <div>
+    
+                                            <h4>{item.userName}: </h4>
+    
+                                            {
+                                            item.listItem.length > 1 ?
+    
+                                                item.listItem.map(product => (
+                                                    <p>{product.title} ({`${product.amount}) - R$ ${Number(product.price * product.amount).toFixed(2)}`}</p>
+                                                ))
+    
+                                            :
+                                                <p>{item.listItem[0].title} ({`${item.listItem[0].amount}) - R$ ${item.listItem[0].price}`}</p>
+                                                
+                                        }
+    
+                                        </div>
+    
+                                        <h4>Data da venda: <span>{item.date}</span></h4>
+                                        <h4>Valor total: <span>R$ {item.totalValue}</span></h4>
+                                        
+                                    </div>
+    
+                                )
+    
+                            })
+                        :
+                        <p></p>
+                    }
+    
+                </div>
+    
+                <Footer />
+    
+            </div>
+    
+        )
+    } else {
 
+        return (
+
+            <div className='Admin'>
+
+                <Header />
+
+                    <main id='mainRegister'> 
+
+                        <div className='adminRegister'>
+
+                            <div className='titleAdmin' >
+                                <h1>Bem vindos, equipe Armazém do Vinho 🍷</h1>
+                            </div>
+
+                            <fieldset>
+
+                                <h1>Entrar</h1>
+
+                                <input name='email' onChange={handleInputLoginChange} placeholder='E-mail' />
+
+                                <input name='password' type='password' onChange={handleInputLoginChange} placeholder='Senha' />
+
+                            </fieldset>
+
+                            <div className='buttonsFormRegister' >
+
+                                <Link id='enterButtonSignIn' onClick={makeLogin}>Entrar</Link>
+
+                            </div>
+
+                        </div>
+
+                    </main>
+
+                <Footer />
+                
             </div>
 
-            <Footer />
+        )
+    
+    }
 
-        </div>
-
-    )
+    
 
 }
 

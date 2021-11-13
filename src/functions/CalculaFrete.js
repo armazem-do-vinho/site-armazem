@@ -3,7 +3,7 @@
   var data = [];
 
   const cartProducts = JSON.parse(localStorage.getItem('products'))
-
+  
   if(cartProducts !== null) {
 
     cartProducts.map((product) => {
@@ -23,6 +23,7 @@
     data.push(productInfos)
 
   })
+
 }
 
 
@@ -66,7 +67,7 @@
 
     const dataToSend = {
       "from": {
-        "postal_code": "96020360"
+        "postal_code": "28909120"
       },
       "to": {
         "postal_code": "28055230"

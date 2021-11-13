@@ -225,168 +225,300 @@ function Provider() {
 
     }
 
-    return (
+    const [loginData,setLoginData] = useState({
 
-        <div className='Provider'>
+        email: '',
+        password: ''
 
-            <Header />
+    })
+    const [userIsLogged, setUserIsLogged] = useState(false);
 
-            <div style={{ display: displayHistory }} tabindex="-1" role="dialog" className='divHistory' >
-                <span onClick={closeHistory}>X</span>
-                <ProviderInfo displayProperty={displayHistory} HistoryData={HistoryData} />
-            </div>
 
-            <main id='mainProvider' >
+    function makeLogin () {
 
-                <div className='titleProvider' >
+        firebase.auth().signInWithEmailAndPassword(loginData.email, loginData.password)
+        .then(() => {
 
-                    <h2>Painel de cadastro de fornecedores</h2>
+            var userEmail = localStorage.getItem('userEmail')
+        
+            firebase.database().ref('admins').get('/admins')
+            .then(function (snapshot) {
 
-                    <div className="optionProvider">
+                if (snapshot.exists()) {
 
-                        <ul>
+                    var data = snapshot.val()
+                    var temp = Object.keys(data).map((key) => data[key])
 
-                            <a onClick={() => { handleHistoryInfos() }}>Informação dos fornecedores</a>
-                            <Link to='/AdminProdutoFornecedor' >Cadastrar produtos dos fornecedores</Link>
+                    temp.map((item) => {
 
-                        </ul>
+                        if(item.email === userEmail)
+                            setUserIsLogged(true)
 
-                    </div>
+                    })
+                }
+                else {
+                    console.log("No data available");
+                }
+            })
+            
+            
+            localStorage.setItem('userEmail',loginData.email)
 
+        })
+        .catch((error) => {
+            var errorCode = error.code;
+            var errorMessage = error.message;
+            alert(errorMessage)
+        }); 
+        
+    }
+
+    function handleInputLoginChange(event) {
+
+        const {name, value} = event.target
+
+        setLoginData ({
+
+            ...loginData, [name]: value
+
+        })
+        
+    }
+
+    useEffect(() => {
+
+        var userEmail = localStorage.getItem('userEmail')
+        
+        firebase.database().ref('admins').get('/admins')
+        .then(function (snapshot) {
+
+            if (snapshot.exists()) {
+
+                var data = snapshot.val()
+                var temp = Object.keys(data).map((key) => data[key])
+
+                temp.map((item) => {
+
+                    if(item.email === userEmail)
+                        setUserIsLogged(true)
+
+                })
+            }
+            else {
+                console.log("No data available");
+            }
+        })
+
+    }, []);
+
+    if (userIsLogged) {
+        return (
+
+            <div className='Provider'>
+    
+                <Header />
+    
+                <div style={{ display: displayHistory }} tabindex="-1" role="dialog" className='divHistory' >
+                    <span onClick={closeHistory}>X</span>
+                    <ProviderInfo displayProperty={displayHistory} HistoryData={HistoryData} />
                 </div>
+    
+                <main id='mainProvider' >
+    
+                    <div className='titleProvider' >
+    
+                        <h2>Painel de cadastro de fornecedores</h2>
+    
+                        <div className="optionProvider">
+    
+                            <ul>
+    
+                                <a onClick={() => { handleHistoryInfos() }}>Informação dos fornecedores</a>
+                                <Link to='/AdminProdutoFornecedor' >Cadastrar produtos dos fornecedores</Link>
+    
+                            </ul>
+    
+                        </div>
+    
+                    </div>
+    
+                    <div className='providerOptions' >
+    
+                        <div className='providerRegister'> 
+    
+                            <fieldset className='registerSection' >
+    
+                                <div className="registerTitle">
+                                    <h2>Cadastrar fornecedor</h2>
+                                    <h5>Preencha os dados do fornecedor abaixo.</h5>
+                                </div>
+    
+                                <input name='corporateName' onChange={handleInputProviderChange} type='text' placeholder='Razão social da empresa' value={newDataProvider.corporateName}/>
+    
+                                <input name='tradeName' onChange={handleInputProviderChange} placeholder='Nome fantasia da empresa' value={newDataProvider.tradeName}/>
+    
+                                <input name='ownerName' onChange={handleInputProviderChange} placeholder='Pessoa responsável' value={newDataProvider.ownerName} />
+    
+                                <input name='cnpj' onChange={handleInputProviderChange} type='number' placeholder='CNPJ' value={newDataProvider.cnpj} />
+    
+                                <input name='city' onChange={handleInputProviderChange} placeholder='Município' value={newDataProvider.city}/>
+    
+                                <input name='district' onChange={handleInputProviderChange} placeholder='Bairro' value={newDataProvider.district} />
+    
+                                <input name='address' onChange={handleInputProviderChange} placeholder='Rua' value={newDataProvider.address} />
+    
+                                <input name='complement' onChange={handleInputProviderChange} placeholder='Complemento' value={newDataProvider.complement} />
+    
+                                <input name='establishmentNumber' onChange={handleInputProviderChange} type='number' placeholder='Nº' value={newDataProvider.establishmentNumber} />
+    
+                                <input name='email' onChange={handleInputProviderChange} placeholder='E-mail' value={newDataProvider.email} />
+    
+                                <input name='phone' onChange={handleInputProviderChange} type='number' placeholder='Telefone com DDD' value={newDataProvider.phone} />
+                        
+                            </fieldset>
+                                <p>
+                                    <a onClick={() => { insertNewProvider() }} >Cadastrar</a>
+                                </p>
+                        </div>
+    
+    
+                        <div className='providerChange'> 
+    
+                            <fieldset>
+    
+                                <h2>Alterar dados de fornecedor</h2>
+                                
+                                <select onChange={handleSelectProvider} >
+    
+                                    <option>Selecione o fornecedor</option>
+    
+                                    {dataProvider.map((providers, index) => {
+    
+                                        return (
+    
+                                            <option style={{color: 'black'}} value={index} key={index}>{providers.tradeName}</option>
+    
+                                        )
+    
+                                    })}
+    
+                                </select>
+    
+                                <h5>Preencha o que deseja alterar</h5>
+    
+                                <input name='corporateName' onChange={handleInputProviderChangeAlter} placeholder='Razão social da empresa' />
+    
+                                <input name='tradeName' onChange={handleInputProviderChangeAlter} placeholder='Nome fantasia da empresa' />
+    
+                                <input name='ownerName' onChange={handleInputProviderChangeAlter} placeholder='Pessoa responsável' />
+    
+                                <input name='cnpj' onChange={handleInputProviderChange} type='number' placeholder='CNPJ'/>
+    
+                                <input name='city' onChange={handleInputProviderChangeAlter} placeholder='Município' />
+    
+                                <input name='district' onChange={handleInputProviderChangeAlter} placeholder='Bairro' />
+    
+                                <input name='address' onChange={handleInputProviderChangeAlter} placeholder='Rua' />
+    
+                                <input name='complement' onChange={handleInputProviderChange} placeholder='Complemento' />
+    
+                                <input name='establishmentNumber' onChange={handleInputProviderChange} type='number' placeholder='Nº' />
+    
+                                <input name='email' onChange={handleInputProviderChangeAlter} placeholder='E-mail' />
+    
+                                <input name='phone' onChange={handleInputProviderChangeAlter} placeholder='Telefone com DDD' />
+    
+    
+                            </fieldset>
+                                <p>
+                                    <a onClick={() => { setWasChanged(true); updateProvider() }} >Alterar</a>  
+                                </p>
+                        </div>
+    
+                        <div className='providerDelete'> 
+                            <fieldset>
+    
+                                    <h2>Apagar fornecedor</h2>
+    
+                                <select onChange={handleSelectProviderToDelete} >
+    
+                                    <option>Selecione o fornecedor</option>
+    
+                                    {dataProvider.map((providers, index) => {
+    
+                                        return (
+    
+                                            <option style={{color: 'black'}} key={index} value={index}>{providers.tradeName}</option>
+    
+                                        )
+    
+                                    })}
+    
+                                </select>
+    
+    
+                            </fieldset>
+                                <p>
+                                    <a onClick={() => { deleteProvider() }} >Apagar</a>
+                                </p>
+    
+                        </div>
+    
+    
+                    </div>
+    
+                </main>
+    
+                <Footer />
+    
+            </div>
+    
+        )
+    } else {
 
-                <div className='providerOptions' >
+        return (
 
-                    <div className='providerRegister'> 
+            <div className='Admin'>
 
-                        <fieldset className='registerSection' >
+                <Header />
 
-                            <div className="registerTitle">
-                                <h2>Cadastrar fornecedor</h2>
-                                <h5>Preencha os dados do fornecedor abaixo.</h5>
+                    <main id='mainRegister'> 
+
+                        <div className='adminRegister'>
+
+                            <div className='titleAdmin' >
+                                <h1>Bem vindos, equipe Armazém do Vinho 🍷</h1>
                             </div>
 
-                            <input name='corporateName' onChange={handleInputProviderChange} type='text' placeholder='Razão social da empresa' value={newDataProvider.corporateName}/>
+                            <fieldset>
 
-                            <input name='tradeName' onChange={handleInputProviderChange} placeholder='Nome fantasia da empresa' value={newDataProvider.tradeName}/>
+                                <h1>Entrar</h1>
 
-                            <input name='ownerName' onChange={handleInputProviderChange} placeholder='Pessoa responsável' value={newDataProvider.ownerName} />
+                                <input name='email' onChange={handleInputLoginChange} placeholder='E-mail' />
 
-                            <input name='cnpj' onChange={handleInputProviderChange} type='number' placeholder='CNPJ' value={newDataProvider.cnpj} />
+                                <input name='password' type='password' onChange={handleInputLoginChange} placeholder='Senha' />
 
-                            <input name='city' onChange={handleInputProviderChange} placeholder='Município' value={newDataProvider.city}/>
+                            </fieldset>
 
-                            <input name='district' onChange={handleInputProviderChange} placeholder='Bairro' value={newDataProvider.district} />
+                            <div className='buttonsFormRegister' >
 
-                            <input name='address' onChange={handleInputProviderChange} placeholder='Rua' value={newDataProvider.address} />
+                                <Link id='enterButtonSignIn' onClick={makeLogin}>Entrar</Link>
 
-                            <input name='complement' onChange={handleInputProviderChange} placeholder='Complemento' value={newDataProvider.complement} />
+                            </div>
 
-                            <input name='establishmentNumber' onChange={handleInputProviderChange} type='number' placeholder='Nº' value={newDataProvider.establishmentNumber} />
+                        </div>
 
-                            <input name='email' onChange={handleInputProviderChange} placeholder='E-mail' value={newDataProvider.email} />
+                    </main>
 
-                            <input name='phone' onChange={handleInputProviderChange} type='number' placeholder='Telefone com DDD' value={newDataProvider.phone} />
-                    
-                        </fieldset>
-                            <p>
-                                <a onClick={() => { insertNewProvider() }} >Cadastrar</a>
-                            </p>
-                    </div>
+                <Footer />
+                
+            </div>
 
-
-                    <div className='providerChange'> 
-
-                        <fieldset>
-
-                            <h2>Alterar dados de fornecedor</h2>
-                            
-                            <select onChange={handleSelectProvider} >
-
-                                <option>Selecione o fornecedor</option>
-
-                                {dataProvider.map((providers, index) => {
-
-                                    return (
-
-                                        <option style={{color: 'black'}} value={index} key={index}>{providers.tradeName}</option>
-
-                                    )
-
-                                })}
-
-                            </select>
-
-                            <h5>Preencha o que deseja alterar</h5>
-
-                            <input name='corporateName' onChange={handleInputProviderChangeAlter} placeholder='Razão social da empresa' />
-
-                            <input name='tradeName' onChange={handleInputProviderChangeAlter} placeholder='Nome fantasia da empresa' />
-
-                            <input name='ownerName' onChange={handleInputProviderChangeAlter} placeholder='Pessoa responsável' />
-
-                            <input name='cnpj' onChange={handleInputProviderChange} type='number' placeholder='CNPJ'/>
-
-                            <input name='city' onChange={handleInputProviderChangeAlter} placeholder='Município' />
-
-                            <input name='district' onChange={handleInputProviderChangeAlter} placeholder='Bairro' />
-
-                            <input name='address' onChange={handleInputProviderChangeAlter} placeholder='Rua' />
-
-                            <input name='complement' onChange={handleInputProviderChange} placeholder='Complemento' />
-
-                            <input name='establishmentNumber' onChange={handleInputProviderChange} type='number' placeholder='Nº' />
-
-                            <input name='email' onChange={handleInputProviderChangeAlter} placeholder='E-mail' />
-
-                            <input name='phone' onChange={handleInputProviderChangeAlter} placeholder='Telefone com DDD' />
+        )
+    
+    }
 
 
-                        </fieldset>
-                            <p>
-                                <a onClick={() => { setWasChanged(true); updateProvider() }} >Alterar</a>  
-                            </p>
-                    </div>
-
-                    <div className='providerDelete'> 
-                        <fieldset>
-
-                                <h2>Apagar fornecedor</h2>
-
-                            <select onChange={handleSelectProviderToDelete} >
-
-                                <option>Selecione o fornecedor</option>
-
-                                {dataProvider.map((providers, index) => {
-
-                                    return (
-
-                                        <option style={{color: 'black'}} key={index} value={index}>{providers.tradeName}</option>
-
-                                    )
-
-                                })}
-
-                            </select>
-
-
-                        </fieldset>
-                            <p>
-                                <a onClick={() => { deleteProvider() }} >Apagar</a>
-                            </p>
-
-                    </div>
-
-
-                </div>
-
-            </main>
-
-            <Footer />
-
-        </div>
-
-    )
 
 }
 

@@ -1,6 +1,48 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap');
 @import "../../global.scss";
 
+#CartSection {
+
+    position: relative;
+
+    .checkedWrapper {
+
+        display: flex;
+        justify-content: center;
+        position: absolute;
+        top: 0;
+        right: 0;
+        left: 0;
+        bottom: 0;
+        z-index: 999;
+
+        .contentPopup {
+
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background-color: $branco;
+            margin-top: 10rem;
+            width: 30vw;
+            height: 50vh;
+            position: fixed;
+            z-index: 1000;
+
+            .lottieContainer {
+
+                // width: 300px;
+                display: flex;
+
+            }
+
+        }
+
+
+    }
+
+}
+
 .cartPage {
 
     width: 100vw;
@@ -133,9 +175,9 @@
         .cartProductsFinal {
 
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: space-around;
-            margin-bottom: 3rem;
 
             button {
 
@@ -160,9 +202,8 @@
                 display: flex;
                 justify-content: center;
                 align-items: center;
-                right: 2rem;
                 text-align: center;
-                padding-top: 1rem;
+                margin: 1rem ;
 
             }
 
@@ -176,6 +217,25 @@
         align-items: center;
         text-align: center;
         justify-content: center;
+
+        .cepSearch {
+
+            flex-direction: column;
+            align-items: center;
+
+            button {
+
+                width: auto;
+
+            }
+
+        }
+
+        .pickupSelect {
+
+            margin-top: 2rem;
+
+        }
 
         .transportInfos {
 

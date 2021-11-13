@@ -554,9 +554,9 @@ export default function ContentChange() {
                     <section id="ChangesSection">
 
                             <h2>Selecione a página a ser alterada</h2>
-                        <select onChange={(event) => handleSelectedOption(event)} >
+                            <select onChange={(event) => handleSelectedOption(event)} >
                             <option selected disabled>Selecione o que deseja alterar</option>
-                            <option value="Home">Alterar conteúdo da página inicial</option>
+                            <option value="Home">Alterar conteúdo da página "Início"</option>
                             <option value="Quem Somos">Alterar conteúdo da página "Quem Somos"</option>
 
                         </select>

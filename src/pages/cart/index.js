@@ -12,6 +12,8 @@ import 'firebase/database'
 import firebaseConfig from '../../FirebaseConfig.js'
 
 import lottie from 'lottie-web';
+// import InputMask from 'react-input-mask';
+
 import trashCan from '../../img/trash.svg'
 
 function Cart() {
@@ -41,23 +43,24 @@ function Cart() {
     const [transportData, setTransportData] = useState([]);
     const [selectedTransportData, setSelectedTransportData] = useState([]);
     const [displayCepSearch, setDisplayCepSearch] = useState('none');
+    const [displayButtonCep, setDisplayButtonCep] = useState('flex');
     
     const [paidFor, setPaidForm] = useState(false);
     const [loaded, setLoaded] = useState(false);
 
     const [redirect, setRedirect] = useState(useHistory());
 
-    const lottieContainer = useRef(null);
+    // const lottieContainer = useRef(null);
 
-    useEffect(() => {
-        lottie.loadAnimation({
-            container: lottieContainer.current,
-            renderer: 'svg',
-            loop: false,
-            autoplay: true,
-            animationData: require('../../img/checked.json')
-        })
-    }, []);
+    // useEffect(() => {
+    //     lottie.loadAnimation({
+    //         container: lottieContainer.current,
+    //         renderer: 'svg',
+    //         loop: true,
+    //         autoplay: true,
+    //         animationData: require('../../img/checked.json')
+    //     })
+    // }, []);
 
     function onAuthStateChanged(user) {
 
@@ -397,6 +400,7 @@ function Cart() {
                 verify = true
 
                 setUserDiscount(item.discount)
+                setDisplayButtonCep('none')
 
                 if(transportValue) {
 
@@ -516,7 +520,7 @@ function Cart() {
 
     const dataToSend = {
         "from": {
-            "postal_code": "96020360"
+            "postal_code": "28909120"
         },
         "to": {
             "postal_code": customerCep
@@ -643,18 +647,22 @@ function Cart() {
 
                             <section id="CartSection">
 
-                                <Header />
+                                {/* <div className='checkedWrapper'>
 
-                                <div className="cartPage">
-                                    
-                                    <div className='checkedWrapper'>
+                                    <div className="contentPopup">
 
+                                        <h2>Cupom inserido com sucesso</h2>
                                         <div className='lottieContainer' ref={lottieContainer}></div>
-
-                                        <h2>aaaa</h2>
 
                                     </div>
 
+                                </div> */}
+
+                                <Header />
+
+                                <div className="cartPage">
+
+                                    
                                     <div className="cartIntro">
 
                                         <h3>Após revisar os itens, clique no botão de finalizar para prosseguir com a sua compra</h3>
@@ -746,11 +754,15 @@ function Cart() {
 
                                     <div className="finishOrder">
 
-                                        <label for="voucherInput">Inserir cupom de desconto</label>
+                                        <div className="cepSearch" style={{display: displayButtonCep}}>
 
-                                        <input onChange={handleVoucher} id="voucherInput" placeholder="Cupom" />
+                                            <label for="voucherInput">Inserir cupom de desconto</label>
 
-                                        <button onClick={() => verifyVoucher()}>Inserir cupom</button>
+                                            <input onChange={handleVoucher} id="voucherInput" placeholder="Cupom" />
+
+                                            <button onClick={() => verifyVoucher()}>Inserir cupom</button>
+
+                                        </div>
 
                                         <select className="pickupSelect" onChange={handlePickupSelect} >
 

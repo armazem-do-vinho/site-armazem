@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import Header from '../../../components/header'
 import Footer from '../../../components/footer'
 import './style.scss'
-
+import { Link } from 'react-router-dom'
 import firebase from 'firebase/app'
 import 'firebase/auth'
 import 'firebase/database'
@@ -158,172 +158,304 @@ function Request() {
 
     }
 
-    return (
+    const [loginData,setLoginData] = useState({
 
-        <div className='Request'>
+        email: '',
+        password: ''
 
-            <Header />
+    })
+    const [userIsLogged, setUserIsLogged] = useState(false);
 
-            <div style={{ display: displayModal }} tabindex="-1" role="dialog" className='modalDelivery' >
-                <span onClick={closeModal}>X</span>
-                <DeliveryModal displayProperty={displayModal} modalData={modalData} />
-            </div>
 
-            <main id='mainRequest' >
+    function makeLogin () {
 
-                {dataAdmin.map((item, indexItem) => (
+        firebase.auth().signInWithEmailAndPassword(loginData.email, loginData.password)
+        .then(() => {
 
-                    <div className="boxOrder">
+            var userEmail = localStorage.getItem('userEmail')
+        
+            firebase.database().ref('admins').get('/admins')
+            .then(function (snapshot) {
 
-                        <div className="leftSizeBoxOrder" >
+                if (snapshot.exists()) {
 
-                            <div className="rowItens">
-                                <p>Nome:</p>
-                                <b>{item.userName}</b>
+                    var data = snapshot.val()
+                    var temp = Object.keys(data).map((key) => data[key])
+
+                    temp.map((item) => {
+
+                        if(item.email === userEmail)
+                            setUserIsLogged(true)
+
+                    })
+                }
+                else {
+                    console.log("No data available");
+                }
+            })
+            
+            
+            localStorage.setItem('userEmail',loginData.email)
+
+        })
+        .catch((error) => {
+            var errorCode = error.code;
+            var errorMessage = error.message;
+            alert(errorMessage)
+        }); 
+        
+    }
+
+    function handleInputLoginChange(event) {
+
+        const {name, value} = event.target
+
+        setLoginData ({
+
+            ...loginData, [name]: value
+
+        })
+        
+    }
+
+    useEffect(() => {
+
+        var userEmail = localStorage.getItem('userEmail')
+        
+        firebase.database().ref('admins').get('/admins')
+        .then(function (snapshot) {
+
+            if (snapshot.exists()) {
+
+                var data = snapshot.val()
+                var temp = Object.keys(data).map((key) => data[key])
+
+                temp.map((item) => {
+
+                    if(item.email === userEmail)
+                        setUserIsLogged(true)
+
+                })
+            }
+            else {
+                console.log("No data available");
+            }
+        })
+
+    }, []);
+
+    if (userIsLogged) {
+        return (
+
+            <div className='Request'>
+    
+                <Header />
+    
+                <div style={{ display: displayModal }} tabindex="-1" role="dialog" className='modalDelivery' >
+                    <span onClick={closeModal}>X</span>
+                    <DeliveryModal displayProperty={displayModal} modalData={modalData} />
+                </div>
+    
+                <main id='mainRequest' >
+    
+                    {dataAdmin.map((item, indexItem) => (
+    
+                        <div className="boxOrder">
+    
+                            <div className="leftSizeBoxOrder" >
+    
+                                <div className="rowItens">
+                                    <p>Nome:</p>
+                                    <b>{item.userName}</b>
+                                </div>
+    
+                                <div className="rowItens">
+                                    <p>Telefone: </p>
+                                    <b>{item.phoneNumber}</b>
+                                </div>
+    
+                                <div className="rowItens">
+                                    <p>Rua:</p>
+                                    <b>{item.address}</b>
+                                </div>
+    
+                                <div className="rowItens">
+                                    <p>Bairro:</p>
+                                    <b>{item.district}</b>
+                                </div>
+    
+                                <div className="rowItens">
+                                    <p>Número da casa:</p>
+                                    <b>{item.houseNumber}</b>
+                                </div>
+    
+                                <div className="rowItens">
+                                    <p>CEP:</p>
+                                    <b>{item.cepNumber}</b>
+                                </div>
+    
                             </div>
-
-                            <div className="rowItens">
-                                <p>Telefone: </p>
-                                <b>{item.phoneNumber}</b>
-                            </div>
-
-                            <div className="rowItens">
-                                <p>Rua:</p>
-                                <b>{item.address}</b>
-                            </div>
-
-                            <div className="rowItens">
-                                <p>Bairro:</p>
-                                <b>{item.district}</b>
-                            </div>
-
-                            <div className="rowItens">
-                                <p>Número da casa:</p>
-                                <b>{item.houseNumber}</b>
-                            </div>
-
-                            <div className="rowItens">
-                                <p>CEP:</p>
-                                <b>{item.cepNumber}</b>
-                            </div>
-
-                        </div>
-
-                        <div className="rightSizeBoxOrder" >
-
-                            {item.seller !== undefined ? <p>Vendedor: {item.seller}</p> : ''}
-
-                            <p>Itens:</p>
-
-                            <ul>
-
-                                { 
-                                    item.listItem.length > 1 ?
-
-                                        item.listItem.map((item, indexListItem) => (
-
+    
+                            <div className="rightSizeBoxOrder" >
+    
+                                {item.seller !== undefined ? <p>Vendedor: {item.seller}</p> : ''}
+    
+                                <p>Itens:</p>
+    
+                                <ul>
+    
+                                    { 
+                                        item.listItem.length > 1 ?
+    
+                                            item.listItem.map((item, indexListItem) => (
+    
+                                                <div className='flexDisplayRequestPage' >
+    
+                                                    <li><b>{item.title}</b> ({item.amount})</li>
+    
+                                                    <img src={closeIcon}
+                                                        className="imgRemoveIconCart"
+                                                        alt='opção de remover item'
+                                                        onClick={() => {
+                                                            removeItemOfClient(indexItem,indexListItem)
+                                                        }}
+                                                    />
+    
+                                                </div>
+    
+                                            ))
+                                        :
                                             <div className='flexDisplayRequestPage' >
-
-                                                <li><b>{item.title}</b> ({item.amount})</li>
-
+    
+                                                <li><b>{item.listItem[0].title}</b> ({item.listItem[0].amount})</li>
+    
                                                 <img src={closeIcon}
                                                     className="imgRemoveIconCart"
                                                     alt='opção de remover item'
                                                     onClick={() => {
-                                                        removeItemOfClient(indexItem,indexListItem)
+                                                        removeItemOfClient(indexItem,0)
                                                     }}
                                                 />
-
+    
                                             </div>
-
-                                        ))
-                                    :
-                                        <div className='flexDisplayRequestPage' >
-
-                                            <li><b>{item.listItem[0].title}</b> ({item.listItem[0].amount})</li>
-
-                                            <img src={closeIcon}
-                                                className="imgRemoveIconCart"
-                                                alt='opção de remover item'
-                                                onClick={() => {
-                                                    removeItemOfClient(indexItem,0)
-                                                }}
-                                            />
-
-                                        </div>
-                                            
+                                                
+                                    }
+    
+                                </ul>
+    
+                                <p>Tipo de pagamento: <b>{item.paymentType}</b></p>
+    
+                                {
+    
+                                    item.clientNote !== '' ?
+                                        <p>Observações do cliente: <b>{item.clientNote}</b></p>
+                                        : ''
+    
                                 }
-
-                            </ul>
-
-                            <p>Tipo de pagamento: <b>{item.paymentType}</b></p>
-
-                            {
-
-                                item.clientNote !== '' ?
-                                    <p>Observações do cliente: <b>{item.clientNote}</b></p>
+    
+                                <p>ID do pedido: <b>{item.id}</b></p>
+                                <p>Valor Total: <b>R$ {Number(item.totalValue).toFixed(2)}</b></p>
+                                
+                                {
+                                    item.deliveryman !== undefined ?
+                                    <p>Entregador: <b>{item.deliveryman}</b></p>
                                     : ''
-
-                            }
-
-                            <p>ID do pedido: <b>{item.id}</b></p>
-                            <p>Valor Total: <b>R$ {Number(item.totalValue).toFixed(2)}</b></p>
-                            
-                            {
-                                item.deliveryman !== undefined ?
-                                <p>Entregador: <b>{item.deliveryman}</b></p>
-                                : ''
-
-                            }
-
-                            {
-
-                            item.adminNote !== '' ?
-                                <p>Observações do Armazém: <b>{item.adminNote}</b></p>
-                                : ''
-
-                            }
-
-                            <div className="clientMessage">
-                                <input 
-                                    placeholder='Recado para cliente'
-                                    onChange={handleInputNote} 
-                                />
-                                    
-                                <div className="sendMessage"> 
-                                    <a onClick={()=>{sendNoteAdmin(indexItem)}} >Enviar Recado</a>
-                                    {/* <a onClick={() => { handleModalInfos(item) }}>Designar Entregador</a> */}
+    
+                                }
+    
+                                {
+    
+                                item.adminNote !== '' ?
+                                    <p>Observações do Armazém: <b>{item.adminNote}</b></p>
+                                    : ''
+    
+                                }
+    
+                                <div className="clientMessage">
+                                    <input 
+                                        placeholder='Recado para cliente'
+                                        onChange={handleInputNote} 
+                                    />
+                                        
+                                    <div className="sendMessage"> 
+                                        <a onClick={()=>{sendNoteAdmin(indexItem)}} >Enviar Recado</a>
+                                        {/* <a onClick={() => { handleModalInfos(item) }}>Designar Entregador</a> */}
+                                    </div>
                                 </div>
+    
+                            </div>
+    
+                        </div>
+    
+                    ))}
+    
+                    <div className="finalizarPedido">
+                        <h3 className="texTripRequest" >Finalizar pedido</h3>
+    
+                        <select onChange={handleIdSelected} className="selectFinishOrder" >
+    
+                            <option className="optionSelectOrder" >Selecionar</option>
+    
+                            {dataAdmin.map((item) => (
+                                <option className="optionSelectOrder" value={item.id} key={item.id}>{item.userName.split(' ')[0]}: {item.id}</option>
+                            ))}
+    
+                        </select>
+    
+                        <a className="finishButton" onClick={() => finishOrder()} >Finalizar</a>
+                    </div>
+    
+                </main>
+    
+                <Footer />
+            </div>
+    
+        )
+    } else {
+
+        return (
+
+            <div className='Admin'>
+
+                <Header />
+
+                    <main id='mainRegister'> 
+
+                        <div className='adminRegister'>
+
+                            <div className='titleAdmin' >
+                                <h1>Bem vindos, equipe Armazém do Vinho 🍷</h1>
+                            </div>
+
+                            <fieldset>
+
+                                <h1>Entrar</h1>
+
+                                <input name='email' onChange={handleInputLoginChange} placeholder='E-mail' />
+
+                                <input name='password' type='password' onChange={handleInputLoginChange} placeholder='Senha' />
+
+                            </fieldset>
+
+                            <div className='buttonsFormRegister' >
+
+                                <Link id='enterButtonSignIn' onClick={makeLogin}>Entrar</Link>
+
                             </div>
 
                         </div>
 
-                    </div>
+                    </main>
 
-                ))}
+                <Footer />
+                
+            </div>
 
-                <div className="finalizarPedido">
-                    <h3 className="texTripRequest" >Finalizar pedido</h3>
+        )
+    
+    }
 
-                    <select onChange={handleIdSelected} className="selectFinishOrder" >
-
-                        <option className="optionSelectOrder" >Selecionar</option>
-
-                        {dataAdmin.map((item) => (
-                            <option className="optionSelectOrder" value={item.id} key={item.id}>{item.userName.split(' ')[0]}: {item.id}</option>
-                        ))}
-
-                    </select>
-
-                    <a className="finishButton" onClick={() => finishOrder()} >Finalizar</a>
-                </div>
-
-            </main>
-
-            <Footer />
-        </div>
-
-    )
+    
 
 }
 
