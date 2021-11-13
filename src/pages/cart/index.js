@@ -11,8 +11,7 @@ import 'firebase/auth'
 import 'firebase/database'
 import firebaseConfig from '../../FirebaseConfig.js'
 
-import MelhorEnvio from "../../functions/MelhorEnvioAPI.js"
-
+import lottie from 'lottie-web';
 import trashCan from '../../img/trash.svg'
 
 function Cart() {
@@ -24,6 +23,7 @@ function Cart() {
     const [isSeller, setIsSeller] = useState(false);
     const [totalValue, setTotalValue] = useState(0);
     const [finalValue, setFinalValue] = useState(0);
+    const [voucherValue, setVoucherValue] = useState(0);
     const [dataAccount, setDataAccount] = useState([]);
     const [dataExists, setDataExists] = useState(false);
     const [userIsLogged, setUserIsLogged] = useState(false);
@@ -35,17 +35,29 @@ function Cart() {
     const [pickupSelect, setPickupSelect] = useState('');
     const [userVoucher, setUserVoucher] = useState('');
     const [userDiscount, setUserDiscount] = useState(0);
+    const [transportValue, setTransportValue] = useState(0);
     const [dataProduct, setDataProduct] = useState([]);
     const [customerCep, setCustomerCep] = useState('');
     const [transportData, setTransportData] = useState([]);
     const [selectedTransportData, setSelectedTransportData] = useState([]);
-    const [isVoucher, setIsVoucher] = useState(false);
     const [displayCepSearch, setDisplayCepSearch] = useState('none');
     
     const [paidFor, setPaidForm] = useState(false);
     const [loaded, setLoaded] = useState(false);
 
     const [redirect, setRedirect] = useState(useHistory());
+
+    const lottieContainer = useRef(null);
+
+    useEffect(() => {
+        lottie.loadAnimation({
+            container: lottieContainer.current,
+            renderer: 'svg',
+            loop: false,
+            autoplay: true,
+            animationData: require('../../img/checked.json')
+        })
+    }, []);
 
     function onAuthStateChanged(user) {
 
@@ -385,7 +397,13 @@ function Cart() {
                 verify = true
 
                 setUserDiscount(item.discount)
-                setFinalValue(totalValue - (totalValue * (item.discount / 100)))
+
+                if(transportValue) {
+
+                    setVoucherValue(totalValue + transportValue - ((totalValue + transportValue) * (item.discount / 100)))
+                    setFinalValue(totalValue + transportValue - ((totalValue + transportValue ) * (item.discount / 100)))
+
+                }
 
                 window.alert('Cupom inserido com sucesso!')
 
@@ -400,6 +418,17 @@ function Cart() {
         }
 
     }
+
+    // useEffect(() => {
+
+    //     if(userDiscount) {
+
+    //         setFinalValue(totalValue - (totalValue * (userDiscount / 100)))
+    //         console.log('discount', totalValue - (totalValue * (userDiscount / 100)))
+
+    //     }
+
+    // }, [])
 
     function handleSelectPayment(event) {
 
@@ -435,17 +464,19 @@ function Cart() {
 
         setSelectedTransportData(item)
         console.log(item)
+        // const value = finalValue
 
-        // if(item.id === index + 1) {
+        setTransportValue(Number(item.custom_price))
 
-        //     setSelectedTransportOption('#e5e5e5');
+        if(voucherValue) {
 
-        // } else {
+            setFinalValue(voucherValue + Number(item.custom_price))
 
-        //     setSelectedTransportOption('#fff');
+        } else {
 
-        // }
- 
+            setFinalValue(totalValue + Number(item.custom_price))
+
+        }
 
     }
 
@@ -615,10 +646,18 @@ function Cart() {
                                 <Header />
 
                                 <div className="cartPage">
+                                    
+                                    <div className='checkedWrapper'>
+
+                                        <div className='lottieContainer' ref={lottieContainer}></div>
+
+                                        <h2>aaaa</h2>
+
+                                    </div>
 
                                     <div className="cartIntro">
 
-                                        <h3>Após revisar os itens, clique no botão para prosseguir com a sua compra</h3>
+                                        <h3>Após revisar os itens, clique no botão de finalizar para prosseguir com a sua compra</h3>
 
                                     </div>
 
