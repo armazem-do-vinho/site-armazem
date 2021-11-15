@@ -8,6 +8,8 @@ import 'firebase/auth'
 import 'firebase/storage'
 import firebaseConfig from '../../../FirebaseConfig.js'
 
+import { Link } from 'react-router-dom'
+
 function Items() {
 
     const [wasChanged, setWasChanged] = useState(false)
@@ -247,264 +249,396 @@ function Items() {
 
     }
 
-    return (
+    const [loginData,setLoginData] = useState({
 
-        <div className='AdminItems'>
+        email: '',
+        password: ''
 
-            <Header />
+    })
+    const [userIsLogged, setUserIsLogged] = useState(false);
 
-            <main id='mainItems' >
 
-                <div className='itemsOptions' >
+    function makeLogin () {
 
-                    <h1>Cadastro de produtos</h1>
+        firebase.auth().signInWithEmailAndPassword(loginData.email, loginData.password)
+        .then(() => {
 
-                    <fieldset>
+            var userEmail = localStorage.getItem('userEmail')
+        
+            firebase.database().ref('admins').get('/admins')
+            .then(function (snapshot) {
 
-                        <legend>
-                            <h2>Inserir novo item</h2>
-                        </legend>
+                if (snapshot.exists()) {
 
-                        <input name='title' onChange={handleInputAdminChange} placeholder='Nome' value={newDataAdmin.title} />
+                    var data = snapshot.val()
+                    var temp = Object.keys(data).map((key) => data[key])
 
-                        <input name='desc' onChange={handleInputAdminChange} placeholder='Descrição' value={newDataAdmin.desc} />
+                    temp.map((item) => {
 
-                        <input name='itemWeight' onChange={handleInputAdminChange} placeholder='Peso (em kg)' type='number' value={newDataAdmin.itemWeight} />
+                        if(item.email === userEmail)
+                            setUserIsLogged(true)
 
-                        <input name='itemWidth' onChange={handleInputAdminChange} placeholder='Largura (em cm)' type='number' value={newDataAdmin.itemWidth} />
+                    })
+                }
+                else {
+                    console.log("No data available");
+                }
+            })
+            
+            
+            localStorage.setItem('userEmail',loginData.email)
 
-                        <input name='itemHeight' onChange={handleInputAdminChange} placeholder='Altura (em cm)' type='number' value={newDataAdmin.itemHeight} />
+        })
+        .catch((error) => {
+            var errorCode = error.code;
+            var errorMessage = error.message;
+            alert(errorMessage)
+        }); 
+        
+    }
 
-                        <input name='itemLength' onChange={handleInputAdminChange} placeholder='Comprimento (em cm)' type='number' value={newDataAdmin.itemLength} />
+    useEffect(() => {
 
-                        <input name='price' onChange={handleInputAdminChange} placeholder='Valor' type='number' value={newDataAdmin.price} />
+        var userEmail = localStorage.getItem('userEmail')
+        
+        firebase.database().ref('admins').get('/admins')
+        .then(function (snapshot) {
 
-                        <input name='amountInStock' onChange={handleInputAdminChange} placeholder='Quantidade em estoque' type='number' value={newDataAdmin.amountInStock} />
+            if (snapshot.exists()) {
 
-                        <input type='file' onChange={uploadImage} accept="image/png, image/jpeg" placeholder='Imagem' />
+                var data = snapshot.val()
+                var temp = Object.keys(data).map((key) => data[key])
 
-                        <select onChange={handleInputAdminChange} name='itemAvailability' >
+                temp.map((item) => {
 
-                            <option value={0} >Disponibilidade</option>
-                            <option value={true} >Disponível</option>
-                            <option value={false} >Indisponível</option>
+                    if(item.email === userEmail)
+                        setUserIsLogged(true)
 
-                        </select>
+                })
+            }
+            else {
+                console.log("No data available");
+            }
+        })
 
-                        <select onChange={handleInputAdminChange} name='country' value={newDataAdmin.country} >
+    }, []);
 
-                            <option value={0} >País</option>
-                            <option value="Argentina" >Argentina</option>
-                            <option value="Brasil" >Brasil</option>
-                            <option value="Chile" >Chile</option>
-                            <option value="Espanha" >Espanha</option>
-                            <option value="França" >França</option>
-                            <option value="Portugal" >Portugal</option>
+    function handleInputLoginChange(event) {
 
-                        </select>
+        const {name, value} = event.target
 
-                        <select onChange={handleInputAdminChange} name='type' value={newDataAdmin.type} >
+        setLoginData ({
 
-                            <option value={0} >Tipo</option>
-                            <option value="Branco" >Branco</option>
-                            <option value="Espumante" >Espumante</option>
-                            <option value="Rosé" >Rosé</option>
-                            <option value="Tinto" >Tinto</option>
-                            <option value="Kits" >Kits</option>
-                            <option value="Outros" >Outros</option>
+            ...loginData, [name]: value
 
-                        </select>
+        })
+        
+    }
 
-                        <select onChange={handleInputAdminChange} name='sweetness' value={newDataAdmin.sweetness} >
+    if (userIsLogged) {
+        return (
 
-                            <option value={0} >Doçura</option>
-                            <option value="Seco" >Seco</option>
-                            <option value="Suave" >Suave</option>
+            <div className='AdminItems'>
+    
+                <Header />
+    
+                <main id='mainItems' >
+    
+                    <div className='itemsOptions' >
+    
+                        <h1>Cadastro de produtos</h1>
+    
+                        <fieldset>
+    
+                            <legend>
+                                <h2>Inserir novo item</h2>
+                            </legend>
+    
+                            <input name='title' onChange={handleInputAdminChange} placeholder='Nome' value={newDataAdmin.title} />
+    
+                            <input name='desc' onChange={handleInputAdminChange} placeholder='Descrição' value={newDataAdmin.desc} />
+    
+                            <input name='itemWeight' onChange={handleInputAdminChange} placeholder='Peso (em kg)' type='number' value={newDataAdmin.itemWeight} />
+    
+                            <input name='itemWidth' onChange={handleInputAdminChange} placeholder='Largura (em cm)' type='number' value={newDataAdmin.itemWidth} />
+    
+                            <input name='itemHeight' onChange={handleInputAdminChange} placeholder='Altura (em cm)' type='number' value={newDataAdmin.itemHeight} />
+    
+                            <input name='itemLength' onChange={handleInputAdminChange} placeholder='Comprimento (em cm)' type='number' value={newDataAdmin.itemLength} />
+    
+                            <input name='price' onChange={handleInputAdminChange} placeholder='Valor' type='number' value={newDataAdmin.price} />
+    
+                            <input name='amountInStock' onChange={handleInputAdminChange} placeholder='Quantidade em estoque' type='number' value={newDataAdmin.amountInStock} />
+    
+                            <input type='file' onChange={uploadImage} accept="image/png, image/jpeg" placeholder='Imagem' />
+    
+                            <select onChange={handleInputAdminChange} name='itemAvailability' >
+    
+                                <option value={0} >Disponibilidade</option>
+                                <option value={true} >Disponível</option>
+                                <option value={false} >Indisponível</option>
+    
+                            </select>
+    
+                            <select onChange={handleInputAdminChange} name='country' value={newDataAdmin.country} >
+    
+                                <option value={0} >País</option>
+                                <option value="Argentina" >Argentina</option>
+                                <option value="Brasil" >Brasil</option>
+                                <option value="Chile" >Chile</option>
+                                <option value="Espanha" >Espanha</option>
+                                <option value="França" >França</option>
+                                <option value="Portugal" >Portugal</option>
+    
+                            </select>
+    
+                            <select onChange={handleInputAdminChange} name='type' value={newDataAdmin.type} >
+    
+                                <option value={0} >Tipo</option>
+                                <option value="Branco" >Branco</option>
+                                <option value="Espumante" >Espumante</option>
+                                <option value="Rosé" >Rosé</option>
+                                <option value="Tinto" >Tinto</option>
+                                <option value="Kits" >Kits</option>
+                                <option value="Outros" >Outros</option>
+    
+                            </select>
+    
+                            <select onChange={handleInputAdminChange} name='sweetness' value={newDataAdmin.sweetness} >
+    
+                                <option value={0} >Doçura</option>
+                                <option value="Seco" >Seco</option>
+                                <option value="Suave" >Suave</option>
+    
+                            </select>
+    
+                            <div className="buttonProducts">
+    
+                                <a onClick={() => { insertNewItem() }} >Inserir</a>
+    
+                            </div>
+    
+                        </fieldset>
+    
+                        <fieldset>
+    
+                            <legend>
+                                <h2>Alterar item</h2>
+                            </legend>
+    
+                            <select onChange={(e)=>handleSelectItem(e)} >
+    
+                                <option>Selecione o item</option>
+    
+                                {dataAdmin.map((item, index) => {
+    
+                                    return (
+    
+                                        <option value={index} key={index}>{item.title}</option>
+    
+                                    )
+    
+                                })}
+    
+                            </select>
+    
+                            <h4>Preencha o que deseja alterar</h4>
+    
+                            <input 
+                                name='title' 
+                                onChange={handleInputAdminChangeAlter} 
+                                placeholder='Nome'
+                                value={dataAlterItem.title}
+                            />
+    
+                            <input
+                                name='desc'
+                                onChange={handleInputAdminChangeAlter}
+                                placeholder='Descrição'
+                                value={dataAlterItem.desc}
+                            />
+    
+                            <input
+                                name='itemWeight'
+                                onChange={handleInputAdminChangeAlter}
+                                placeholder='Peso (em kg)'
+                                value={dataAlterItem.itemWeight}
+                            />
+    
+                            <input
+                                name='itemWidth'
+                                onChange={handleInputAdminChangeAlter}
+                                placeholder='Largura (em cm)'
+                                value={dataAlterItem.itemWidth}
+                            />
+    
+                            <input
+                                name='itemHeight'
+                                onChange={handleInputAdminChangeAlter}
+                                placeholder='Altura (em cm)'
+                                value={dataAlterItem.itemHeight}
+                            />
+    
+                            <input
+                                name='itemLength'
+                                onChange={handleInputAdminChangeAlter}
+                                placeholder='Comprimento (em cm)'
+                                value={dataAlterItem.itemLength}
+                            />
+    
+                            <input
+                                name='price'
+                                type='number'
+                                placeholder='Preço'
+                                value={dataAlterItem.price}
+                                onChange={handleInputAdminChangeAlter}
+                            />
+    
+                            <input 
+                              type='file'
+                              onChange={uploadImageAltered}
+                              accept="image/png, image/jpeg"
+                              placeholder='Imagem'
+                            />
+    
+                            <input
+                              name='amountInStock'
+                              onChange={handleInputAdminChangeAlter}
+                              placeholder='Quantidade em estoque'
+                              value={dataAlterItem.amountInStock}
+                            />
+    
+                            <select onChange={handleInputAdminChangeAlter} name='itemAvailability' >
+               
+                                <option value={0} >Disponibilidade</option>
+                                <option value={true} >Disponível</option>
+                                <option value={false} >Indisponível</option>
+                            
+                            </select>
+    
+                            <select onChange={handleInputAdminChangeAlter} name='country' value={dataAdmin[selectItem]?.country} >
+    
+                                <option value="Argentina" >Argentina</option>
+                                <option value="Brasil" >Brasil</option>
+                                <option value="Chile" >Chile</option>
+                                <option value="Espanha" >Espanha</option>
+                                <option value="França" >França</option>
+                                <option value="Portugal" >Portugal</option>
+    
+                            </select>
+    
+                            <select onChange={handleInputAdminChangeAlter} name='type' value={dataAdmin[selectItem]?.type} >
+    
+                                <option value={0} >Tipo</option>
+                                <option value="Branco" >Branco</option>
+                                <option value="Espumante" >Espumante</option>
+                                <option value="Rosé" >Rosé</option>
+                                <option value="Tinto" >Tinto</option>
+                                <option value="Kits" >Kits</option>
+                                <option value="Outros" >Outros</option>
+    
+                            </select>
+    
+                            <select onChange={handleInputAdminChangeAlter} name='sweetness' value={dataAdmin[selectItem]?.sweetness} >
+                            
+                                <option value={0} >Doçura</option>
+                                <option value="Seco" >Seco</option>
+                                <option value="Suave" >Suave</option>
+    
+                            </select>
+                            
+                            <div className="buttonProducts">
+    
+                                <a onClick={() => { setWasChanged(true); updateItem(); }} >Alterar</a>
+    
+                            </div>
+    
+                        </fieldset>
+    
+                        <fieldset>
+    
+                            <legend>
+                                <h2>Apagar item</h2>
+                            </legend>
+    
+                            <select onChange={handleSelectItemToDelete} >
+    
+                                <option>Selecione o item</option>
+    
+                                {dataAdmin.map((item, index) => {
+    
+                                    return (
+    
+                                        <option value={index} key={index}>{item.title}</option>
+    
+                                    )
+    
+                                })}
+    
+                            </select>
+    
+                            <div className="buttonProducts">
+    
+                                <a id="deleteButton" onClick={() => { deleteItem() }} >Apagar</a>
+    
+                            </div>
+    
+                        </fieldset>
+    
+                    </div>
+    
+                </main>
+    
+                <Footer />
+    
+            </div>
+    
+        )
+    } else {
 
-                        </select>
+        return (
 
-                        <div className="buttonProducts">
+            <div className='Admin'>
 
-                            <a onClick={() => { insertNewItem() }} >Inserir</a>
+                <Header />
+
+                    <main id='mainRegister'> 
+
+                        <div className='adminRegister'>
+
+                            <div className='titleAdmin' >
+                                <h1>Bem vindos, equipe Armazém do Vinho 🍷</h1>
+                            </div>
+
+                            <fieldset>
+
+                                <h1>Entrar</h1>
+
+                                <input name='email' onChange={handleInputLoginChange} placeholder='E-mail' />
+
+                                <input name='password' type='password' onChange={handleInputLoginChange} placeholder='Senha' />
+
+                            </fieldset>
+
+                            <div className='buttonsFormRegister' >
+
+                                <Link id='enterButtonSignIn' onClick={makeLogin}>Entrar</Link>
+
+                            </div>
 
                         </div>
 
-                    </fieldset>
+                    </main>
 
-                    <fieldset>
+                <Footer />
+                
+            </div>
 
-                        <legend>
-                            <h2>Alterar item</h2>
-                        </legend>
+        )
+    
+    }
 
-                        <select onChange={(e)=>handleSelectItem(e)} >
-
-                            <option>Selecione o item</option>
-
-                            {dataAdmin.map((item, index) => {
-
-                                return (
-
-                                    <option value={index} key={index}>{item.title}</option>
-
-                                )
-
-                            })}
-
-                        </select>
-
-                        <h4>Preencha o que deseja alterar</h4>
-
-                        <input 
-                            name='title' 
-                            onChange={handleInputAdminChangeAlter} 
-                            placeholder='Nome'
-                            value={dataAlterItem.title}
-                        />
-
-                        <input
-                            name='desc'
-                            onChange={handleInputAdminChangeAlter}
-                            placeholder='Descrição'
-                            value={dataAlterItem.desc}
-                        />
-
-                        <input
-                            name='itemWeight'
-                            onChange={handleInputAdminChangeAlter}
-                            placeholder='Peso (em kg)'
-                            value={dataAlterItem.itemWeight}
-                        />
-
-                        <input
-                            name='itemWidth'
-                            onChange={handleInputAdminChangeAlter}
-                            placeholder='Largura (em cm)'
-                            value={dataAlterItem.itemWidth}
-                        />
-
-                        <input
-                            name='itemHeight'
-                            onChange={handleInputAdminChangeAlter}
-                            placeholder='Altura (em cm)'
-                            value={dataAlterItem.itemHeight}
-                        />
-
-                        <input
-                            name='itemLength'
-                            onChange={handleInputAdminChangeAlter}
-                            placeholder='Comprimento (em cm)'
-                            value={dataAlterItem.itemLength}
-                        />
-
-                        <input
-                            name='price'
-                            type='number'
-                            placeholder='Preço'
-                            value={dataAlterItem.price}
-                            onChange={handleInputAdminChangeAlter}
-                        />
-
-                        <input 
-                          type='file'
-                          onChange={uploadImageAltered}
-                          accept="image/png, image/jpeg"
-                          placeholder='Imagem'
-                        />
-
-                        <input
-                          name='amountInStock'
-                          onChange={handleInputAdminChangeAlter}
-                          placeholder='Quantidade em estoque'
-                          value={dataAlterItem.amountInStock}
-                        />
-
-                        <select onChange={handleInputAdminChangeAlter} name='itemAvailability' >
-           
-                            <option value={0} >Disponibilidade</option>
-                            <option value={true} >Disponível</option>
-                            <option value={false} >Indisponível</option>
-                        
-                        </select>
-
-                        <select onChange={handleInputAdminChangeAlter} name='country' value={dataAdmin[selectItem]?.country} >
-
-                            <option value="Argentina" >Argentina</option>
-                            <option value="Brasil" >Brasil</option>
-                            <option value="Chile" >Chile</option>
-                            <option value="Espanha" >Espanha</option>
-                            <option value="França" >França</option>
-                            <option value="Portugal" >Portugal</option>
-
-                        </select>
-
-                        <select onChange={handleInputAdminChangeAlter} name='type' value={dataAdmin[selectItem]?.type} >
-
-                            <option value={0} >Tipo</option>
-                            <option value="Branco" >Branco</option>
-                            <option value="Espumante" >Espumante</option>
-                            <option value="Rosé" >Rosé</option>
-                            <option value="Tinto" >Tinto</option>
-                            <option value="Kits" >Kits</option>
-                            <option value="Outros" >Outros</option>
-
-                        </select>
-
-                        <select onChange={handleInputAdminChangeAlter} name='sweetness' value={dataAdmin[selectItem]?.sweetness} >
-                        
-                            <option value={0} >Doçura</option>
-                            <option value="Seco" >Seco</option>
-                            <option value="Suave" >Suave</option>
-
-                        </select>
-                        
-                        <div className="buttonProducts">
-
-                            <a onClick={() => { setWasChanged(true); updateItem(); }} >Alterar</a>
-
-                        </div>
-
-                    </fieldset>
-
-                    <fieldset>
-
-                        <legend>
-                            <h2>Apagar item</h2>
-                        </legend>
-
-                        <select onChange={handleSelectItemToDelete} >
-
-                            <option>Selecione o item</option>
-
-                            {dataAdmin.map((item, index) => {
-
-                                return (
-
-                                    <option value={index} key={index}>{item.title}</option>
-
-                                )
-
-                            })}
-
-                        </select>
-
-                        <div className="buttonProducts">
-
-                            <a id="deleteButton" onClick={() => { deleteItem() }} >Apagar</a>
-
-                        </div>
-
-                    </fieldset>
-
-                </div>
-
-            </main>
-
-            <Footer />
-
-        </div>
-
-    )
+    
 
 }
 

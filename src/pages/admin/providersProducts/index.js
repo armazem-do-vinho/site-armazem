@@ -321,189 +321,321 @@ function ProviderProducts() {
 
     }
 
-    return (
+    const [loginData,setLoginData] = useState({
 
-        <div className='ProviderProducts'>
+        email: '',
+        password: ''
 
-            <Header />
+    })
+    const [userIsLogged, setUserIsLogged] = useState(false);
 
-            <main id='mainProviderProducts' >
 
-                <div className='titleProviderProducts' >
+    function makeLogin () {
 
-                    <h1>Painel de cadastro de produto dos fornecedores</h1>
+        firebase.auth().signInWithEmailAndPassword(loginData.email, loginData.password)
+        .then(() => {
 
-                    <div className='optionProvider'>
+            var userEmail = localStorage.getItem('userEmail')
+        
+            firebase.database().ref('admins').get('/admins')
+            .then(function (snapshot) {
 
-                        <ul>
+                if (snapshot.exists()) {
 
-                            <Link to='/AdminFornecedor'>Voltar para painel de cadastro de fornecedores</Link>
+                    var data = snapshot.val()
+                    var temp = Object.keys(data).map((key) => data[key])
 
-                        </ul>
+                    temp.map((item) => {
 
+                        if(item.email === userEmail)
+                            setUserIsLogged(true)
+
+                    })
+                }
+                else {
+                    console.log("No data available");
+                }
+            })
+            
+            
+            localStorage.setItem('userEmail',loginData.email)
+
+        })
+        .catch((error) => {
+            var errorCode = error.code;
+            var errorMessage = error.message;
+            alert(errorMessage)
+        }); 
+        
+    }
+
+    function handleInputLoginChange(event) {
+
+        const {name, value} = event.target
+
+        setLoginData ({
+
+            ...loginData, [name]: value
+
+        })
+        
+    }
+
+    useEffect(() => {
+
+        var userEmail = localStorage.getItem('userEmail')
+        
+        firebase.database().ref('admins').get('/admins')
+        .then(function (snapshot) {
+
+            if (snapshot.exists()) {
+
+                var data = snapshot.val()
+                var temp = Object.keys(data).map((key) => data[key])
+
+                temp.map((item) => {
+
+                    if(item.email === userEmail)
+                        setUserIsLogged(true)
+
+                })
+            }
+            else {
+                console.log("No data available");
+            }
+        })
+
+    }, []);
+
+    if (userIsLogged) {
+        return (
+
+            <div className='ProviderProducts'>
+    
+                <Header />
+    
+                <main id='mainProviderProducts' >
+    
+                    <div className='titleProviderProducts' >
+    
+                        <h1>Painel de cadastro de produto dos fornecedores</h1>
+    
+                        <div className='optionProvider'>
+    
+                            <ul>
+    
+                                <Link to='/AdminFornecedor'>Voltar para painel de cadastro de fornecedores</Link>
+    
+                            </ul>
+    
+                        </div>
+    
                     </div>
+    
+                    <div className='providerProductsOptions' >
+    
+                        <fieldset>
+    
+                            <legend>
+                                <h2>Cadastrar produto</h2>
+                                <h5>Selecione o fornecedor e preencha os dados do produto abaixo.</h5>
+                            </legend>
+    
+                            <select onChange={handleSelectProvider} >
+    
+                                <option>Selecione o fornecedor</option>
+    
+                                {dataProvider.map((providers, index) => {
+    
+                                    return (
+    
+                                        <option value={index} key={index}>{providers.tradeName}</option>
+    
+                                    )
+    
+                                })}
+    
+                            </select>
+    
+                            <legend>
+                                <h3>Insira os dados do produto</h3>
+                            </legend>
+    
+                            <input name='title' onChange={handleInputProductChange} placeholder='Nome' value={newDataProduct.title} />
+    
+                            <input name='amount' onChange={handleInputProductChange} placeholder='Quantidade' value={newDataProduct.amount} />
+    
+                            <input name='sweetness' onChange={handleInputProductChange} placeholder='Doçura' value={newDataProduct.sweetness} />
+    
+                            <input name='type' onChange={handleInputProductChange} placeholder='Tipo' value={newDataProduct.type} />
+    
+                            <input name='country' onChange={handleInputProductChange} placeholder='País' value={newDataProduct.country} />
+                    
+                            <input type='file' onChange={uploadImage} accept="image/png, image/jpeg" placeholder='Imagem' />
+    
+                            <input name='buyPrice' onChange={handleInputProductChange} placeholder='Preço de compra' value={newDataProduct.buyPrice} />
+    
+                            <input name='sellPrice' onChange={handleInputProductChange} placeholder='Preço de venda' value={newDataProduct.sellPrice} />
+    
+    
+                        </fieldset>
+    
+                        <div className="linkProductRegister">
+                            <a onClick={() => { insertNewProduct() }} >Inserir</a>
+                        </div>
+    
+                        <fieldset>
+    
+                            <legend>
+                                <h2>Alterar dados dos produtos</h2>
+                            </legend>
+    
+                            <select onChange={handleSelectProviderProducts} >
+    
+                                <option>Selecione o fornecedor</option>
+    
+                                {dataProvider.map((providers, index) => {
+    
+                                    return (
+    
+                                        <option value={index} key={index}>{providers.tradeName}</option>
+    
+                                    )
+    
+                                })}
+    
+                            </select>
+    
+                            <select onChange={handleSelectProduct} >
+    
+                                <option>Selecione o produto</option>
+    
+                                {itemsOfProvider.map((products, index) => (
+    
+                                    <option value={index} key={index}>{products.product}</option>
+    
+                                ))}
+    
+                            </select>
+    
+                            <h5>Preencha o que deseja alterar</h5>
+    
+                            <input name='title' onChange={handleInputProductChangeAlter} placeholder='Nome' />
+    
+                            <input name='amount' onChange={handleInputProductChange} placeholder='Quantidade'/>
+    
+                            <input name='sweetness' onChange={handleInputProductChange} placeholder='Doçura'/>
+    
+                            <input name='type' onChange={handleInputProductChange} placeholder='Tipo'/>
+    
+                            <input name='country' onChange={handleInputProductChange} placeholder='País'/>
+    
+                            <input name='imageSrc' onChange={handleInputProductChangeAlter} placeholder='Imagem' />
+    
+                            <input name='sellPrice' onChange={handleInputProductChangeAlter} placeholder='Valor de venda' />
+    
+                            <input name='buyPrice' onChange={handleInputProductChangeAlter} placeholder='Valor de compra' />
+    
+                        </fieldset>
+    
+                        <div className="linkProductRegister">
+                            <a onClick={() => { setWasChangedProduct(true); updateProduct(); }} >Alterar</a>
+                        </div>
+    
+                        <fieldset>
+    
+                            <legend>
+                                <h2>Apagar produto</h2>
+                            </legend>
+    
+                            <select onChange={handleSelectProviderProducts} >
+    
+                                <option>Selecione o fornecedor</option>
+    
+                                {dataProvider.map((providers, index) => {
+    
+                                    return (
+    
+                                        <option key={index} value={index} >{providers.tradeName}</option>
+    
+                                    )
+    
+                                })}
+    
+                            </select>
+    
+                            <select onChange={handleSelectProductToDelete} >
+    
+                                <option>Selecione o produto</option>
+    
+                                {itemsOfProvider.map((products, index) => (
+    
+                                    <option value={index} key={index}>{products.product}</option>
+    
+                                ))}
+    
+                            </select>
+    
+                        </fieldset>
+    
+                        <div className="linkProductRegister">
+                            <a onClick={() => { deleteProduct() }} >Apagar</a>
+                        </div>
+    
+                    </div>
+    
+                </main>
+    
+                <Footer />
+    
+            </div>
+    
+        )
+    } else {
 
-                </div>
+        return (
 
-                <div className='providerProductsOptions' >
+            <div className='Admin'>
 
-                    <fieldset>
+                <Header />
 
-                        <legend>
-                            <h2>Cadastrar produto</h2>
-                            <h5>Selecione o fornecedor e preencha os dados do produto abaixo.</h5>
-                        </legend>
+                    <main id='mainRegister'> 
 
-                        <select onChange={handleSelectProvider} >
+                        <div className='adminRegister'>
 
-                            <option>Selecione o fornecedor</option>
+                            <div className='titleAdmin' >
+                                <h1>Bem vindos, equipe Armazém do Vinho 🍷</h1>
+                            </div>
 
-                            {dataProvider.map((providers, index) => {
+                            <fieldset>
 
-                                return (
+                                <h1>Entrar</h1>
 
-                                    <option value={index} key={index}>{providers.tradeName}</option>
+                                <input name='email' onChange={handleInputLoginChange} placeholder='E-mail' />
 
-                                )
+                                <input name='password' type='password' onChange={handleInputLoginChange} placeholder='Senha' />
 
-                            })}
+                            </fieldset>
 
-                        </select>
+                            <div className='buttonsFormRegister' >
 
-                        <legend>
-                            <h3>Insira os dados do produto</h3>
-                        </legend>
+                                <Link id='enterButtonSignIn' onClick={makeLogin}>Entrar</Link>
 
-                        <input name='title' onChange={handleInputProductChange} placeholder='Nome' value={newDataProduct.title} />
+                            </div>
 
-                        <input name='amount' onChange={handleInputProductChange} placeholder='Quantidade' value={newDataProduct.amount} />
+                        </div>
 
-                        <input name='sweetness' onChange={handleInputProductChange} placeholder='Doçura' value={newDataProduct.sweetness} />
+                    </main>
 
-                        <input name='type' onChange={handleInputProductChange} placeholder='Tipo' value={newDataProduct.type} />
-
-                        <input name='country' onChange={handleInputProductChange} placeholder='País' value={newDataProduct.country} />
+                <Footer />
                 
-                        <input type='file' onChange={uploadImage} accept="image/png, image/jpeg" placeholder='Imagem' />
+            </div>
 
-                        <input name='buyPrice' onChange={handleInputProductChange} placeholder='Preço de compra' value={newDataProduct.buyPrice} />
+        )
+    
+    }
 
-                        <input name='sellPrice' onChange={handleInputProductChange} placeholder='Preço de venda' value={newDataProduct.sellPrice} />
-
-
-                    </fieldset>
-
-                    <div className="linkProductRegister">
-                        <a onClick={() => { insertNewProduct() }} >Inserir</a>
-                    </div>
-
-                    <fieldset>
-
-                        <legend>
-                            <h2>Alterar dados dos produtos</h2>
-                        </legend>
-
-                        <select onChange={handleSelectProviderProducts} >
-
-                            <option>Selecione o fornecedor</option>
-
-                            {dataProvider.map((providers, index) => {
-
-                                return (
-
-                                    <option value={index} key={index}>{providers.tradeName}</option>
-
-                                )
-
-                            })}
-
-                        </select>
-
-                        <select onChange={handleSelectProduct} >
-
-                            <option>Selecione o produto</option>
-
-                            {itemsOfProvider.map((products, index) => (
-
-                                <option value={index} key={index}>{products.product}</option>
-
-                            ))}
-
-                        </select>
-
-                        <h5>Preencha o que deseja alterar</h5>
-
-                        <input name='title' onChange={handleInputProductChangeAlter} placeholder='Nome' />
-
-                        <input name='amount' onChange={handleInputProductChange} placeholder='Quantidade'/>
-
-                        <input name='sweetness' onChange={handleInputProductChange} placeholder='Doçura'/>
-
-                        <input name='type' onChange={handleInputProductChange} placeholder='Tipo'/>
-
-                        <input name='country' onChange={handleInputProductChange} placeholder='País'/>
-
-                        <input name='imageSrc' onChange={handleInputProductChangeAlter} placeholder='Imagem' />
-
-                        <input name='sellPrice' onChange={handleInputProductChangeAlter} placeholder='Valor de venda' />
-
-                        <input name='buyPrice' onChange={handleInputProductChangeAlter} placeholder='Valor de compra' />
-
-                    </fieldset>
-
-                    <div className="linkProductRegister">
-                        <a onClick={() => { setWasChangedProduct(true); updateProduct(); }} >Alterar</a>
-                    </div>
-
-                    <fieldset>
-
-                        <legend>
-                            <h2>Apagar produto</h2>
-                        </legend>
-
-                        <select onChange={handleSelectProviderProducts} >
-
-                            <option>Selecione o fornecedor</option>
-
-                            {dataProvider.map((providers, index) => {
-
-                                return (
-
-                                    <option key={index} value={index} >{providers.tradeName}</option>
-
-                                )
-
-                            })}
-
-                        </select>
-
-                        <select onChange={handleSelectProductToDelete} >
-
-                            <option>Selecione o produto</option>
-
-                            {itemsOfProvider.map((products, index) => (
-
-                                <option value={index} key={index}>{products.product}</option>
-
-                            ))}
-
-                        </select>
-
-                    </fieldset>
-
-                    <div className="linkProductRegister">
-                        <a onClick={() => { deleteProduct() }} >Apagar</a>
-                    </div>
-
-                </div>
-
-            </main>
-
-            <Footer />
-
-        </div>
-
-    )
+    
 
 }
 

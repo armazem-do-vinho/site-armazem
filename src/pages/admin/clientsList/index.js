@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import Header from '../../../components/header'
 import Footer from '../../../components/footer'
 import './style.scss'
-
+import { Link } from 'react-router-dom'
 import ModalUsers from '../../../components/modalUsers'
 
 import firebase from 'firebase/app'
@@ -99,85 +99,217 @@ function Admin() {
 
     }
 
-    return (
+    const [userIsLogged, setUserIsLogged] = useState(false);
+    const [loginData,setLoginData] = useState({
 
-        <div className='ClientListPage'>
+        email: '',
+        password: ''
 
-            <Header />
+    })
 
-            <div style={{ display: displayModal }} role="dialog" className='divModalUser' >
+    function makeLogin () {
 
-                <span onClick={closeModal}>X</span>
-                <ModalUsers displayProperty={displayModal} modalDataUsers={modalDataUsers} />
+        firebase.auth().signInWithEmailAndPassword(loginData.email, loginData.password)
+        .then(() => {
 
-            </div>
+            var userEmail = localStorage.getItem('userEmail')
+        
+            firebase.database().ref('admins').get('/admins')
+            .then(function (snapshot) {
 
-            <main id="mainClientList" >
+                if (snapshot.exists()) {
 
-                <h1>Informações dos usuários</h1>
-                <span>Clique em um cartão para alterar os dados do usuário</span>
+                    var data = snapshot.val()
+                    var temp = Object.keys(data).map((key) => data[key])
 
-                <div className='filterName' >
+                    temp.map((item) => {
 
-                    <h3>Pesquisa por nome</h3>
+                        if(item.email === userEmail)
+                            setUserIsLogged(true)
 
-                    <div className='searchName'>
+                    })
+                }
+                else {
+                    console.log("No data available");
+                }
+            })
+            
+            
+            localStorage.setItem('userEmail',loginData.email)
 
-                        <input type="text" placeholder="Dê Enter para realizar a busca" onKeyDown={handleSearchInput} />
-                    </div>
+        })
+        .catch((error) => {
+            var errorCode = error.code;
+            var errorMessage = error.message;
+            alert(errorMessage)
+        }); 
+        
+    }
 
+    function handleInputLoginChange(event) {
+
+        const {name, value} = event.target
+
+        setLoginData ({
+
+            ...loginData, [name]: value
+
+        })
+        
+    }
+
+    useEffect(() => {
+
+        var userEmail = localStorage.getItem('userEmail')
+        
+        firebase.database().ref('admins').get('/admins')
+        .then(function (snapshot) {
+
+            if (snapshot.exists()) {
+
+                var data = snapshot.val()
+                var temp = Object.keys(data).map((key) => data[key])
+
+                temp.map((item) => {
+
+                    if(item.email === userEmail)
+                        setUserIsLogged(true)
+
+                })
+            }
+            else {
+                console.log("No data available");
+            }
+        })
+
+    }, []);
+
+    if (userIsLogged) {
+
+        return (
+
+            <div className='ClientListPage'>
+    
+                <Header />
+    
+                <div style={{ display: displayModal }} role="dialog" className='divModalUser' >
+    
+                    <span onClick={closeModal}>X</span>
+                    <ModalUsers displayProperty={displayModal} modalDataUsers={modalDataUsers} />
+    
                 </div>
-
-                <section style={{ display: displaySearchResult }} className='searchNameResult' >
-
-                    <div className='divSearchNameResult'>
-
-                        <a onClick={() => { clearSearchName() }}>Limpar pesquisa</a>
-                        <h2>Resultado da busca</h2>
-
+    
+                <main id="mainClientList" >
+    
+                    <h1>Informações dos usuários</h1>
+                    <span>Clique em um cartão para alterar os dados do usuário</span>
+    
+                    <div className='filterName' >
+    
+                        <h3>Pesquisa por nome</h3>
+    
+                        <div className='searchName'>
+    
+                            <input type="text" placeholder="Dê Enter para realizar a busca" onKeyDown={handleSearchInput} />
+                        </div>
+    
                     </div>
-
-                </section>
-
-                {dataUsers.map((item) => (
-
-                    <div onClick={() => { handleModalInfos(item) }} className="boxClientList" >
-
-                        <h3>{item.name}</h3>
-
-                        <div>
-
+    
+                    <section style={{ display: displaySearchResult }} className='searchNameResult' >
+    
+                        <div className='divSearchNameResult'>
+    
+                            <a onClick={() => { clearSearchName() }}>Limpar pesquisa</a>
+                            <h2>Resultado da busca</h2>
+    
+                        </div>
+    
+                    </section>
+    
+                    {dataUsers.map((item) => (
+    
+                        <div onClick={() => { handleModalInfos(item) }} className="boxClientList" >
+    
+                            <h3>{item.name}</h3>
+    
                             <div>
-                                <p><b>Telefone</b>: {item.phoneNumber}</p>
-                                <p><b>E-mail</b>: {item.email}</p>
-                                <p><b>Data de nascimento</b>: {item.birthDate} </p>
+    
+                                <div>
+                                    <p><b>Telefone</b>: {item.phoneNumber}</p>
+                                    <p><b>E-mail</b>: {item.email}</p>
+                                    <p><b>Data de nascimento</b>: {item.birthDate} </p>
+                                </div>
+    
+                                <div>
+                                    <p><b>Cidade</b>: {item.city}</p>
+                                    <p><b>UF</b>: {item.state}</p>
+                                    <p><b>CEP</b>: {item.cepNumber}</p>
+                                </div>
+    
+                                <div>
+                                    <p><b>Rua</b>: {item.address}</p>
+                                    <p><b>Bairro</b>: {item.district}</p>
+                                    <p><b>Complemento</b>: {item.complement}</p>
+                                    <p><b>N°</b>: {item.houseNumber}</p>
+                                </div>
+    
+                            </div>
+    
+                        </div>
+    
+                    ))}
+    
+                </main>
+    
+                <Footer />
+            </div>
+    
+        )
+
+    } else {
+
+        return (
+
+            <div className='Admin'>
+
+                <Header />
+
+                    <main id='mainRegister'> 
+
+                        <div className='adminRegister'>
+
+                            <div className='titleAdmin' >
+                                <h1>Bem vindos, equipe Armazém do Vinho 🍷</h1>
                             </div>
 
-                            <div>
-                                <p><b>Cidade</b>: {item.city}</p>
-                                <p><b>UF</b>: {item.state}</p>
-                                <p><b>CEP</b>: {item.cepNumber}</p>
-                            </div>
+                            <fieldset>
 
-                            <div>
-                                <p><b>Rua</b>: {item.address}</p>
-                                <p><b>Bairro</b>: {item.district}</p>
-                                <p><b>Complemento</b>: {item.complement}</p>
-                                <p><b>N°</b>: {item.houseNumber}</p>
+                                <h1>Entrar</h1>
+
+                                <input name='email' onChange={handleInputLoginChange} placeholder='E-mail' />
+
+                                <input name='password' type='password' onChange={handleInputLoginChange} placeholder='Senha' />
+
+                            </fieldset>
+
+                            <div className='buttonsFormRegister' >
+
+                                <Link id='enterButtonSignIn' onClick={makeLogin}>Entrar</Link>
+
                             </div>
 
                         </div>
 
-                    </div>
+                    </main>
 
-                ))}
+                <Footer />
+                
+            </div>
 
-            </main>
+        )
+    
+    }
 
-            <Footer />
-        </div>
-
-    )
 
 }
 
