@@ -342,8 +342,41 @@ function Request() {
                                     }
     
                                 </ul>
+
+                                {
+
+                                    item.paymentType === "Pix" ? (
+
+                                    item.paymentProof ? (
+
+                                        <p>
+
+                                            Tipo de pagamento: 
+
+                                            <b>{item.paymentType} (<a style={{textDecoration: 'none'}} target="_blank" href={item.paymentProof}>Comprovante</a>)</b>
+
+                                        </p>
+
+                                    ) : 
+
+                                    (
+                                        <p>
+
+                                            Tipo de pagamento: 
+
+                                            <b>{item.paymentType} (Aguardando comprovante)</b>
+
+                                        </p>
+                                    )
+                                    )
+
+
+                                    :
+
+                                    (<p>Tipo de pagamento: <b>{item.paymentType}</b></p>)
+
+                                }
     
-                                <p>Tipo de pagamento: <b>{item.paymentType}</b></p>
     
                                 {
     
@@ -355,13 +388,24 @@ function Request() {
     
                                 <p>ID do pedido: <b>{item.id}</b></p>
                                 <p>Valor Total: <b>R$ {Number(item.totalValue).toFixed(2)}</b></p>
-                                
+
                                 {
+                                    item.voucher ? 
+
+                                    <p>Cupom utilizado: <b>{item.voucher}</b></p>
+
+                                    :
+
+                                    <p></p>
+
+                                }
+
+                                {/* {
                                     item.deliveryman !== undefined ?
                                     <p>Entregador: <b>{item.deliveryman}</b></p>
                                     : ''
     
-                                }
+                                } */}
     
                                 {
     

@@ -73,8 +73,6 @@ function Cart() {
             setDataExists(true)
             setDisplayButtonClear('block')
 
-            console.log(verify)
-
             var total = 0
 
             temp.map((item) => {
@@ -107,7 +105,7 @@ function Cart() {
 
         const verify = await JSON.parse(localStorage.getItem('products'))
 
-        if (verify !== null) {
+        if (verify != {}) {
 
             var temp = Object.keys(verify).map((key) => verify[key])
 
@@ -132,8 +130,6 @@ function Cart() {
 
             })
         }
-        else
-            setDataExists(false)
 
     }, [])
 
@@ -205,27 +201,27 @@ function Cart() {
 
             })
 
-        firebase.database().ref('sellers/').get('/sellers')
-            .then(function (snapshot) {
+        // firebase.database().ref('sellers/').get('/sellers')
+        //     .then(function (snapshot) {
 
-                if (snapshot.exists()) {
+        //         if (snapshot.exists()) {
 
-                    var data = snapshot.val()
-                    var temp = Object.keys(data).map((key) => data[key])
+        //             var data = snapshot.val()
+        //             var temp = Object.keys(data).map((key) => data[key])
 
-                    temp.map((item) => {
+        //             temp.map((item) => {
 
-                        if (item.email === userEmail) {
-                            setSeller(item)
-                            setIsSeller(true)
-                        }
+        //                 if (item.email === userEmail) {
+        //                     setSeller(item)
+        //                     setIsSeller(true)
+        //                 }
 
-                    })
+        //             })
 
-                } else
-                    console.log("No data available");
+        //         } else
+        //             console.log("No data available");
 
-            })
+        //     })
 
     }, []);
 
@@ -254,7 +250,8 @@ function Cart() {
                     clientNote: clientNote,
                     userEmail: dataAccount.email,
                     voucher: choosedVoucher,
-                    choosedTransport: transportData,
+                    paymentProof: '',
+                    // choosedTransport: transportData,
                     selectedTransport: selectedTransportData.company.name,
                     // adminNote: '',
                     dateToCompare: new Date().toDateString(),
@@ -311,6 +308,10 @@ function Cart() {
                 paymentType: 'Paypal',
                 clientNote: clientNote,
                 userEmail: dataAccount.email,
+                voucher: choosedVoucher,
+                paymentProof: '',
+                // choosedTransport: transportData,
+                selectedTransport: selectedTransportData.company.name,
                 // adminNote: '',
                 dateToCompare: new Date().toDateString(),
                 date: `${now.getUTCDate()}/${now.getMonth()}/${now.getFullYear()}-${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}`
@@ -342,31 +343,31 @@ function Cart() {
 
     }
 
-    function sendOrderSeller() {
+    // function sendOrderSeller() {
 
-        const id = firebase.database().ref().child('posts').push().key
+    //     const id = firebase.database().ref().child('posts').push().key
 
-        firebase.database().ref('requests/' + id).set({
+    //     firebase.database().ref('requests/' + id).set({
 
-            id: id,
-            listItem: data,
-            totalValue: finalValue.toFixed(2),
-            userName: dataUsers[selectedClient].name,
-            phoneNumber: dataUsers[selectedClient].phoneNumber,
-            street: dataUsers[selectedClient].street,
-            houseNumber: dataUsers[selectedClient].houseNumber,
-            district: dataUsers[selectedClient].district,
-            cepNumber: dataUsers[selectedClient].cepNumber,
-            complement: dataUsers[selectedClient].complement,
-            paymentType: selectedPayment,
-            seller: seller.name
+    //         id: id,
+    //         listItem: data,
+    //         totalValue: finalValue.toFixed(2),
+    //         userName: dataUsers[selectedClient].name,
+    //         phoneNumber: dataUsers[selectedClient].phoneNumber,
+    //         street: dataUsers[selectedClient].street,
+    //         houseNumber: dataUsers[selectedClient].houseNumber,
+    //         district: dataUsers[selectedClient].district,
+    //         cepNumber: dataUsers[selectedClient].cepNumber,
+    //         complement: dataUsers[selectedClient].complement,
+    //         paymentType: selectedPayment,
+    //         seller: seller.name
 
-        }).then(() => {
-            localStorage.setItem('products', '[{}]')
-            alert("Pedido finalizado com sucesso!.")
-        })
+    //     }).then(() => {
+    //         localStorage.setItem('products', '[{}]')
+    //         alert("Pedido finalizado com sucesso!.")
+    //     })
 
-    }
+    // }
 
     function cleanCart() {
 
@@ -396,12 +397,8 @@ function Cart() {
                 setChoosedVoucher(item.title)
                 setDisplayCepDiv('none')
 
-                if (transportValue) {
-
-                    setVoucherValue(totalValue + transportValue - ((totalValue + transportValue) * (item.discount / 100)))
-                    setFinalValue(totalValue + transportValue - ((totalValue + transportValue) * (item.discount / 100)))
-
-                }
+                setVoucherValue(totalValue + transportValue - ((totalValue + transportValue) * (item.discount / 100)))
+                setFinalValue(totalValue + transportValue - ((totalValue + transportValue) * (item.discount / 100)))
 
                 window.alert('Cupom inserido com sucesso!')
 
@@ -480,7 +477,7 @@ function Cart() {
 
         if (voucherValue) {
 
-            setFinalValue(voucherValue + Number(item.custom_price))
+            setFinalValue(voucherValue + (Number(item.custom_price) - (Number(item.custom_price) * userDiscount/100)))
 
         } else {
 
@@ -584,7 +581,7 @@ function Cart() {
                                         // description: product.description,
                                         amount: {
                                             currency_code: "BRL",
-                                            value: totalValue
+                                            value: finalValue
                                         }
                                     }
                                 ]
