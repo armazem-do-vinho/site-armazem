@@ -1,6 +1,7 @@
 import React from 'react'
 import { useEffect, useState } from 'react'
 
+import InputMask from 'react-input-mask';
 
 import Header from '../../components/header'
 import Footer from '../../components/footer'
@@ -281,9 +282,12 @@ function Register() {
 
                                             </div>
 
-                                            <input id='phoneNumber' name='phoneNumber' onChange={handleInputRegisterChange} placeholder='Telefone' />
-                                            <input id='birthDate' name='birthDate' type='date' onChange={handleInputRegisterChange} placeholder='Data de nascimento' />
-                                            <input id='cepNumber' name='cepNumber' onChange={handleInputRegisterChange} placeholder='CEP' />
+                                            {/* <input id='phoneNumber' name='phoneNumber' onChange={handleInputRegisterChange} placeholder='Telefone' /> */}
+                                            <InputMask id='phoneNumber' name='phoneNumber' type='tel' mask="(99) 99999-9999" maskChar="" onChange={handleInputRegisterChange} placeholder='Telefone com DDD' />
+                                            {/* <input id='birthDate' name='birthDate' type='date' onChange={handleInputRegisterChange} placeholder='Data de nascimento' /> */}
+                                            <InputMask id='birthDate' name='birthDate' type='text' mask="99/99/9999" maskChar="" onChange={handleInputRegisterChange} placeholder="Data de nascimento" />
+                                            {/* <input id='cepNumber' name='cepNumber' onChange={handleInputRegisterChange} placeholder='CEP' /> */}
+                                            <InputMask id='cepNumber' name="cepNumber" type='text' mask="99999-999" maskChar="" onChange={handleInputRegisterChange} placeholder="CEP" />
 
                                             <div className="cityDiv">
 

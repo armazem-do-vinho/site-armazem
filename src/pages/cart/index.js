@@ -2,6 +2,8 @@ import React, { useEffect, useRef, useState } from 'react'
 import { Link } from "react-router-dom";
 import { useHistory } from 'react-router-dom'
 
+import InputMask from 'react-input-mask';
+
 import Header from '../../components/header'
 import Footer from '../../components/footer'
 import './style.scss'
@@ -11,8 +13,8 @@ import 'firebase/auth'
 import 'firebase/database'
 import firebaseConfig from '../../FirebaseConfig.js'
 
-import lottie from 'lottie-web';
 import trashCan from '../../img/trash.svg'
+
 
 function Cart() {
 
@@ -31,6 +33,7 @@ function Cart() {
     const [clientNote, setClientNote] = useState('');
     const [displayButtonClear, setDisplayButtonClear] = useState('none');
     const [displayTransport, setDisplayTransport] = useState('none');
+    const [displayCepDiv, setDisplayCepDiv] = useState('flex');
     const [selectedPayment, setSelectedPayment] = useState('');
     const [pickupSelect, setPickupSelect] = useState('');
     const [userVoucher, setUserVoucher] = useState('');
@@ -41,23 +44,13 @@ function Cart() {
     const [transportData, setTransportData] = useState([]);
     const [selectedTransportData, setSelectedTransportData] = useState([]);
     const [displayCepSearch, setDisplayCepSearch] = useState('none');
-    
+    const [displayPopup, setDisplayPopup] = useState('none');
+    const [choosedVoucher, setChoosedVoucher] = useState('');
+
     const [paidFor, setPaidForm] = useState(false);
     const [loaded, setLoaded] = useState(false);
 
     const [redirect, setRedirect] = useState(useHistory());
-
-    const lottieContainer = useRef(null);
-
-    useEffect(() => {
-        lottie.loadAnimation({
-            container: lottieContainer.current,
-            renderer: 'svg',
-            loop: false,
-            autoplay: true,
-            animationData: require('../../img/checked.json')
-        })
-    }, []);
 
     function onAuthStateChanged(user) {
 
@@ -260,6 +253,9 @@ function Cart() {
                     paymentType: selectedPayment,
                     clientNote: clientNote,
                     userEmail: dataAccount.email,
+                    voucher: choosedVoucher,
+                    choosedTransport: transportData,
+                    selectedTransport: selectedTransportData.company.name,
                     // adminNote: '',
                     dateToCompare: new Date().toDateString(),
                     date: `${now.getUTCDate()}/${now.getMonth()}/${now.getFullYear()}-${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}`
@@ -397,11 +393,13 @@ function Cart() {
                 verify = true
 
                 setUserDiscount(item.discount)
+                setChoosedVoucher(item.title)
+                setDisplayCepDiv('none')
 
-                if(transportValue) {
+                if (transportValue) {
 
                     setVoucherValue(totalValue + transportValue - ((totalValue + transportValue) * (item.discount / 100)))
-                    setFinalValue(totalValue + transportValue - ((totalValue + transportValue ) * (item.discount / 100)))
+                    setFinalValue(totalValue + transportValue - ((totalValue + transportValue) * (item.discount / 100)))
 
                 }
 
@@ -432,7 +430,19 @@ function Cart() {
 
     function handleSelectPayment(event) {
 
-        setSelectedPayment(event.target.value)
+        let payment = event.target.value
+
+        setSelectedPayment(payment)
+
+        if (payment === 'Pix') {
+
+            setDisplayPopup('flex')
+
+        } else {
+
+            setDisplayPopup('none')
+
+        }
 
     }
 
@@ -468,7 +478,7 @@ function Cart() {
 
         setTransportValue(Number(item.custom_price))
 
-        if(voucherValue) {
+        if (voucherValue) {
 
             setFinalValue(voucherValue + Number(item.custom_price))
 
@@ -514,9 +524,15 @@ function Cart() {
 
     }
 
+    function closePopup() {
+
+        setDisplayPopup('none')
+
+    }
+
     const dataToSend = {
         "from": {
-            "postal_code": "96020360"
+            "postal_code": "28909120"
         },
         "to": {
             "postal_code": customerCep
@@ -643,17 +659,22 @@ function Cart() {
 
                             <section id="CartSection">
 
+                                <div style={{ display: displayPopup }} className='popupWrapper'>
+
+                                    <div className='popupContent'>
+
+                                        <h3>Realize um Pix para a chave: <br /> (22) 98112 9219 </h3>
+                                        <h4>Após isso, envie seu comprovante através da seção "meus produtos" em seu perfil.</h4>
+
+                                        <button onClick={() => closePopup()}>Confirmar</button>
+
+                                    </div>
+
+                                </div>
+
                                 <Header />
 
                                 <div className="cartPage">
-                                    
-                                    <div className='checkedWrapper'>
-
-                                        <div className='lottieContainer' ref={lottieContainer}></div>
-
-                                        <h2>aaaa</h2>
-
-                                    </div>
 
                                     <div className="cartIntro">
 
@@ -746,11 +767,15 @@ function Cart() {
 
                                     <div className="finishOrder">
 
-                                        <label for="voucherInput">Inserir cupom de desconto</label>
+                                        <div style={{display: displayCepDiv}} className="cepInputDiv">
 
-                                        <input onChange={handleVoucher} id="voucherInput" placeholder="Cupom" />
+                                            <label for="voucherInput">Inserir cupom de desconto</label>
 
-                                        <button onClick={() => verifyVoucher()}>Inserir cupom</button>
+                                            <input onChange={handleVoucher} id="voucherInput" placeholder="Cupom" />
+
+                                            <button onClick={() => verifyVoucher()}>Inserir cupom</button>
+
+                                        </div>
 
                                         <select className="pickupSelect" onChange={handlePickupSelect} >
 
@@ -761,9 +786,11 @@ function Cart() {
 
                                         </select>
 
-                                        <input style={{display: displayCepSearch}} onChange={handleInputCep} placeholder="CEP" />
+                                        {/* <input style={{ display: displayCepSearch }} onChange={handleInputCep} placeholder="CEP" /> */}
+                                        <label style={{ display: displayCepSearch }} for="cepNumber">Insira o seu CEP cadastrado no site</label>
+                                        <InputMask id="cepNumber" name='cepNumber' type='text' mask="99999-999" maskChar="" style={{ display: displayCepSearch }} onChange={handleInputCep} placeholder="CEP" />
 
-                                        <button style={{display: displayCepSearch}} onClick={() => { calculaFrete() }}>Calcular frete</button>
+                                        <button style={{ display: displayCepSearch }} onClick={() => { calculaFrete() }}>Calcular frete</button>
 
                                         <div className="transportInfos" style={{ display: displayTransport }}>
 
@@ -773,33 +800,36 @@ function Cart() {
 
                                                 if (item.id === 1 || item.id === 2 || item.id === 3) {
 
-                                                return (
+                                                    if (!item.error) {
 
-                                                    <div className="optionsTransport">
+                                                        return (
 
-                                                        <div className="radioButton">
+                                                            <div className="optionsTransport">
 
-                                                            <input onClick={(e)=>handleSelectedTransport(e, item, index)} type="radio" name="selectedTransport" key={item.id} value={item.name} />
+                                                                <div className="radioButton">
 
-                                                        </div>
+                                                                    <input onClick={(e) => handleSelectedTransport(e, item, index)} type="radio" name="selectedTransport" key={item.id} value={item.name} />
 
-                                                        <div className="transportLogoWrapper">
+                                                                </div>
 
-                                                            <img src={item.company.picture} alt={item.company.name} />
+                                                                <div className="transportLogoWrapper">
 
-                                                        </div>
+                                                                    <img src={item.company.picture} alt={item.company.name} />
 
-                                                        <div className="textTransportInfos">
+                                                                </div>
 
-                                                            <span>{item.company.name} ({item.name})</span>
-                                                            <span><strong>R$ {item.custom_price}</strong></span>
-                                                            <span>Prazo de entrega: <strong>{item.custom_delivery_time} dias úteis</strong></span>
+                                                                <div className="textTransportInfos">
 
-                                                        </div>
+                                                                    <span>{item.company.name} ({item.name})</span>
+                                                                    <span><strong>R$ {item.custom_price}</strong></span>
+                                                                    <span>Prazo de entrega: <strong>{item.custom_delivery_time} dias úteis</strong></span>
 
-                                                    </div>
+                                                                </div>
 
-                                                    )
+                                                            </div>
+
+                                                        )
+                                                    }
                                                 }
 
                                             })}
@@ -812,7 +842,7 @@ function Cart() {
                                             <option value="Dinheiro" >Dinheiro (apenas para entregas na região)</option>
                                             <option value="Débito (máquina)" >Cartão de débito (apenas para entregas na região)</option>
                                             <option value="Crédito (máquina)" >Cartão de crédito (apenas para entregas na região)</option>
-                                            <option value="Pix" >PIX</option>
+                                            <option value="Pix" >Pix</option>
 
                                         </select>
 
