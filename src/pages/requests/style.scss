@@ -47,9 +47,21 @@
                 justify-content: center;
                 align-items: center;
 
+                h4 {
+
+                    margin: .5rem 0;
+
+                }
+
                 span {
 
                     margin-top: 1rem;
+
+                }
+
+                span:nth-child(3) {
+
+                    margin-top: 5rem;
 
                 }
 
@@ -77,29 +89,15 @@
                     display: flex;
                     flex-direction: column;
                     align-items: center;
+                    background-color: #3a414e;
+                    border-radius: 8px;
+                    padding: 1rem;
 
-                    label {
+                    span {
 
-                        display: flex;
-                        justify-content: center;
-                        align-items: center;
-                        outline: none;
-                        background-color: $vinho;
-                        border: none;
-                        text-decoration: none;
                         font-size: 1rem;
-                        color: $branco;
-                        cursor: pointer;
-                        padding: 0.5rem 2rem;
-                        border-radius: 5px;
                         font-weight: 700;
-                        margin-top: .5rem;
-
-                    }
-
-                    input {
-
-                        display: none;
+                        margin-bottom: 1rem;
 
                     }
 
@@ -110,9 +108,19 @@
                         text-decoration: none;
                         color: $branco;
                         cursor: pointer;
-                        background-color: transparent;
+                        background-color: $vinho;
+                        font-weight: 700;
                         font-size: 1rem;
-                        margin-top: .5rem;
+                        margin-top: 2rem;
+                        padding: 0.5rem 1rem;
+                        border-radius: 5px;
+
+                        &:hover {
+
+                            background-color: $deepVinho;
+                            transition: .3s ease-in-out;
+
+                        }
 
                     }
 

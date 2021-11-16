@@ -20,6 +20,7 @@ function Request() {
     const [displayModal, setDisplayModal] = useState("none");
     const [heightPageWhenOpenModal, setHeightPageWhenOpenModal] = useState(0)
     const [modalData, setModalData] = useState({});
+    const [requestStatus, setRequestStatus] = useState('');
 
     useEffect(() => {
 
@@ -148,11 +149,21 @@ function Request() {
             paymentType: dataTemp[indexItem].paymentType,
             clientNote: dataTemp[indexItem].clientNote,
             userEmail: dataTemp[indexItem].userEmail,
-            adminNote: noteAdmin
-
+            adminNote: noteAdmin !== '' ? noteAdmin : dataTemp[indexItem].adminNote,
+            requestStatus: requestStatus
 
         }).then(()=>{
-            alert("Recado enviado!")
+            
+            if(noteAdmin) {
+
+                window.alert('Recado enviado!')
+
+            } else if(requestStatus) {
+
+                window.alert('Status alterado!')
+
+            }
+
         })
         setNoteAdmin('')
 
@@ -244,6 +255,12 @@ function Request() {
 
     }, []);
 
+    function handleSelectedStatus(event) {
+
+        setRequestStatus(event.target.value)
+
+    }
+
     if (userIsLogged) {
         return (
 
@@ -251,10 +268,10 @@ function Request() {
     
                 <Header />
     
-                <div style={{ display: displayModal }} tabindex="-1" role="dialog" className='modalDelivery' >
+                {/* <div style={{ display: displayModal }} tabindex="-1" role="dialog" className='modalDelivery' >
                     <span onClick={closeModal}>X</span>
                     <DeliveryModal displayProperty={displayModal} modalData={modalData} />
-                </div>
+                </div> */}
     
                 <main id='mainRequest' >
     
@@ -292,6 +309,23 @@ function Request() {
                                 <div className="rowItens">
                                     <p>CEP:</p>
                                     <b>{item.cepNumber}</b>
+                                </div>
+
+                                <div className="requestStatus">
+
+                                    <p>Status do pedido: <b>{item.requestStatus}</b></p>
+
+                                    <select onChange={handleSelectedStatus}>
+
+                                        <option selected disabled>Status do pedido</option>
+                                        <option value="Preparando">Preparando</option>
+                                        <option value="Enviado">Enviado</option>
+                                        <option value="Entregue">Entregue</option>
+
+                                    </select>
+
+                                    <button onClick={() => {sendNoteAdmin(indexItem)}}>Alterar status</button>
+
                                 </div>
     
                             </div>

@@ -31,26 +31,25 @@ import 'firebase/database'
 import firebaseConfig from '../../FirebaseConfig.js'
 import { Link } from 'react-router-dom';
 
-
-import calculaFrete from '../../functions/CalculaFrete'
+// import calculaFrete from '../../functions/CalculaFrete'
 
 function Home() {
 
     const [data, setData] = useState([]);
     const [dataBanner, setDataBanner] = useState([]);
 
-    const teste = async () => {
+    // const teste = async () => {
 
-        const promisse = calculaFrete()
-        // const promisse = await calculaFrete().then(
-        //     console.log('promisse', promisse)
-        // )
+    //     const promisse = calculaFrete()
+    //     // const promisse = await calculaFrete().then(
+    //     //     console.log('promisse', promisse)
+    //     // )
 
-    }
+    // }
 
     useEffect(() => {
 
-        teste()
+        // teste()
 
         if (!firebase.apps.length)
             firebase.initializeApp(firebaseConfig);

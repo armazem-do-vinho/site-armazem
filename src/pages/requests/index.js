@@ -48,6 +48,8 @@ function Requests() {
 
     function sendPaymentProof(requestIndex) {
 
+        if (paymentFile !== '') {
+            
         const newRequestData = {
 
             address: requestData[requestIndex].address,
@@ -60,7 +62,7 @@ function Requests() {
             houseNumber: requestData[requestIndex].houseNumber,
             id: requestData[requestIndex].id,
             listItem: requestData[requestIndex].listItem,
-            paymentProof: paymentFile !== '' ? paymentFile : '',
+            paymentProof: paymentFile,
             paymentType: requestData[requestIndex].paymentType,
             phoneNumber: requestData[requestIndex].phoneNumber,
             selectedTransport: requestData[requestIndex].selectedTransport,
@@ -77,6 +79,12 @@ function Requests() {
         .then(() => alert("Comprovante enviado com sucesso!"))
 
         setPaymentFile('')
+
+    } else {
+
+        window.alert("Comprovante não enviado. Aguarde alguns segundos e tente novamente. Se o error persistir, verifique o formato do arquivo inserido ou sua conexão.")
+
+    }
 
     }
 
@@ -121,13 +129,15 @@ function Requests() {
 
                                         <div className="controlInfos">
 
-                                            <h4><span>ID do pedido: {request.id}</span></h4>
+                                            <span><b>ID do pedido:</b> {request.id}</span>
+
+                                            <span><b>Pedido realizado em:</b> {request.date.slice(0, -3)}</span>
 
                                             {
 
                                                 request.adminNote ? 
 
-                                                <span><b>Observações: </b>{request.adminNote}</span>
+                                                <span><b>Recado do Armazém: </b>{request.adminNote}</span>
 
                                                 :
 
@@ -162,8 +172,8 @@ function Requests() {
 
                                         <div className="selectedPaymentInfos">
 
-                                            <label for="inputPayment">Inserir comprovante</label>
-                                            <input id="inputPayment" type='file' onChange={uploadPaymentProof} accept="image/png, image/jpeg, application/pdf" placeholder='Comprovante' />
+                                            <span>Inserir comprovante</span>
+                                            <input type='file' onChange={uploadPaymentProof} accept="image/png, image/jpeg, application/pdf" placeholder='Comprovante' />
                                             <button onClick={() => {sendPaymentProof(requestIndex)}}>Enviar comprovante</button>
 
                                         </div>
