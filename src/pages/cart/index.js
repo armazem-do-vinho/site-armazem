@@ -15,7 +15,6 @@ import firebaseConfig from '../../FirebaseConfig.js'
 
 import trashCan from '../../img/trash.svg'
 
-
 function Cart() {
 
     const [data, setData] = useState([]);
@@ -46,11 +45,26 @@ function Cart() {
     const [displayCepSearch, setDisplayCepSearch] = useState('none');
     const [displayPopup, setDisplayPopup] = useState('none');
     const [choosedVoucher, setChoosedVoucher] = useState('');
+    const [addressForms, setAddressForms] = useState('none');
+    const [transportDataVerify, setTransportDataVerify] = useState(false);
 
     const [paidFor, setPaidForm] = useState(false);
     const [loaded, setLoaded] = useState(false);
 
     const [redirect, setRedirect] = useState(useHistory());
+
+    const [newDataReceiver, setNewDataReceiver] = useState({
+
+        receiverName: '',
+        receiverPhone: '',
+        receiverAddress: '',
+        receiverHouseNumber: '',
+        receiverComplement: '',
+        receiverDistrict: '',
+        receiverCity: '',
+        receiverCpf: '',
+
+    })
 
     function onAuthStateChanged(user) {
 
@@ -239,13 +253,15 @@ function Cart() {
                     id: id,
                     listItem: data,
                     totalValue: finalValue.toFixed(2),
-                    userName: dataAccount.name,
-                    phoneNumber: dataAccount.phoneNumber,
-                    address: dataAccount.address,
-                    houseNumber: dataAccount.houseNumber,
-                    district: dataAccount.district,
-                    cepNumber: dataAccount.cepNumber,
-                    complement: dataAccount.complement,
+                    userName: newDataReceiver.receiverName,
+                    phoneNumber: newDataReceiver.receiverPhone,
+                    address: newDataReceiver.receiverAddress,
+                    houseNumber: newDataReceiver.receiverHouseNumber,
+                    complement: newDataReceiver.receiverComplement,
+                    district: newDataReceiver.receiverDistrict,
+                    city: newDataReceiver.receiverCity,
+                    cpf: newDataReceiver.receiverCpf,
+                    cepNumber: customerCep,
                     paymentType: selectedPayment,
                     clientNote: clientNote,
                     userEmail: dataAccount.email,
@@ -300,13 +316,15 @@ function Cart() {
                 id: id,
                 listItem: data,
                 totalValue: finalValue.toFixed(2),
-                userName: dataAccount.name,
-                phoneNumber: dataAccount.phoneNumber,
-                address: dataAccount.address,
-                houseNumber: dataAccount.houseNumber,
-                district: dataAccount.district,
-                cepNumber: dataAccount.cepNumber,
-                complement: dataAccount.complement,
+                userName: newDataReceiver.receiverName,
+                phoneNumber: newDataReceiver.receiverPhone,
+                address: newDataReceiver.receiverAddress,
+                houseNumber: newDataReceiver.receiverHouseNumber,
+                complement: newDataReceiver.receiverComplement,
+                district: newDataReceiver.receiverDistrict,
+                city: newDataReceiver.receiverCity,
+                cpf: newDataReceiver.receiverCpf,
+                cepNumber: customerCep,
                 paymentType: 'Paypal',
                 clientNote: clientNote,
                 userEmail: dataAccount.email,
@@ -346,6 +364,27 @@ function Cart() {
         return 0;
 
     }
+
+    useEffect(() => {
+        
+        var counter = 0
+    
+        newDataReceiver.receiverName != '' ? counter = counter + 1 : counter = counter
+        newDataReceiver.receiverPhone != '' ? counter++ : counter = counter
+        newDataReceiver.receiverAddress != '' ? counter++ : counter = counter
+        newDataReceiver.receiverHouseNumber != '' ? counter++ : counter = counter
+        newDataReceiver.receiverComplement != '' ? counter++ : counter = counter
+        newDataReceiver.receiverDistrict != '' ? counter++ : counter = counter
+        newDataReceiver.receiverCity != '' ? counter++ : counter = counter
+        newDataReceiver.receiverCpf != '' ? counter++ : counter = counter
+    
+        if (counter == 8) {
+    
+            setTransportDataVerify(true)
+    
+        }
+    
+    }, [newDataReceiver])
 
     // function sendOrderSeller() {
 
@@ -456,10 +495,12 @@ function Cart() {
         if (pickup === 'Frete') {
 
             setDisplayCepSearch('flex');
+            setAddressForms('flex');
 
         } else {
 
             setDisplayCepSearch('none');
+            setAddressForms('none');
 
         }
 
@@ -522,6 +563,18 @@ function Cart() {
             // localStorage.setItem('totalValue', totalValue.toFixed(2))
 
         }
+
+    }
+
+    function handleInputInfosChange(event) {
+
+        const { name, value } = event.target
+
+        setNewDataReceiver({
+
+            ...newDataReceiver, [name]: value
+
+        })
 
     }
 
@@ -834,6 +887,32 @@ function Cart() {
                                                 }
 
                                             })}
+
+                                        </div>
+
+                                        <div className="transportDiv">
+
+                                            <h2>Insira os dados para entrega abaixo</h2>
+
+                                            <div style={{display: addressForms}} className="userInfos">
+
+                                                <input name='receiverName' onChange={handleInputInfosChange} placeholder='Nome do destinatário' value={newDataReceiver.receiverName} />
+
+                                                <input name='receiverPhone' onChange={handleInputInfosChange} placeholder='Telefone' value={newDataReceiver.receiverPhone} />
+
+                                                <input name='receiverAddress' onChange={handleInputInfosChange} placeholder='Endereço de entrega' value={newDataReceiver.receiverAddress} />
+
+                                                <input name='receiverHouseNumber' onChange={handleInputInfosChange} placeholder='Número da residência' value={newDataReceiver.receiverHouseNumber} />
+
+                                                <input name='receiverComplement' onChange={handleInputInfosChange} placeholder='Complemento' value={newDataReceiver.receiverComplement} />
+
+                                                <input name='receiverDistrict' onChange={handleInputInfosChange} placeholder='Bairro' value={newDataReceiver.receiverDistrict} />
+
+                                                <input name='receiverCity' onChange={handleInputInfosChange} placeholder='Cidade' value={newDataReceiver.receiverCity} />
+
+                                                <input name='receiverCpf' onChange={handleInputInfosChange} placeholder='CPF' value={newDataReceiver.receiverCpf} />
+
+                                            </div>
 
                                         </div>
 

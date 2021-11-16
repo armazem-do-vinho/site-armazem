@@ -339,6 +339,38 @@
 
         }
 
+        .transportDiv {
+
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            margin: 3rem 0 4rem 0;
+            
+            h2 {
+
+                color: $branco;
+                margin-bottom: 1rem;
+
+            }
+    
+            .userInfos {
+    
+                display: flex;
+                width: 100%;
+                flex-wrap: wrap;
+                align-items: center;
+                justify-content: center;
+    
+                input {
+    
+                    margin: .5rem 1rem;
+    
+                }
+    
+            }
+
+        }
+
         label {
 
             color: $branco;
