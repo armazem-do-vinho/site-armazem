@@ -42,13 +42,14 @@ function Cart() {
     const [customerCep, setCustomerCep] = useState('');
     const [transportData, setTransportData] = useState([]);
     const [selectedTransportData, setSelectedTransportData] = useState([]);
+    const [purchaseData, setPurchaseData] = useState([]);
     const [displayCepSearch, setDisplayCepSearch] = useState('none');
     const [displayPopup, setDisplayPopup] = useState('none');
     const [choosedVoucher, setChoosedVoucher] = useState('');
-    const [addressForms, setAddressForms] = useState('none');
+    const [displayAddressForms, setDisplayAddressForms] = useState('none');
     const [transportDataVerify, setTransportDataVerify] = useState(false);
 
-    const [paidFor, setPaidForm] = useState(false);
+    const [paidForm, setPaidForm] = useState(false);
     const [loaded, setLoaded] = useState(false);
 
     const [redirect, setRedirect] = useState(useHistory());
@@ -243,7 +244,7 @@ function Cart() {
 
         if (userIsLogged) {
 
-            if (selectedPayment !== '') {
+            if (selectedPayment !== '' && pickupSelect !== '') {
 
                 const id = firebase.database().ref().child('posts').push().key
                 const now = new Date()
@@ -266,11 +267,12 @@ function Cart() {
                     clientNote: clientNote,
                     userEmail: dataAccount.email,
                     voucher: choosedVoucher,
+                    pickupOption: pickupSelect,
                     paymentProof: '',
                     adminNote: '',
                     requestStatus: '',
                     // choosedTransport: transportData,
-                    selectedTransport: selectedTransportData.company.name,
+                    selectedTransport: selectedTransportData.length > 0 ? selectedTransportData.company.name : '',
                     // adminNote: '',
                     dateToCompare: new Date().toDateString(),
                     date: `${now.getUTCDate()}/${now.getMonth()}/${now.getFullYear()}-${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}`
@@ -288,7 +290,10 @@ function Cart() {
                         alert("Pedido finalizado com sucesso!.")
                     })
 
-            } else alert('Você precisa selecionar o tipo de pagamento!')
+                setPurchaseData(dataToSend)
+                setPaidForm(true)
+
+            } else alert('Você precisa selecionar todos os campos!')
 
         }
         else {
@@ -333,7 +338,7 @@ function Cart() {
                 adminNote: '',
                 requestStatus: '',
                 // choosedTransport: transportData,
-                selectedTransport: selectedTransportData.company.name,
+                selectedTransport: selectedTransportData.length > 0 ? selectedTransportData.company.name : '',
                 // adminNote: '',
                 dateToCompare: new Date().toDateString(),
                 date: `${now.getUTCDate()}/${now.getMonth()}/${now.getFullYear()}-${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}`
@@ -351,6 +356,8 @@ function Cart() {
                     alert("Pedido finalizado com sucesso!.")
                 })
 
+            setPurchaseData(dataToSend)
+
         }
         else {
 
@@ -366,9 +373,9 @@ function Cart() {
     }
 
     useEffect(() => {
-        
+
         var counter = 0
-    
+
         newDataReceiver.receiverName != '' ? counter = counter + 1 : counter = counter
         newDataReceiver.receiverPhone != '' ? counter++ : counter = counter
         newDataReceiver.receiverAddress != '' ? counter++ : counter = counter
@@ -377,13 +384,13 @@ function Cart() {
         newDataReceiver.receiverDistrict != '' ? counter++ : counter = counter
         newDataReceiver.receiverCity != '' ? counter++ : counter = counter
         newDataReceiver.receiverCpf != '' ? counter++ : counter = counter
-    
+
         if (counter == 8) {
-    
+
             setTransportDataVerify(true)
-    
+
         }
-    
+
     }, [newDataReceiver])
 
     // function sendOrderSeller() {
@@ -495,12 +502,20 @@ function Cart() {
         if (pickup === 'Frete') {
 
             setDisplayCepSearch('flex');
-            setAddressForms('flex');
 
         } else {
 
             setDisplayCepSearch('none');
-            setAddressForms('none');
+
+        }
+
+        if (pickup !== 'Retirada física') {
+
+            setDisplayAddressForms('flex');
+
+        } else {
+
+            setDisplayAddressForms('none');
 
         }
 
@@ -522,7 +537,7 @@ function Cart() {
 
         if (voucherValue) {
 
-            setFinalValue(voucherValue + (Number(item.custom_price) - (Number(item.custom_price) * userDiscount/100)))
+            setFinalValue(voucherValue + (Number(item.custom_price) - (Number(item.custom_price) * userDiscount / 100)))
 
         } else {
 
@@ -625,36 +640,39 @@ function Cart() {
 
         if (loaded) {
 
-            setTimeout(() => {
+            if (selectedPayment === 'PayPal' || selectedPayment === 'Cartão') {
 
-                window.paypal
-                    .Buttons({
+                setTimeout(() => {
 
-                        createOrder: (data, actions) => {
+                    window.paypal
+                        .Buttons({
 
-                            return actions.order.create({
-                                purchase_units: [
-                                    {
-                                        // description: product.description,
-                                        amount: {
-                                            currency_code: "BRL",
-                                            value: finalValue
+                            createOrder: (data, actions) => {
+
+                                return actions.order.create({
+                                    purchase_units: [
+                                        {
+                                            // description: product.description,
+                                            amount: {
+                                                currency_code: "BRL",
+                                                value: finalValue
+                                            }
                                         }
-                                    }
-                                ]
-                            })
-                        },
-                        onApprove: async (data, actions) => {
+                                    ]
+                                })
+                            },
+                            onApprove: async (data, actions) => {
 
-                            const order = await actions.order.capture();
-                            setPaidForm(true)
-                            sendOrderPaypal();
+                                const order = await actions.order.capture();
+                                setPaidForm(true)
+                                sendOrderPaypal();
 
-                        },
+                            },
 
-                    })
-                    .render(paypalRef)
-            })
+                        })
+                        .render(paypalRef)
+                })
+            }
         }
     })
 
@@ -666,39 +684,48 @@ function Cart() {
 
                 <div className="paymentForm">
 
-                    {paidFor ? (
+                    {paidForm ? (
 
                         <main>
 
                             <section id="purchaseDetails">
 
-                                <h1>Compra confirmada com sucesso!</h1>
+                                <div className="purchasedProductsInfos">
 
-                                <div className="purchaseWrapper">
+                                    <h1>Compra confirmada com sucesso!</h1>
 
-                                    <h5>Detalhes da compra</h5>
+                                    <div className="productsDetails">
 
-                                    <table>
+                                        {purchaseData.map((item) => {
 
-                                        <tr>
+                                            <ul>
 
-                                            <td>Produto</td>
-                                            <td>Quantidade</td>
-                                            <td>Valor</td>
+                                                {
+                                                    item.listItem.length > 1 ?
 
-                                        </tr>
+                                                        item.listItem.map((product) => (
 
-                                        <tr>
+                                                            <div className='purchasedProductsDetails' >
 
-                                            <td>A</td>
-                                            <td>3</td>
-                                            <td>44,55</td>
+                                                                <li><b>{product.title}</b> ({product.amount})</li>
 
-                                        </tr>
+                                                            </div>
 
-                                    </table>
+                                                        ))
+                                                        :
+                                                        <div className='purchasedProductsDetails' >
 
-                                    <h3>Total: R$ 999,99</h3>
+                                                            <li><b>{item.listItem[0].title}</b> ({item.listItem[0].amount})</li>
+
+                                                        </div>
+
+                                                }
+
+                                            </ul>
+
+                                        })}
+
+                                    </div>
 
                                 </div>
 
@@ -717,7 +744,7 @@ function Cart() {
 
                                     <div className='popupContent'>
 
-                                        <h3>Realize um Pix para a chave: <br /> (22) 98112 9219 </h3>
+                                        <h3>Ao finalizar o pedido, realize um Pix para a chave: <br /> (22) 98112 9219 </h3>
                                         <h4>Após isso, envie seu comprovante através da seção "meus produtos" em seu perfil.</h4>
 
                                         <button onClick={() => closePopup()}>Confirmar</button>
@@ -821,7 +848,7 @@ function Cart() {
 
                                     <div className="finishOrder">
 
-                                        <div style={{display: displayCepDiv}} className="cepInputDiv">
+                                        <div style={{ display: displayCepDiv }} className="cepInputDiv">
 
                                             <label for="voucherInput">Inserir cupom de desconto</label>
 
@@ -830,6 +857,8 @@ function Cart() {
                                             <button onClick={() => verifyVoucher()}>Inserir cupom</button>
 
                                         </div>
+
+                                        <input className="clientNoteInput" onChange={handleClientNote} placeholder='Observação sobre seu pedido (opcional)' />
 
                                         <select className="pickupSelect" onChange={handlePickupSelect} >
 
@@ -841,7 +870,7 @@ function Cart() {
                                         </select>
 
                                         {/* <input style={{ display: displayCepSearch }} onChange={handleInputCep} placeholder="CEP" /> */}
-                                        <label style={{ display: displayCepSearch }} for="cepNumber">Insira o seu CEP cadastrado no site</label>
+                                        <label style={{ display: displayCepSearch }} for="cepNumber">Insira o CEP abaixo</label>
                                         <InputMask id="cepNumber" name='cepNumber' type='text' mask="99999-999" maskChar="" style={{ display: displayCepSearch }} onChange={handleInputCep} placeholder="CEP" />
 
                                         <button style={{ display: displayCepSearch }} onClick={() => { calculaFrete() }}>Calcular frete</button>
@@ -890,15 +919,25 @@ function Cart() {
 
                                         </div>
 
-                                        <div className="transportDiv">
+                                        <div style={{ display: displayAddressForms }} className="transportDiv">
 
                                             <h2>Insira os dados para entrega abaixo</h2>
 
-                                            <div style={{display: addressForms}} className="userInfos">
+                                            <div className="userInfos">
 
                                                 <input name='receiverName' onChange={handleInputInfosChange} placeholder='Nome do destinatário' value={newDataReceiver.receiverName} />
 
-                                                <input name='receiverPhone' onChange={handleInputInfosChange} placeholder='Telefone' value={newDataReceiver.receiverPhone} />
+                                                {/* <input name='receiverPhone' onChange={handleInputInfosChange} placeholder='Telefone' value={newDataReceiver.receiverPhone} /> */}
+                                                <InputMask
+                                                    id="receiverPhone"
+                                                    name='receiverPhone'
+                                                    type='text'
+                                                    mask="(99) 99999-9999"
+                                                    maskChar=""
+                                                    onChange={handleInputInfosChange}
+                                                    placeholder='Telefone'
+                                                    value={newDataReceiver.receiverPhone}
+                                                />
 
                                                 <input name='receiverAddress' onChange={handleInputInfosChange} placeholder='Endereço de entrega' value={newDataReceiver.receiverAddress} />
 
@@ -910,7 +949,17 @@ function Cart() {
 
                                                 <input name='receiverCity' onChange={handleInputInfosChange} placeholder='Cidade' value={newDataReceiver.receiverCity} />
 
-                                                <input name='receiverCpf' onChange={handleInputInfosChange} placeholder='CPF' value={newDataReceiver.receiverCpf} />
+                                                {/* <input name='receiverCpf' onChange={handleInputInfosChange} placeholder='CPF' value={newDataReceiver.receiverCpf} /> */}
+                                                <InputMask
+                                                    id="receiverCpf"
+                                                    name='receiverCpf'
+                                                    type='text'
+                                                    mask="999.999.999-99"
+                                                    maskChar=""
+                                                    onChange={handleInputInfosChange}
+                                                    placeholder='CPF'
+                                                    value={newDataReceiver.receiverCpf}
+                                                />
 
                                             </div>
 
@@ -922,15 +971,13 @@ function Cart() {
                                             <option value="Dinheiro" >Dinheiro (apenas para entregas na região)</option>
                                             <option value="Débito (máquina)" >Cartão de débito (apenas para entregas na região)</option>
                                             <option value="Crédito (máquina)" >Cartão de crédito (apenas para entregas na região)</option>
+                                            <option value="PayPal" >PayPal </option>
+                                            <option value="Cartão" >Cartão </option>
                                             <option value="Pix" >Pix</option>
 
                                         </select>
 
-                                        <h3>Pague com PayPal sem sair do conforto de sua casa</h3>
-
                                         <div className="paypalButtons" ref={v => (paypalRef = v)} />
-
-                                        <input className="clientNoteInput" onChange={handleClientNote} placeholder='Observação sobre seu pedido (opcional)' />
 
                                     </div>
 

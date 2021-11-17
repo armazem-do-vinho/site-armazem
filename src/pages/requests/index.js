@@ -53,9 +53,12 @@ function Requests() {
         const newRequestData = {
 
             address: requestData[requestIndex].address,
+            adminNote: requestData[requestIndex].adminNote,
             cepNumber: requestData[requestIndex].cepNumber,
+            city: requestData[requestIndex].city,
             clientNote: requestData[requestIndex].clientNote,
             complement: requestData[requestIndex].complement,
+            cpf: requestData[requestIndex].cpf,
             date: requestData[requestIndex].date,
             dateToCompare: requestData[requestIndex].dateToCompare,
             district: requestData[requestIndex].district,
@@ -65,12 +68,13 @@ function Requests() {
             paymentProof: paymentFile,
             paymentType: requestData[requestIndex].paymentType,
             phoneNumber: requestData[requestIndex].phoneNumber,
+            pickupOption: requestData[requestIndex].pickupOption,
+            requestStatus: requestData[requestIndex].requestStatus,
             selectedTransport: requestData[requestIndex].selectedTransport,
             totalValue: requestData[requestIndex].totalValue,
             userEmail: requestData[requestIndex].userEmail,
             userName: requestData[requestIndex].userName,
             voucher: requestData[requestIndex].voucher,
-            adminNote: requestData[requestIndex].adminNote,
 
         }
         firebase.database()
@@ -132,6 +136,21 @@ function Requests() {
                                             <span><b>ID do pedido:</b> {request.id}</span>
 
                                             <span><b>Pedido realizado em:</b> {request.date.slice(0, -3)}</span>
+
+                                            {
+
+                                                request.requestStatus ? 
+
+                                                (
+                                                    <span><b>Status do pedido:</b> {request.requestStatus}</span>
+                                                ) :
+
+                                                (
+                                                    <span><b>Status do pedido:</b> Aguardando</span>
+                                                )
+
+                                            }
+
 
                                             {
 
