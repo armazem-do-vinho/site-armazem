@@ -22,6 +22,7 @@ import Reports from './pages/admin/reports'
 import Vouchers from './pages/admin/vouchers'
 import ProviderProducts from './pages/admin/providersProducts'
 import ContentChanges from './pages/admin/contentChanges'
+import ForgotPassword from './pages/forgotPassword'
 
 const Routes = () => {
 
@@ -50,6 +51,7 @@ const Routes = () => {
             <Route component={Requests} path='/MeusPedidos' />
             <Route component={Vouchers} path='/AdminCupons' />
             <Route component={ContentChanges} path='/AlterarConteudos' />
+            <Route component={ForgotPassword} path='/RecuperarSenha' />
 
         </BrowserRouter>
 

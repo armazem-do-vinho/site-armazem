@@ -49,46 +49,46 @@ function Requests() {
     function sendPaymentProof(requestIndex) {
 
         if (paymentFile !== '') {
-            
-        const newRequestData = {
 
-            address: requestData[requestIndex].address,
-            adminNote: requestData[requestIndex].adminNote,
-            cepNumber: requestData[requestIndex].cepNumber,
-            city: requestData[requestIndex].city,
-            clientNote: requestData[requestIndex].clientNote,
-            complement: requestData[requestIndex].complement,
-            cpf: requestData[requestIndex].cpf,
-            date: requestData[requestIndex].date,
-            dateToCompare: requestData[requestIndex].dateToCompare,
-            district: requestData[requestIndex].district,
-            houseNumber: requestData[requestIndex].houseNumber,
-            id: requestData[requestIndex].id,
-            listItem: requestData[requestIndex].listItem,
-            paymentProof: paymentFile,
-            paymentType: requestData[requestIndex].paymentType,
-            phoneNumber: requestData[requestIndex].phoneNumber,
-            pickupOption: requestData[requestIndex].pickupOption,
-            requestStatus: requestData[requestIndex].requestStatus,
-            selectedTransport: requestData[requestIndex].selectedTransport,
-            totalValue: requestData[requestIndex].totalValue,
-            userEmail: requestData[requestIndex].userEmail,
-            userName: requestData[requestIndex].userName,
-            voucher: requestData[requestIndex].voucher,
+            const newRequestData = {
+
+                address: requestData[requestIndex].address,
+                adminNote: requestData[requestIndex].adminNote,
+                cepNumber: requestData[requestIndex].cepNumber,
+                city: requestData[requestIndex].city,
+                clientNote: requestData[requestIndex].clientNote,
+                complement: requestData[requestIndex].complement,
+                cpf: requestData[requestIndex].cpf,
+                date: requestData[requestIndex].date,
+                dateToCompare: requestData[requestIndex].dateToCompare,
+                district: requestData[requestIndex].district,
+                houseNumber: requestData[requestIndex].houseNumber,
+                id: requestData[requestIndex].id,
+                listItem: requestData[requestIndex].listItem,
+                paymentProof: paymentFile,
+                paymentType: requestData[requestIndex].paymentType,
+                phoneNumber: requestData[requestIndex].phoneNumber,
+                pickupOption: requestData[requestIndex].pickupOption,
+                requestStatus: requestData[requestIndex].requestStatus,
+                selectedTransport: requestData[requestIndex].selectedTransport,
+                totalValue: requestData[requestIndex].totalValue,
+                userEmail: requestData[requestIndex].userEmail,
+                userName: requestData[requestIndex].userName,
+                voucher: requestData[requestIndex].voucher,
+
+            }
+            firebase.database()
+                .ref('requests/' + requestData[requestIndex].id)
+                .update(newRequestData)
+                .then(() => alert("Comprovante enviado com sucesso!"))
+
+            setPaymentFile('')
+
+        } else {
+
+            window.alert("Comprovante não enviado. Aguarde alguns segundos e tente novamente. Se o error persistir, verifique o formato do arquivo inserido ou sua conexão.")
 
         }
-        firebase.database()
-        .ref('requests/' + requestData[requestIndex].id)
-        .update(newRequestData)
-        .then(() => alert("Comprovante enviado com sucesso!"))
-
-        setPaymentFile('')
-
-    } else {
-
-        window.alert("Comprovante não enviado. Aguarde alguns segundos e tente novamente. Se o error persistir, verifique o formato do arquivo inserido ou sua conexão.")
-
-    }
 
     }
 
@@ -135,32 +135,63 @@ function Requests() {
 
                                             <span><b>ID do pedido:</b> {request.id}</span>
 
-                                            <span><b>Pedido realizado em:</b> {request.date.slice(0, -3)}</span>
+                                            <span><b>Pedido realizado em:</b> {request.date.slice(0, -3)}h</span>
+
+                                            <ul>
+
+                                                {
+
+                                                    request.address ?
+
+                                                        <li><strong>Endereço: </strong>{request.address} - {request.houseNumber}, {request.district}</li>
+
+                                                        :
+
+                                                        <li></li>
+
+                                                }
+
+                                                <li><strong>Como deseja receber: </strong>{request.pickupOption}</li>
+
+                                                {
+
+                                                    request.selectedTransport ?
+
+                                                        <li><strong>Transportadora: </strong>{request.selectedTransport}</li>
+
+                                                        :
+
+                                                        <li></li>
+
+                                                }
+
+
+                                            </ul>
 
                                             {
 
-                                                request.requestStatus ? 
+                                                request.requestStatus ?
 
-                                                (
-                                                    <span><b>Status do pedido:</b> {request.requestStatus}</span>
-                                                ) :
+                                                    (
+                                                        <span><b>Status do pedido:</b> {request.requestStatus}</span>
+                                                    ) :
 
-                                                (
-                                                    <span><b>Status do pedido:</b> Aguardando</span>
-                                                )
+                                                    (
+                                                        <span><b>Status do pedido:</b> Aguardando</span>
+                                                    )
 
                                             }
 
 
                                             {
 
-                                                request.adminNote ? 
+                                                request.adminNote ?
 
-                                                <span><b>Recado do Armazém: </b>{request.adminNote}</span>
+                                                    <span><b>Recado do Armazém: </b>{request.adminNote}</span>
 
-                                                :
+                                                    :
 
-                                                <p></p>
+                                                    <p></p>
 
                                             }
 
@@ -168,42 +199,42 @@ function Requests() {
 
                                         <div className="requestItensWrapper">
 
-                                        {request.listItem.map((item) => {
+                                            {request.listItem.map((item) => {
 
-                                            return (
+                                                return (
 
-                                                <div className="requestItens">
+                                                    <div className="requestItens">
 
-                                                    <b>{item.title} <span>({item.amount}) - R$ {Number(item.price).toFixed(2)} </span></b>
+                                                        <b>{item.title} <span>({item.amount}) - R$ {Number(item.price).toFixed(2)} </span></b>
 
-                                                </div>
+                                                    </div>
 
-                                            )
+                                                )
 
-                                        })}
+                                            })}
 
-                                    <h3>Valor total: <strong>R$ {request.totalValue}</strong></h3>
-                                    <h3>Forma de pagamento: <strong> {request.paymentType}</strong></h3>
+                                            <h3>Valor total: <strong>R$ {request.totalValue}</strong></h3>
+                                            <h3>Forma de pagamento: <strong> {request.paymentType}</strong></h3>
 
-                                    {
+                                            {
 
-                                        request.paymentType === 'Pix' ?
+                                                request.paymentType === 'Pix' ?
 
-                                        <div className="selectedPaymentInfos">
+                                                    <div className="selectedPaymentInfos">
 
-                                            <span>Inserir comprovante</span>
-                                            <input type='file' onChange={uploadPaymentProof} accept="image/png, image/jpeg, application/pdf" placeholder='Comprovante' />
-                                            <button onClick={() => {sendPaymentProof(requestIndex)}}>Enviar comprovante</button>
+                                                        <span>Inserir comprovante</span>
+                                                        <input type='file' onChange={uploadPaymentProof} accept="image/png, image/jpeg, application/pdf" placeholder='Comprovante' />
+                                                        <button onClick={() => { sendPaymentProof(requestIndex) }}>Enviar comprovante</button>
+
+                                                    </div>
+
+                                                    :
+
+                                                    <p></p>
+
+                                            }
 
                                         </div>
-
-                                        :
-
-                                        <p></p>
-
-                                    }
-
-                                    </div>
 
                                     </div>
 

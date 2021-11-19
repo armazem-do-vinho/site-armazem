@@ -45,7 +45,18 @@
                 display: flex;
                 flex-direction: column;
                 justify-content: center;
-                align-items: center;
+
+                ul {
+
+                    list-style: none;
+
+                    li {
+
+                        margin: 1rem 0;
+
+                    }
+
+                }
 
                 h4 {
 

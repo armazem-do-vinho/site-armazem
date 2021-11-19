@@ -486,24 +486,142 @@
 
 .paymentForm {
 
-    main {
+    #mainPaid {
 
         width: 100vw;
-        height: 100vh;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
+        min-height: 100vh;
         background-color: #1D222C;
+        justify-content: flex-start;
 
         #purchaseDetails {
 
             align-items: center;
             display: flex;
-            justify-content: center;
-            flex-direction: column;
-           
+            justify-content: space-evenly;
+            width: 100vw;
+            padding: 3rem 0;
 
+            .receiverDetails {
+
+                display: flex;
+                flex-direction: column;
+                width: 50%;
+                background-color:#2B303A;
+                color: $offwhite;
+                padding: 1.5rem;
+                border-radius: 8px;
+
+                h4 {
+
+                    margin-bottom: 2rem;
+
+                }
+
+                ul {
+
+                    list-style: none;
+
+                    li {
+
+                        margin: 1.3rem 0;
+
+                    }
+
+                    span {
+
+                        a {
+
+                            color: red;
+                            text-decoration: none;
+
+                            &:hover {
+                                
+                                color: rgb(190, 32, 32);
+
+                            }
+
+                        }
+
+                    }
+
+                }
+
+            }
+
+            .purchasedProductsDetails {
+
+                display: flex;
+                flex-direction: column;
+                width: 40%;
+                background-color:#2B303A;
+                padding: 1.5rem;
+                border-radius: 8px;
+                color: $offwhite;
+
+                h4 {
+
+                    margin: 2rem;
+
+                }
+
+                ul {
+
+                    list-style: none;
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    justify-content: space-between;
+
+                    li {
+
+                        display: flex;
+                        justify-content: space-between;
+                        background-color:#3c414d;
+                        margin: .5rem 0;
+                        border-radius: 5px;
+                        padding: 1rem 3rem;
+
+                        .purchasedItensImgWrapper {
+
+                            display: flex;
+                            width: 30%;
+                            height: 100%;
+                            border-radius: 5px;
+    
+                            img {
+    
+                                width: 50px;
+                                overflow: hidden;
+                                object-fit: cover;
+    
+                            }
+    
+                        }
+
+                        .itensText {
+
+                            display: flex;
+                            flex-direction: column;
+
+                            span {
+    
+                                padding: .3rem 1rem;
+    
+                            }
+                        }
+
+                    }
+                }
+
+
+                h4 {
+
+                    color: rgb(255, 255, 255);
+
+                }
+
+            }
+           
         }
     }
 }

@@ -18,10 +18,8 @@ import trashCan from '../../img/trash.svg'
 function Cart() {
 
     const [data, setData] = useState([]);
-    const [seller, setSeller] = useState([]);
     const [dataUsers, setDataUsers] = useState([]);
     const [dataVoucher, setDataVoucher] = useState([]);
-    const [isSeller, setIsSeller] = useState(false);
     const [totalValue, setTotalValue] = useState(0);
     const [finalValue, setFinalValue] = useState(0);
     const [voucherValue, setVoucherValue] = useState(0);
@@ -41,13 +39,13 @@ function Cart() {
     const [dataProduct, setDataProduct] = useState([]);
     const [customerCep, setCustomerCep] = useState('');
     const [transportData, setTransportData] = useState([]);
-    const [selectedTransportData, setSelectedTransportData] = useState([]);
-    const [purchaseData, setPurchaseData] = useState([]);
+    const [selectedTransportData, setSelectedTransportData] = useState({});
     const [displayCepSearch, setDisplayCepSearch] = useState('none');
     const [displayPopup, setDisplayPopup] = useState('none');
     const [choosedVoucher, setChoosedVoucher] = useState('');
     const [displayAddressForms, setDisplayAddressForms] = useState('none');
     const [transportDataVerify, setTransportDataVerify] = useState(false);
+    const [purchasedProductData, setPurchasedProductData] = useState([]);
 
     const [paidForm, setPaidForm] = useState(false);
     const [loaded, setLoaded] = useState(false);
@@ -246,59 +244,64 @@ function Cart() {
 
             if (selectedPayment !== '' && pickupSelect !== '') {
 
-                const id = firebase.database().ref().child('posts').push().key
-                const now = new Date()
+                if (transportDataVerify === true) {
 
-                const dataToSend = {
+                    const id = firebase.database().ref().child('posts').push().key
+                    const now = new Date()
 
-                    id: id,
-                    listItem: data,
-                    totalValue: finalValue.toFixed(2),
-                    userName: newDataReceiver.receiverName,
-                    phoneNumber: newDataReceiver.receiverPhone,
-                    address: newDataReceiver.receiverAddress,
-                    houseNumber: newDataReceiver.receiverHouseNumber,
-                    complement: newDataReceiver.receiverComplement,
-                    district: newDataReceiver.receiverDistrict,
-                    city: newDataReceiver.receiverCity,
-                    cpf: newDataReceiver.receiverCpf,
-                    cepNumber: customerCep,
-                    paymentType: selectedPayment,
-                    clientNote: clientNote,
-                    userEmail: dataAccount.email,
-                    voucher: choosedVoucher,
-                    pickupOption: pickupSelect,
-                    paymentProof: '',
-                    adminNote: '',
-                    requestStatus: '',
-                    // choosedTransport: transportData,
-                    selectedTransport: selectedTransportData.length > 0 ? selectedTransportData.company.name : '',
-                    // adminNote: '',
-                    dateToCompare: new Date().toDateString(),
-                    date: `${now.getUTCDate()}/${now.getMonth()}/${now.getFullYear()}-${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}`
+                    const dataToSend = {
 
-                }
+                        id: id,
+                        listItem: data,
+                        totalValue: finalValue.toFixed(2),
+                        userName: newDataReceiver.receiverName,
+                        phoneNumber: newDataReceiver.receiverPhone,
+                        address: newDataReceiver.receiverAddress,
+                        houseNumber: newDataReceiver.receiverHouseNumber,
+                        complement: newDataReceiver.receiverComplement,
+                        district: newDataReceiver.receiverDistrict,
+                        city: newDataReceiver.receiverCity,
+                        cpf: newDataReceiver.receiverCpf,
+                        cepNumber: customerCep,
+                        paymentType: selectedPayment,
+                        clientNote: clientNote,
+                        userEmail: dataAccount.email,
+                        voucher: choosedVoucher,
+                        pickupOption: pickupSelect,
+                        paymentProof: '',
+                        adminNote: '',
+                        requestStatus: '',
+                        // choosedTransport: transportData,
+                        selectedTransport: selectedTransportData.company.name,
+                        // adminNote: '',
+                        dateToCompare: new Date().toDateString(),
+                        date: `${now.getUTCDate()}/${now.getMonth()}/${now.getFullYear()}-${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}`
 
-                firebase.database().ref('requests/' + id).set(dataToSend)
-                    .then(() => {
-                        localStorage.setItem('products', '{}')
-                    })
+                    }
 
-                firebase.database().ref('reportsSales/' + id).set(dataToSend)
-                    .then(() => {
-                        localStorage.setItem('products', '{}')
-                        alert("Pedido finalizado com sucesso!.")
-                    })
+                    firebase.database().ref('requests/' + id).set(dataToSend)
+                        .then(() => {
+                            setPurchasedProductData(dataToSend)
+                            localStorage.setItem('products', '{}')
+                        })
 
-                setPurchaseData(dataToSend)
-                setPaidForm(true)
+                    firebase.database().ref('reportsSales/' + id).set(dataToSend)
+                        .then(() => {
+                            setPurchasedProductData(dataToSend)
+                            localStorage.setItem('products', '{}')
+                            alert("Pedido finalizado com sucesso!.")
+                        })
+
+                    setPaidForm(true)
+
+                } else alert('Você precisa preencher todos os campos!')
 
             } else alert('Você precisa selecionar todos os campos!')
 
         }
         else {
 
-            var confirm = window.confirm("Você precisa ter uma conta para finalizar um pedido!.")
+            var confirm = window.confirm("Você precisa ter uma conta para finalizar um pedido!")
 
             if (confirm)
                 redirect.push("/Cadastrar")
@@ -338,7 +341,7 @@ function Cart() {
                 adminNote: '',
                 requestStatus: '',
                 // choosedTransport: transportData,
-                selectedTransport: selectedTransportData.length > 0 ? selectedTransportData.company.name : '',
+                selectedTransport: selectedTransportData.company.name,
                 // adminNote: '',
                 dateToCompare: new Date().toDateString(),
                 date: `${now.getUTCDate()}/${now.getMonth()}/${now.getFullYear()}-${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}`
@@ -353,12 +356,11 @@ function Cart() {
             firebase.database().ref('reportsSales/' + id).set(dataToSend)
                 .then(() => {
                     localStorage.setItem('products', '{}')
-                    alert("Pedido finalizado com sucesso!.")
+                    alert("Pedido finalizado com sucesso!")
                 })
 
-            setPurchaseData(dataToSend)
-
         }
+
         else {
 
             var confirm = window.confirm("Você precisa ter uma conta para finalizar um pedido!.")
@@ -388,6 +390,10 @@ function Cart() {
         if (counter == 8) {
 
             setTransportDataVerify(true)
+
+        } else if (counter !== 8 || pickupSelect !== 'Retirada física') {
+
+            setTransportDataVerify(false)
 
         }
 
@@ -516,6 +522,7 @@ function Cart() {
         } else {
 
             setDisplayAddressForms('none');
+            setTransportDataVerify(true)
 
         }
 
@@ -527,21 +534,21 @@ function Cart() {
 
     }
 
-    function handleSelectedTransport(event, item, index) {
+    function handleSelectedTransport(item, event) {
 
-        setSelectedTransportData(item)
-        console.log(item)
+        setSelectedTransportData(event)
+        console.log(event)
         // const value = finalValue
 
-        setTransportValue(Number(item.custom_price))
+        setTransportValue(Number(event.custom_price))
 
         if (voucherValue) {
 
-            setFinalValue(voucherValue + (Number(item.custom_price) - (Number(item.custom_price) * userDiscount / 100)))
+            setFinalValue(voucherValue + (Number(event.custom_price) - (Number(event.custom_price) * userDiscount / 100)))
 
         } else {
 
-            setFinalValue(totalValue + Number(item.custom_price))
+            setFinalValue(totalValue + Number(event.custom_price))
 
         }
 
@@ -686,50 +693,166 @@ function Cart() {
 
                     {paidForm ? (
 
-                        <main>
+                        <main id="mainPaid">
+
+                            <Header />
 
                             <section id="purchaseDetails">
 
-                                <div className="purchasedProductsInfos">
+                                <div className="receiverDetails">
 
-                                    <h1>Compra confirmada com sucesso!</h1>
+                                    <h4>Resumo da compra</h4>
 
-                                    <div className="productsDetails">
+                                    <ul>
 
-                                        {purchaseData.map((item) => {
+                                        {
 
-                                            <ul>
+                                            purchasedProductData.id ?
 
-                                                {
-                                                    item.listItem.length > 1 ?
+                                                <li><strong>Código de identificação da compra: </strong>{purchasedProductData.id}</li>
 
-                                                        item.listItem.map((product) => (
+                                                :
 
-                                                            <div className='purchasedProductsDetails' >
+                                                <li></li>
 
-                                                                <li><b>{product.title}</b> ({product.amount})</li>
+                                        }
 
-                                                            </div>
+                                        {
 
-                                                        ))
-                                                        :
-                                                        <div className='purchasedProductsDetails' >
+                                            purchasedProductData.address ?
 
-                                                            <li><b>{item.listItem[0].title}</b> ({item.listItem[0].amount})</li>
+                                                <li><strong>Endereço: </strong>{purchasedProductData.address} - {purchasedProductData.houseNumber}, {purchasedProductData.district}</li>
+
+                                                :
+
+                                                <li></li>
+
+                                        }
+
+                                        {
+
+                                            purchasedProductData.paymentType === 'Pix' ?
+
+                                                <>
+
+                                                    <li><strong>Pagamento: </strong>{purchasedProductData.paymentType}</li>
+                                                    <span><strong>Chave Pix: </strong>(22) 98112 9219 - Envie seu comprovante em <Link to='/MeusPedidos'>Meus pedidos</Link></span>
+
+                                                </>
+
+                                                :
+
+                                                <li><strong>Pagamento: </strong>{purchasedProductData.paymentType}</li>
+
+                                        }
+
+                                        {
+
+                                            purchasedProductData.voucher ?
+
+                                                <li><strong>Cupom de desconto: </strong>{purchasedProductData.voucher}</li>
+
+                                                :
+
+                                                <li></li>
+
+                                        }
+
+                                        <li><strong>Como deseja receber: </strong>{purchasedProductData.pickupOption}</li>
+
+                                        {
+
+                                            selectedTransportData ?
+
+                                                <>
+
+                                                    <li><strong>Transportadora: </strong>{selectedTransportData.company.name} ({selectedTransportData.name})</li>
+                                                    <li><strong>Valor do frete: </strong>R$ {selectedTransportData.price}</li>
+                                                    <li><strong>Prazo de entrega: </strong>{selectedTransportData.delivery_time} dias úteis após a postagem</li>
+
+                                                </>
+
+                                                :
+
+                                                <li></li>
+
+                                        }
+
+                                    </ul>
+
+                                    {console.log(purchasedProductData)}
+
+                                </div>
+
+                                <div className='purchasedProductsDetails' >
+
+                                    <h4>Você comprou: </h4>
+
+                                    <ul>
+
+                                        {purchasedProductData.listItem ?
+
+                                            (
+                                                purchasedProductData.listItem.map((item) => {
+
+                                                    return (
+
+                                                        <div className="purchasedItensInfos">
+
+                                                            <li>
+
+                                                                <div className="purchasedItensImgWrapper">
+
+                                                                    <img src={item.imageSrc} alt="Imagem do produto" />
+
+                                                                </div>
+
+                                                                <div className="itensText">
+
+                                                                    <span><strong>{item.title}</strong> ({item.amount})</span>
+
+                                                                    {
+
+                                                                        item.desc ?
+
+                                                                            <span>{item.desc}</span>
+
+                                                                            :
+
+                                                                            <span></span>
+
+                                                                    }
+
+                                                                    <span>{item.country} • {item.sweetness} • {item.type}</span>
+
+                                                                </div>
+
+                                                            </li>
 
                                                         </div>
 
-                                                }
+                                                    )
 
-                                            </ul>
+                                                })
+                                            )
 
-                                        })}
+                                            :
 
-                                    </div>
+                                            (
+                                                <p></p>
+                                            )
+
+                                        }
+
+                                    </ul>
+
+                                    <h4>Valor total: R$ {purchasedProductData.totalValue}</h4>
 
                                 </div>
 
                             </section>
+
+                            <Footer />
 
                         </main>
 
