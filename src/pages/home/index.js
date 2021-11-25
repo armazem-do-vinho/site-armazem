@@ -1,6 +1,5 @@
 import { React } from 'react';
 import { useState, useEffect } from 'react';
-import { useHistory } from 'react-router-dom'
 
 import Slider from "react-slick";
 
@@ -12,13 +11,12 @@ import vinhoImg3 from '../../img/vinho rosé.png'
 import vinhoImg4 from '../../img/vinho tinto 2.png'
 import mapaLagos from '../../img/mapa.png';
 
-import banner from '../../img/banner.png'
-import banner2 from '../../img/banner 2.png'
-
 import Header from '../../components/header'
 import Footer from '../../components/footer'
+
 import WhatsAppButton from '../../components/whatsappButton'
 import AgePopup from '../../components/agePopup'
+import ModalCountries from '../../components/modalCountries'
 
 import './style.scss'
 
@@ -37,6 +35,8 @@ function Home() {
 
     const [data, setData] = useState([]);
     const [dataBanner, setDataBanner] = useState([]);
+    const [displayModal, setDisplayModal] = useState("none");
+    const [modalDataCountries, setModalDataCountries] = useState({});
 
     // const teste = async () => {
 
@@ -109,6 +109,14 @@ function Home() {
         adaptiveHeight: true,
     };
 
+     function handleModalInfos(item) {
+
+        setModalDataCountries(item)
+        window.scrollTo(0, 0);
+        displayModal === "none" ? setDisplayModal("flex") : setDisplayModal("none")
+
+    }
+
     return (
 
         <div className="HomePage">
@@ -118,7 +126,7 @@ function Home() {
             <AgePopup />
 
             <section id="heroSection">
-{/* 
+                {/* 
                 <div className="optionsHero">
 
                     <span>Tintos</span>
@@ -144,13 +152,13 @@ function Home() {
 
                         {dataBanner.map((item) => {
 
-                            return(
+                            return (
 
-                            <div className="sliderImg">
+                                <div className="sliderImg">
 
-                                <img src={item.imageSrc} alt="Banner" />
-                                
-                            </div>
+                                    <img src={item.imageSrc} alt="Banner" />
+
+                                </div>
 
                             )
 
@@ -279,6 +287,25 @@ function Home() {
 
             </section>
 
+            <section id="homeText">
+
+                <div className="leftSideHomeText">
+
+                    <h1>Brinde os bons momentos!</h1>
+                    <h1>Brinde com Armazém</h1>
+
+                </div>
+
+                <div className="rightSideHomeText">
+
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat.</p>
+
+                </div>
+
+            </section>
+
             <section id="optionSection">
 
                 <h4>Sinta o sabor de diversos países sem sair de casa</h4>
@@ -298,26 +325,39 @@ function Home() {
                             <h3>Argentina</h3>
 
                         </div>
+
+{/*                             
+                <div style={{ display: displayModal }} role="dialog" className='divModalUser' >
+    
+                    <span onClick={closeModal}>X</span>
+                    <ModalCountries displayProperty={displayModal} modalDataUsers={modalDataCountries} />
+    
+                </div> */}
+
                         <div className="cardsOptionsSelection">
 
                             <h3>Chile</h3>
 
                         </div>
+
                         <div className="cardsOptionsSelection">
 
                             <h3>Portugal</h3>
 
                         </div>
+
                         <div className="cardsOptionsSelection">
 
                             <h3>Espanha</h3>
 
                         </div>
+
                         <div className="cardsOptionsSelection">
 
                             <h3>França</h3>
 
                         </div>
+
                         <div className="cardsOptionsSelection">
 
                             <h3>Brasil</h3>
@@ -332,10 +372,31 @@ function Home() {
 
             <section id="infosSection">
 
-                <div className="infosImageWrapper">
+                <div className="infosPromoWrapper">
+                    <h2>Nossa recomendação para você</h2>
 
-                    <img src={vinhoImg4} alt="a" />
+                    <div className="textVinho">
+                        <h3>Anciano</h3>
+                        <p>Espanha • Tinto</p>
+                    </div>
+                    <div className="imageVinho">
+                        <img src={vinhoImg4} alt="a" />
+                    </div>
+                    
 
+
+                </div>
+
+                <div className="infosHighlightWrapper">
+                    <div className="infosCard">
+                        <h3>Qualidade máxima</h3>
+                        <p>Produtos selecionados a dedo</p>
+                    </div>
+
+                    <div className="infosCard">
+                        <h3>O melhor para você</h3>
+                        <p>Brindando todos os seus momentos</p>
+                    </div>
                 </div>
 
             </section>

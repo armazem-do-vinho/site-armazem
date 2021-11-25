@@ -19,7 +19,7 @@ function Admin() {
     const [dataBackup, setDataBackup] = useState([])
 
     const [displayModal, setDisplayModal] = useState("none");
-    const [modalDataUsers, setModalDataUsers] = useState({});
+    // const [modalDataUsers, setModalDataUsers] = useState({});
 
     useEffect(() => {
 
@@ -81,13 +81,13 @@ function Admin() {
 
     }
 
-    function handleModalInfos(item) {
+    // function handleModalInfos(item) {
 
-        setModalDataUsers(item)
-        window.scrollTo(0, 0);
-        displayModal === "none" ? setDisplayModal("flex") : setDisplayModal("none")
+    //     setModalDataUsers(item)
+    //     window.scrollTo(0, 0);
+    //     displayModal === "none" ? setDisplayModal("flex") : setDisplayModal("none")
 
-    }
+    // }
 
     function closeModal() {
 
@@ -191,13 +191,13 @@ function Admin() {
             <div className='ClientListPage'>
     
                 <Header />
-    
+{/*     
                 <div style={{ display: displayModal }} role="dialog" className='divModalUser' >
     
                     <span onClick={closeModal}>X</span>
                     <ModalUsers displayProperty={displayModal} modalDataUsers={modalDataUsers} />
     
-                </div>
+                </div> */}
     
                 <main id="mainClientList" >
     
@@ -228,7 +228,7 @@ function Admin() {
     
                     {dataUsers.map((item) => (
     
-                        <div onClick={() => { handleModalInfos(item) }} className="boxClientList" >
+                        <div className="boxClientList" >
     
                             <h3>{item.name}</h3>
     
