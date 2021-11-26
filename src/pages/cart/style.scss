@@ -628,6 +628,19 @@
 
 @media screen and (max-width: 768px) {
 
+    #CartSection {
+
+        .popupWrapper {
+    
+            .popupContent {
+
+                width: 80vw;
+
+            }
+        
+        }
+    }
+
     .cartPage {
         //width: 100vw;
 
@@ -756,6 +769,65 @@
 
                 width: 80vw;
                 
+            }
+
+            .transportInfos {
+
+                .optionsTransport {
+
+                    margin: .3rem .5rem;
+                    flex-direction: column;
+                    height: auto;
+    
+                    .radioButton {
+    
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        width: 5%;
+    
+                        input {
+    
+                            width: auto;
+                            margin: 0;
+    
+                        }
+                        
+                    }
+
+                    .textTransportInfos {
+
+                        flex-direction: column;
+
+                        span {
+
+                            font-size: .8rem;
+                            margin: 4px 0;
+
+                        }
+
+                    }
+
+                    .transportLogoWrapper {
+    
+                        display: flex;
+                        width: 25%;
+                        align-items: center;
+                        justify-content: center;
+        
+                        img {
+        
+                            width: auto;
+                            overflow: hidden;
+                            padding: .2rem;
+                            margin-bottom: 25px;
+                            
+                        }
+                        
+                    }
+        
+                }
+
             }
 
         }

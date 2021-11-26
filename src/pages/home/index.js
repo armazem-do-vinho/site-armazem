@@ -4,6 +4,8 @@ import { useState, useEffect } from 'react';
 import Slider from "react-slick";
 
 import rightArrow from '../../img/right-arrow.svg'
+import trust from '../../img/trust.svg'
+import wine from '../../img/wine.svg'
 
 import vinhoImg from '../../img/vinho_periquita_tinto.png'
 import vinhoImg2 from '../../img/vinho tinto.png'
@@ -389,13 +391,19 @@ function Home() {
 
                 <div className="infosHighlightWrapper">
                     <div className="infosCard">
+
                         <h3>Qualidade máxima</h3>
                         <p>Produtos selecionados a dedo</p>
+                        <img src={trust} alt="" />
+
                     </div>
 
                     <div className="infosCard">
+
                         <h3>O melhor para você</h3>
                         <p>Brindando todos os seus momentos</p>
+                        <img src={wine} alt="" />
+
                     </div>
                 </div>
 
