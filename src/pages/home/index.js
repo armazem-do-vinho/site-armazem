@@ -39,6 +39,7 @@ function Home() {
     const [dataBanner, setDataBanner] = useState([]);
     const [displayModal, setDisplayModal] = useState("none");
     const [modalDataCountries, setModalDataCountries] = useState({});
+    const [dataCountries, setDataCountries] = useState([]);
 
     // const teste = async () => {
 
@@ -100,6 +101,28 @@ function Home() {
 
     }, []);
 
+    useEffect(() => {
+
+        if (!firebase.apps.length)
+            firebase.initializeApp(firebaseConfig);
+
+        firebase.database().ref('aboutCards').get('/aboutCards')
+            .then(function (snapshot) {
+
+                if (snapshot.exists()) {
+
+                    var data = snapshot.val()
+                    var temp = Object.keys(data).map((key) => data[key])
+                    setDataCountries(temp)
+
+                }
+                else {
+                    console.log("No data available");
+                }
+            })
+
+    }, [])
+
     var carouselSettings = {
         dots: true,
         infinite: true,
@@ -114,8 +137,18 @@ function Home() {
      function handleModalInfos(item) {
 
         setModalDataCountries(item)
-        window.scrollTo(0, 0);
+        // window.scrollTo(0, 0);
         displayModal === "none" ? setDisplayModal("flex") : setDisplayModal("none")
+
+    }
+
+    function closeModal() {
+
+        if (displayModal === "none")
+            setDisplayModal("flex")
+        else {
+            setDisplayModal("none");
+        }
 
     }
 
@@ -308,6 +341,13 @@ function Home() {
 
             </section>
 
+            <div style={{ display: displayModal }} role="dialog" className='divModalCountry' >
+
+                <span onClick={closeModal}>X</span>
+                <ModalCountries displayProperty={displayModal} modalDataCountries={modalDataCountries} />
+
+            </div>
+
             <section id="optionSection">
 
                 <h4>Sinta o sabor de diversos países sem sair de casa</h4>
@@ -322,49 +362,19 @@ function Home() {
 
                     <div className="optionsSelection">
 
-                        <div className="cardsOptionsSelection">
+                        {dataCountries.map((item) => {
 
-                            <h3>Argentina</h3>
+                            return (
 
-                        </div>
+                                <div onClick={() => { handleModalInfos(item) }} className="cardsOptionsSelection">
 
-{/*                             
-                <div style={{ display: displayModal }} role="dialog" className='divModalUser' >
-    
-                    <span onClick={closeModal}>X</span>
-                    <ModalCountries displayProperty={displayModal} modalDataUsers={modalDataCountries} />
-    
-                </div> */}
+                                    <h3>{item.country}</h3>
 
-                        <div className="cardsOptionsSelection">
+                                </div>
 
-                            <h3>Chile</h3>
+                            )
 
-                        </div>
-
-                        <div className="cardsOptionsSelection">
-
-                            <h3>Portugal</h3>
-
-                        </div>
-
-                        <div className="cardsOptionsSelection">
-
-                            <h3>Espanha</h3>
-
-                        </div>
-
-                        <div className="cardsOptionsSelection">
-
-                            <h3>França</h3>
-
-                        </div>
-
-                        <div className="cardsOptionsSelection">
-
-                            <h3>Brasil</h3>
-
-                        </div>
+                        })}
 
                     </div>
 
@@ -375,6 +385,7 @@ function Home() {
             <section id="infosSection">
 
                 <div className="infosPromoWrapper">
+                    
                     <h2>Nossa recomendação para você</h2>
 
                     <div className="textVinho">

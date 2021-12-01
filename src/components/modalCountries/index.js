@@ -1,59 +1,61 @@
-// import React from 'react'
-// import { useEffect } from 'react'
-// import "./style.scss";
+import React from 'react'
+import { useEffect, useState } from 'react'
+import "./style.scss";
 
-// import firebase from 'firebase/app'
-// import 'firebase/auth'
-// import FirebaseConfig from '../../FirebaseConfig.js'
+import firebase from 'firebase/app'
+import 'firebase/auth'
+import FirebaseConfig from '../../FirebaseConfig.js'
 
-// function ModalCountries(props) {
+function ModalCountries(props) {
 
-//     const { displayProperty, modalDataCountries } = props;
+    const { displayProperty, modalDataCountries } = props;
 
-//     useEffect(() => {
+    useEffect(() => {
 
-//         if (!firebase.apps.length)
-//             firebase.initializeApp(FirebaseConfig);
+        if (!firebase.apps.length)
+            firebase.initializeApp(FirebaseConfig);
 
-//         firebase.database().ref('aboutCards').get('/aboutCards')
-//             .then(function (snapshot) {
+        firebase.database().ref('aboutCards').get('/aboutCards')
+            .then(function (snapshot) {
 
-//                 if (snapshot.exists()) {
+                if (snapshot.exists()) {
 
-//                     var data = snapshot.val()
-//                     var temp = Object.keys(data).map((key) => data[key])
-//                 }
-//                 else {
-//                     console.log("No data available");
-//                 }
-//             })
+                    var data = snapshot.val()
+                    var temp = Object.keys(data).map((key) => data[key])
 
-//     }, [])
+                }
+                else {
+                    console.log("No data available");
+                }
+            })
 
-//     function handleModalInfos(item) {
+    }, [])
 
-//         setModalDataCountries(item)
-//         displayModal === "none" ? setDisplayModal("flex") : setDisplayModal("none")
+    return (
 
-//     }
+        <div style={{ display: displayProperty }} className='modalCountries' >
 
-//     return (
+            <main>
 
-//         <div style={{ display: displayProperty }} className='modalCountries' >
+                <div className="countryInfos">
 
-//             <main>
+                    <div className="imgFlagWrapper">
 
-//                 <div className="CountryInfos">
+                        <img src={modalDataCountries.imageSrc} alt="Bandeira do país" />
 
-//                     {console.log(data)}
+                    </div>
 
-//                 </div>
+                    <h2>{modalDataCountries.country}</h2>
 
-//             </main>
+                    <p>{modalDataCountries.desc}</p>
 
-//         </div>
+                </div>
 
-//     )
-// }
+            </main>
 
-// export default ModalCountries;
+        </div>
+
+    )
+}
+
+export default ModalCountries;

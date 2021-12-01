@@ -678,7 +678,7 @@ function Cart() {
 
                         })
                         .render(paypalRef)
-                })
+                }, 100)
             }
         }
     })
