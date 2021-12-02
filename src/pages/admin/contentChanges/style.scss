@@ -20,7 +20,7 @@
         text-decoration: none;
         border-radius: .3rem;
         transition: .24s;
-        border: 1px solid $deepVinho;
+        border: none;
         justify-content:center;
         font-weight: 500;
         width: 35%;
@@ -79,6 +79,7 @@
     input[type="file"] {
 
         padding-top: .8rem;
+        width: auto;
 
     }
 }
@@ -100,13 +101,105 @@
 #OptionsSection {
 
     #HomeChanges, #AboutChanges {
+
         padding: 1rem 0;
-        border-radius: .3rem;
-        border: 2px solid $deepVinho;
+        border: none;
         align-items: center;
         justify-content: center;
         display: flex;
         flex-direction: column;
+
+        .addBanner, .updateBanner, .deleteBanner, .updateHeroVideo, .updateIntroText, .updateCountries, .deleteDescription {
+
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+
+            input {
+
+                width: 100%;
+
+            }
+
+        }
+
+        .updateBanner {
+
+            margin-top: 3rem;
+
+            select {
+
+                width: 100%;
+
+            }
+
+            input {
+
+                width: 150%;
+
+            }
+
+        }
+
+        .deleteBanner {
+
+            margin-top: 3rem;
+
+            select {
+
+                width: 200%;
+
+            }
+
+        }
+
+        .buttonChanges {
+
+            width: 100%;
+
+            a {
+
+                padding: 1rem 3rem;
+
+            }
+
+        }
+
+        .updateHeroVideo, .updateIntroText {
+
+            margin-bottom: 3rem;
+
+        }
+
+        .updateCountries {
+
+            margin: 3rem 0;
+
+            select {
+
+                width: 100%;
+                margin-bottom: 1.5rem;
+
+            }
+
+            a {
+
+                width: 70%;
+
+            }
+
+        }
+
+        .deleteDescription {
+
+            select {
+
+                width: 100%;
+
+            }
+
+        }
+
     }
     
 }
@@ -178,7 +271,7 @@
     
             background-color: $vinho;
             color: $branco;
-            width: 70%;
+            width: 100%;
             margin-bottom: 1.5rem;
             outline: none;
             height: 3rem;
@@ -191,6 +284,7 @@
         input[type="file"] {
     
             padding-top: .8rem;
+            width: 100%;
     
         }
     }
@@ -214,7 +308,7 @@
         #HomeChanges, #AboutChanges {
             padding: 1rem 0;
             border-radius: .3rem;
-            border: 2px solid $deepVinho;
+            border: none;
             align-items: center;
             justify-content: center;
             display: flex;
@@ -229,6 +323,18 @@
 
                 a {
                     width: 100%;
+                }
+
+                select {
+
+                    width: 100%;
+
+                }
+
+                input {
+
+                    width: 100%;
+
                 }
             }
         }

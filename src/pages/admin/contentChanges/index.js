@@ -551,15 +551,18 @@ export default function ContentChange() {
                 <Header />
 
                 <section id="ContentChangesMain">
+
                     <section id="ChangesSection">
 
                             <h2>Selecione a página a ser alterada</h2>
-                            <select onChange={(event) => handleSelectedOption(event)} >
-                            <option selected disabled>Selecione o que deseja alterar</option>
-                            <option value="Home">Alterar conteúdo da página "Início"</option>
-                            <option value="Quem Somos">Alterar conteúdo da página "Quem Somos"</option>
 
-                        </select>
+                            <select onChange={(event) => handleSelectedOption(event)} >
+
+                                <option selected disabled>Selecione o que deseja alterar</option>
+                                <option value="Home">Alterar conteúdo da página "Início"</option>
+                                <option value="Quem Somos">Alterar conteúdo da página "Quem Somos"</option>
+
+                            </select>
 
                     </section>
 
@@ -573,7 +576,7 @@ export default function ContentChange() {
 
                                     <fieldset className="addBanner">
                                         
-                                        <legend>Inserir novo banner</legend>
+                                        <h3>Inserir novo banner</h3>
 
                                         <input name='title' onChange={handleInputBannerChange} placeholder='Título' value={newDataBanner.title} />
                                         <input type='file' onChange={uploadImage} accept="image/png, image/jpeg" placeholder='Imagem' />
@@ -588,7 +591,7 @@ export default function ContentChange() {
                                     
                                     <fieldset className="updateBanner">
 
-                                        <legend>Alterar Banner</legend>
+                                        <h3>Alterar Banner</h3>
 
                                         <select onChange={(event)=>handleSelectedBanner(event)} >
 
@@ -632,9 +635,7 @@ export default function ContentChange() {
 
                                     <fieldset className="deleteBanner">
 
-                                        <legend>
-                                            <h2>Apagar banner</h2>
-                                        </legend>
+                                        <h3>Apagar banner</h3>
 
                                         <select onChange={handleSelectBannerToDelete} >
 
@@ -668,7 +669,7 @@ export default function ContentChange() {
 
                                     <fieldset className="updateHeroVideo">
                                         
-                                        <legend>Alterar vídeo da página "Quem Somos"</legend>
+                                        <h3>Alterar vídeo da página "Quem Somos"</h3>
 
                                         <input 
                                             type='file'
@@ -687,7 +688,7 @@ export default function ContentChange() {
 
                                     <fieldset className="updateIntroText">
 
-                                        <legend>Alterar texto de Quem Somos</legend>
+                                        <h3>Alterar texto de Quem Somos</h3>
 
                                         <input 
                                             name='title' 
@@ -705,7 +706,7 @@ export default function ContentChange() {
 
                                     <fieldset className="addCardWine">
                                         
-                                        <legend>Inserir descrição de países</legend>
+                                        <h3>Inserir descrição de países</h3>
 
                                         <input name='country' onChange={handleInputCardChange} placeholder='País' value={newDataCard.country} />
                                         <input name='desc' onChange={handleInputCardChange} placeholder='Descrição' value={newDataCard.desc} />
@@ -719,9 +720,9 @@ export default function ContentChange() {
                                         
                                     </fieldset>
                                     
-                                    <fieldset className="updateBanner">
+                                    <fieldset className="updateCountries">
 
-                                        <legend >Alterar descrição dos países</legend>
+                                        <h3>Alterar descrição dos países</h3>
 
                                         <select className="alterCountryCard" onChange={(event)=>handleSelectedCard(event)} >
 
@@ -739,7 +740,7 @@ export default function ContentChange() {
 
                                         </select>
 
-                                        <legend>Preencha o que deseja alterar</legend>
+                                        <h3>Preencha o que deseja alterar</h3>
 
                                         <input 
                                             name='country' 
@@ -772,7 +773,7 @@ export default function ContentChange() {
 
                                     <fieldset className="deleteDescription">
 
-                                        <legend>Apagar descrição</legend>
+                                        <h3>Apagar descrição</h3>
 
                                         <select onChange={handleSelectCardToDelete} >
 
