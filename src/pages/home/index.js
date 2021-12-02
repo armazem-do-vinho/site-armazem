@@ -40,6 +40,7 @@ function Home() {
     const [displayModal, setDisplayModal] = useState("none");
     const [modalDataCountries, setModalDataCountries] = useState({});
     const [dataCountries, setDataCountries] = useState([]);
+    const [dataProductCards, setDataProductCards] = useState([]);
 
     // const teste = async () => {
 
@@ -121,7 +122,30 @@ function Home() {
                 }
             })
 
-    }, [])
+    }, []);
+
+    useEffect(() => {
+
+        if (!firebase.apps.length)
+            firebase.initializeApp(firebaseConfig);
+
+        var firebaseRef = firebase.database().ref('productsCard/');
+
+        firebaseRef.on('value', (snapshot) => {
+
+            if (snapshot.exists()) {
+
+                var data = snapshot.val()
+                var temp = Object.keys(data).map((key) => data[key])
+                setDataProductCards(temp)
+
+            }
+            else {
+                console.log("No data available");
+            }
+        })
+
+    }, []);
 
     var carouselSettings = {
         dots: true,
@@ -134,7 +158,7 @@ function Home() {
         adaptiveHeight: true,
     };
 
-     function handleModalInfos(item) {
+    function handleModalInfos(item) {
 
         setModalDataCountries(item)
         // window.scrollTo(0, 0);
@@ -222,101 +246,43 @@ function Home() {
 
                 <div className="featuredProducts">
 
-                    <div className="featuredProductsCard">
+                    {dataProductCards.map((item => {
 
-                        <div className="imgFeaturedWrapper">
+                        return (
 
-                            <img src={vinhoImg} alt="Imagem do vinho" />
+                            <div className="featuredProductsCard">
 
-                        </div>
+                                <div className="visualData">
 
-                        <div className="featuredTag">
+                                    <div className="featuredTag">
 
-                            <h6>Informação</h6>
+                                        <h6>{item.info}</h6>
 
-                        </div>
+                                    </div>
 
-                        <div className="featuredTextWrapper">
+                                    <div className="imgFeaturedWrapper">
 
-                            <h5>Vinho Periquita tinto</h5>
+                                        <img src={item.imageSrc} alt="Imagem do vinho" />
 
-                            <span>Espanha • Tinto</span>
+                                    </div>
 
-                        </div>
+                                </div>
 
-                    </div>
+                                <div className="featuredTextWrapper">
 
-                    <div className="featuredProductsCard">
+                                    <h5>{item.name}</h5>
 
-                        <div className="imgFeaturedWrapper">
+                                    <span>{item.country} • {item.type}</span>
 
-                            <img id="imgVinho" src={vinhoImg2} alt="Imagem do vinho" />
+                                    <p>{item.description}</p>
 
-                        </div>
+                                </div>
 
-                        <div className="featuredTag">
+                            </div>
 
-                            <h6>Informação</h6>
-
-                        </div>
-
-                        <div className="featuredTextWrapper">
-
-                            <h5>Vinho Don Simon</h5>
-
-                            <span>Espanha • Tinto</span>
-
-                        </div>
-
-                    </div>
-
-                    <div className="featuredProductsCard">
-
-                        <div className="imgFeaturedWrapper">
-
-                            <img id="imgVinho" src={vinhoImg3} alt="Imagem do vinho" />
-
-                        </div>
-
-                        <div className="featuredTag">
-
-                            <h6>Informação</h6>
-
-                        </div>
-
-                        <div className="featuredTextWrapper">
-
-                            <h5>Vinho Viñapeña</h5>
-
-                            <span>Espanha • Rosé</span>
-
-                        </div>
-
-                    </div>
-
-                    <div className="featuredProductsCard">
-
-                        <div className="imgFeaturedWrapper">
-
-                            <img id="imgVinho" src={vinhoImg4} alt="Imagem do vinho" />
-
-                        </div>
-
-                        <div className="featuredTag">
-
-                            <h6>Informação</h6>
-
-                        </div>
-
-                        <div className="featuredTextWrapper">
-
-                            <h5>Vinho Anciano</h5>
-
-                            <span>Espanha • Tinto</span>
-
-                        </div>
-
-                    </div>
+                        )
+                    }))
+                    }
 
                 </div>
 
@@ -385,7 +351,7 @@ function Home() {
             <section id="infosSection">
 
                 <div className="infosPromoWrapper">
-                    
+
                     <h2>Nossa recomendação para você</h2>
 
                     <div className="textVinho">
@@ -395,7 +361,7 @@ function Home() {
                     <div className="imageVinho">
                         <img src={vinhoImg4} alt="a" />
                     </div>
-                    
+
 
 
                 </div>

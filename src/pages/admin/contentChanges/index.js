@@ -16,6 +16,7 @@ export default function ContentChange() {
     const [selectedCard, setSelectedCard] = useState('')
     const [selectedBannerToDelete, setSelectedBannerToDelete] = useState('')
     const [selectedCardToDelete, setSelectedCardToDelete] = useState('')
+    const [selectedProductCardToDelete, setSelectedProductCardToDelete] = useState('')
     const [imageUrl, setImageUrl] = useState('')
     const [alteredImageUrl, setAlteredImageUrl] = useState('')
     const [cardImageUrl, setCardImageUrl] = useState('')
@@ -24,9 +25,13 @@ export default function ContentChange() {
     const [dataAlterText, setDataAlterText] = useState('')
     const [dataKeysBanner, setDataKeysBanner] = useState([])
     const [dataKeysCard, setDataKeysCard] = useState([])
+    const [dataKeysProduct, setDataKeysProduct] = useState([])
     const [dataBanner, setDataBanner] = useState([])
     const [dataAbout, setDataAbout] = useState([])
     const [dataCard, setDataCard] = useState([])
+    const [dataProducts, setDataProducts] = useState([])
+    const [dataProductCards, setDataProductCards] = useState([])
+    const [selectedProduct, setSelectedProduct] = useState({})
     const [userIsLogged, setUserIsLogged] = useState(false)
 
     const [dataAlterBanner, setDataAlterBanner] = useState({
@@ -56,6 +61,13 @@ export default function ContentChange() {
         imageSrc: '',
         country: '',
         desc: '',
+
+    })
+
+    const [productCardText, setProductCardText] = useState({
+
+        description: '',
+        info: '',
 
     })
 
@@ -151,16 +163,15 @@ export default function ContentChange() {
         var firebaseRef = firebase.database().ref('about/');
 
         firebaseRef.on('value', (snapshot) => {
-    
+
             if (snapshot.exists()) {
 
                 var data = snapshot.val()
                 var temp = Object.keys(data).map((key) => data[key])
                 setDataAbout(temp)
-                console.log(temp)
             }
             else {
-              console.log("No data available");
+                console.log("No data available");
             }
         })
 
@@ -174,7 +185,7 @@ export default function ContentChange() {
         var firebaseRef = firebase.database().ref('aboutCards/');
 
         firebaseRef.on('value', (snapshot) => {
-    
+
             if (snapshot.exists()) {
 
                 var data = snapshot.val()
@@ -182,7 +193,53 @@ export default function ContentChange() {
                 setDataCard(temp)
             }
             else {
-              console.log("No data available");
+                console.log("No data available");
+            }
+        })
+
+    }, [])
+
+    useEffect(() => {
+
+        if (!firebase.apps.length)
+            firebase.initializeApp(firebaseConfig);
+
+        var firebaseRef = firebase.database().ref('items/');
+
+        firebaseRef.on('value', (snapshot) => {
+
+            if (snapshot.exists()) {
+
+                var data = snapshot.val()
+                var temp = Object.keys(data).map((key) => data[key])
+                setDataProducts(temp)
+
+            }
+            else {
+                console.log("No data available");
+            }
+        })
+
+    }, [])
+
+    useEffect(() => {
+
+        if (!firebase.apps.length)
+            firebase.initializeApp(firebaseConfig);
+
+        var firebaseRef = firebase.database().ref('productsCard/');
+
+        firebaseRef.on('value', (snapshot) => {
+
+            if (snapshot.exists()) {
+
+                var data = snapshot.val()
+                var temp = Object.keys(data).map((key) => data[key])
+                setDataProductCards(temp)
+
+            }
+            else {
+                console.log("No data available");
             }
         })
 
@@ -196,19 +253,19 @@ export default function ContentChange() {
         var firebaseRef = firebase.database().ref('banners/');
 
         firebaseRef.on('value', (snapshot) => {
-    
+
             if (snapshot.exists()) {
 
                 var data = snapshot.val()
                 var temp = Object.keys(data).map((key) => data[key])
-                setDataBanner(temp.sort((a,b)=> {
+                setDataBanner(temp.sort((a, b) => {
 
-                  return (a.title > b.title) ? 1 : ((b.title > a.title) ? -1 : 0)
+                    return (a.title > b.title) ? 1 : ((b.title > a.title) ? -1 : 0)
 
                 }))
             }
             else {
-              console.log("No data available");
+                console.log("No data available");
             }
         })
 
@@ -216,7 +273,7 @@ export default function ContentChange() {
 
     useEffect(() => {
 
-        if(dataBanner) {
+        if (dataBanner) {
 
             var keys = []
             dataBanner.map((item) => keys.push(item.id))
@@ -227,14 +284,39 @@ export default function ContentChange() {
 
     useEffect(() => {
 
-        if(dataCard) {
+        if (dataCard) {
 
             var keys = []
             dataCard.map((item) => keys.push(item.id))
             setDataKeysCard(keys)
+
         }
 
     }, [dataCard]);
+
+    useEffect(() => {
+
+        if (dataProductCards) {
+
+            var keys = []
+            dataProductCards.map((item) => keys.push(item.id))
+            setDataKeysProduct(keys)
+
+        }
+
+    }, [dataProductCards]);
+
+    function handleInputCardText(event) {
+
+        const { name, value } = event.target
+
+        setProductCardText({
+
+            ...productCardText, [name]: value
+
+        })
+
+    }
 
     function handleInputBannerChange(event) {
 
@@ -288,15 +370,11 @@ export default function ContentChange() {
 
         setSelectedOption(event.target.value)
 
-        console.log(event.target.value)
-
     }
 
     function handleSelectedBanner(event) {
 
         setSelectedBanner(event.target.value)
-
-        console.log(event.target.value)
 
         setDataAlterBanner(dataBanner[event.target.value])
 
@@ -305,10 +383,6 @@ export default function ContentChange() {
     function handleSelectedCard(event) {
 
         setSelectedCard(event.target.value)
-
-        console.log(event.target.value)
-
-        setDataAlterBanner(dataCard[event.target.value])
 
     }
 
@@ -325,8 +399,8 @@ export default function ContentChange() {
         }
 
         firebase.database().ref('banners/' + id)
-        .set(data)
-        .then(err => console.log(err))
+            .set(data)
+            .then(err => console.log(err))
 
         setNewDataBanner({
 
@@ -349,9 +423,9 @@ export default function ContentChange() {
 
         }
         firebase.database()
-        .ref('banners/' + dataKeysBanner[selectedBanner])
-        .update(newBanner)
-        .then(() => alert("Banner atualizado com sucesso!"))
+            .ref('banners/' + dataKeysBanner[selectedBanner])
+            .update(newBanner)
+            .then(() => alert("Banner atualizado com sucesso!"))
         window.location.reload()
 
     }
@@ -374,6 +448,15 @@ export default function ContentChange() {
 
     }
 
+    function deleteProductCard() {
+
+        firebase.database()
+            .ref('productsCard/' + dataKeysProduct[selectedProductCardToDelete])
+            .remove()
+            .then(() => alert("Produto removido com sucesso!"))
+
+    }
+
     function insertNewCard() {
 
         const id = firebase.database().ref().child('aboutCards').push().key
@@ -388,8 +471,8 @@ export default function ContentChange() {
         }
 
         firebase.database().ref('aboutCards/' + id)
-        .set(data)
-        .then(err => console.log(err))
+            .set(data)
+            .then(err => console.log(err))
 
         setNewDataCard({
 
@@ -414,9 +497,9 @@ export default function ContentChange() {
 
         }
         firebase.database()
-        .ref('aboutCards/' + dataKeysCard[selectedCard])
-        .update(newCard)
-        .then(() => alert("Atualizado com sucesso!"))
+            .ref('aboutCards/' + dataKeysCard[selectedCard])
+            .update(newCard)
+            .then(() => alert("Atualizado com sucesso!"))
         window.location.reload()
 
     }
@@ -452,11 +535,11 @@ export default function ContentChange() {
         var storageRef = firebase.storage().ref();
 
         storageRef.child('images/' + file.name.trim())
-        .put(file)
-        .then(snapshot => {
-            snapshot.ref.getDownloadURL()
-                .then(url => setAlteredImageUrl(url))
-        });
+            .put(file)
+            .then(snapshot => {
+                snapshot.ref.getDownloadURL()
+                    .then(url => setAlteredImageUrl(url))
+            });
 
     }
 
@@ -482,11 +565,11 @@ export default function ContentChange() {
         var storageRef = firebase.storage().ref();
 
         storageRef.child('images/' + file.name.trim())
-        .put(file)
-        .then(snapshot => {
-            snapshot.ref.getDownloadURL()
-                .then(url => setAlteredCardImageUrl(url))
-        });
+            .put(file)
+            .then(snapshot => {
+                snapshot.ref.getDownloadURL()
+                    .then(url => setAlteredCardImageUrl(url))
+            });
 
     }
 
@@ -497,12 +580,11 @@ export default function ContentChange() {
         var storageRef = firebase.storage().ref();
 
         storageRef.child('videos/' + file.name.trim())
-        .put(file)
-        .then(snapshot => {
-            snapshot.ref.getDownloadURL()
-                .then(url => setAlteredVideoUrl(url))
-                console.log(alteredVideoUrl)
-        });
+            .put(file)
+            .then(snapshot => {
+                snapshot.ref.getDownloadURL()
+                    .then(url => setAlteredVideoUrl(url))
+            });
 
     }
 
@@ -515,9 +597,9 @@ export default function ContentChange() {
 
         }
         firebase.database()
-        .ref('about/data')
-        .update(newData)
-        .then(() => alert("Vídeo atualizado com sucesso!"))
+            .ref('about/data')
+            .update(newData)
+            .then(() => alert("Vídeo atualizado com sucesso!"))
         window.location.reload()
 
     }
@@ -534,11 +616,55 @@ export default function ContentChange() {
 
     }
 
+    function handleSelectProductCardToDelete(event) {
+
+        setSelectedProductCardToDelete(event.target.value)
+
+    }
+
     function handleInputTextChangeAlter(event) {
 
         const text = event.target.value
 
         setDataAlterText(text)
+
+    }
+
+    function handleSelectedProduct(event) {
+
+        setSelectedProduct(dataProducts[event.target.value])
+
+    }
+
+    function insertNewProductHome() {
+
+        const id = firebase.database().ref().child('productsCard').push().key
+
+        const productCard = {
+            
+            id: id,
+            name: selectedProduct.title,
+            imageSrc: selectedProduct.imageSrc,
+            country: selectedProduct.country,
+            type: selectedProduct.type,
+            info: productCardText.info,
+            description: productCardText.description,
+
+        }
+
+        firebase.database().ref('productsCard/' + id)
+            .set(productCard)
+            .then(err => console.log(err))
+
+        alert("Inserido com sucesso!")
+        window.location.reload()
+
+        setProductCardText({
+
+            info: '',
+            description: '',
+
+        })
 
     }
 
@@ -554,15 +680,15 @@ export default function ContentChange() {
 
                     <section id="ChangesSection">
 
-                            <h2>Selecione a página a ser alterada</h2>
+                        <h2>Selecione a página a ser alterada</h2>
 
-                            <select onChange={(event) => handleSelectedOption(event)} >
+                        <select onChange={(event) => handleSelectedOption(event)} >
 
-                                <option selected disabled>Selecione o que deseja alterar</option>
-                                <option value="Home">Alterar conteúdo da página "Início"</option>
-                                <option value="Quem Somos">Alterar conteúdo da página "Quem Somos"</option>
+                            <option selected disabled>Selecione o que deseja alterar</option>
+                            <option value="Home">Alterar conteúdo da página "Início"</option>
+                            <option value="Quem Somos">Alterar conteúdo da página "Quem Somos"</option>
 
-                            </select>
+                        </select>
 
                     </section>
 
@@ -570,12 +696,14 @@ export default function ContentChange() {
 
                         <div>
 
-                            {selectedOption === "Home" ? 
+                            {selectedOption === "Home" ?
 
                                 <section id="HomeChanges">
 
+                                    <h1>Banner</h1>
+
                                     <fieldset className="addBanner">
-                                        
+
                                         <h3>Inserir novo banner</h3>
 
                                         <input name='title' onChange={handleInputBannerChange} placeholder='Título' value={newDataBanner.title} />
@@ -586,14 +714,14 @@ export default function ContentChange() {
                                             <a onClick={() => { insertNewBanner() }} >Inserir</a>
 
                                         </div>
-                                        
+
                                     </fieldset>
-                                    
+
                                     <fieldset className="updateBanner">
 
                                         <h3>Alterar Banner</h3>
 
-                                        <select onChange={(event)=>handleSelectedBanner(event)} >
+                                        <select onChange={(event) => handleSelectedBanner(event)} >
 
                                             <option selected disabled>Selecione o banner que deseja alterar</option>
 
@@ -611,14 +739,14 @@ export default function ContentChange() {
 
                                         <h4>Preencha o que deseja alterar</h4>
 
-                                        <input 
-                                            name='title' 
-                                            onChange={handleInputBannerChangeAlter} 
+                                        <input
+                                            name='title'
+                                            onChange={handleInputBannerChangeAlter}
                                             placeholder='Título'
                                             value={dataAlterBanner.title}
                                         />
 
-                                        <input 
+                                        <input
                                             type='file'
                                             onChange={uploadImageAltered}
                                             accept="image/png, image/jpeg"
@@ -661,17 +789,78 @@ export default function ContentChange() {
 
                                     </fieldset>
 
+                                    <fieldset className="addProductCard">
+
+                                        <h1>Produtos em amostra</h1>
+
+                                        <h3>Inserir novo produto</h3>
+
+                                        <select onChange={(event) => handleSelectedProduct(event)} >
+
+                                            <option selected disabled>Selecione o produto que deseja mostrar na página inicial</option>
+
+                                            {dataProducts.map((item, index) => {
+
+                                                return (
+
+                                                    <option value={index} key={index}>{item.title}</option>
+
+                                                )
+
+                                            })}
+
+                                        </select>
+
+                                        <input name='info' onChange={handleInputCardText} placeholder='Informação (desconto, novidade, etc)' value={productCardText.info}/>
+                                        <input name='description' onChange={handleInputCardText} placeholder='Breve descrição do produto' value={productCardText.description}/>
+
+                                        <div className="buttonChanges">
+
+                                            <a onClick={() => { insertNewProductHome() }} >Inserir</a>
+
+                                        </div>
+
+                                    </fieldset>
+
+                                    <fieldset className="deleteCardProduct">
+
+                                        <h3>Apagar produto em amostra</h3>
+
+                                        <select onChange={handleSelectProductCardToDelete} >
+
+                                            <option>Selecione o produto</option>
+
+                                            {dataProductCards.map((item, index) => {
+
+                                                return (
+
+                                                    <option value={index} key={index}>{item.name}</option>
+
+                                                )
+
+                                            })}
+
+                                        </select>
+
+                                        <div className="buttonChanges">
+
+                                            <a onClick={() => { deleteProductCard() }} >Apagar</a>
+
+                                        </div>
+
+                                    </fieldset>
+
                                 </section>
-                                
-                                : 
-                                
+
+                                :
+
                                 <section id="AboutChanges">
 
                                     <fieldset className="updateHeroVideo">
-                                        
+
                                         <h3>Alterar vídeo da página "Quem Somos"</h3>
 
-                                        <input 
+                                        <input
                                             type='file'
                                             onChange={uploadVideoAltered}
                                             accept="video/*"
@@ -683,16 +872,16 @@ export default function ContentChange() {
                                             <a onClick={() => { updateAbout() }} >Alterar</a>
 
                                         </div>
-                                        
+
                                     </fieldset>
 
                                     <fieldset className="updateIntroText">
 
                                         <h3>Alterar texto de Quem Somos</h3>
 
-                                        <input 
-                                            name='title' 
-                                            onChange={handleInputTextChangeAlter} 
+                                        <input
+                                            name='title'
+                                            onChange={handleInputTextChangeAlter}
                                             placeholder='Descrição'
                                         />
 
@@ -705,7 +894,7 @@ export default function ContentChange() {
                                     </fieldset>
 
                                     <fieldset className="addCardWine">
-                                        
+
                                         <h3>Inserir descrição de países</h3>
 
                                         <input name='country' onChange={handleInputCardChange} placeholder='País' value={newDataCard.country} />
@@ -717,14 +906,14 @@ export default function ContentChange() {
                                             <a onClick={() => { insertNewCard() }} >Inserir</a>
 
                                         </div>
-                                        
+
                                     </fieldset>
-                                    
+
                                     <fieldset className="updateCountries">
 
                                         <h3>Alterar descrição dos países</h3>
 
-                                        <select className="alterCountryCard" onChange={(event)=>handleSelectedCard(event)} >
+                                        <select className="alterCountryCard" onChange={(event) => handleSelectedCard(event)} >
 
                                             <option selected disabled>Selecione o país que deseja alterar</option>
 
@@ -742,21 +931,21 @@ export default function ContentChange() {
 
                                         <h3>Preencha o que deseja alterar</h3>
 
-                                        <input 
-                                            name='country' 
-                                            onChange={handleInputCardChangeAlter} 
+                                        <input
+                                            name='country'
+                                            onChange={handleInputCardChangeAlter}
                                             placeholder='País'
                                             value={dataAlterCard.country}
                                         />
 
-                                        <input 
-                                            name='desc' 
-                                            onChange={handleInputCardChangeAlter} 
+                                        <input
+                                            name='desc'
+                                            onChange={handleInputCardChangeAlter}
                                             placeholder='Descrição'
                                             value={dataAlterCard.desc}
                                         />
 
-                                        <input 
+                                        <input
                                             type='file'
                                             onChange={uploadCardImageAltered}
                                             accept="image/png, image/jpeg"
@@ -800,14 +989,17 @@ export default function ContentChange() {
                                     </fieldset>
 
                                 </section>
-                            
+
                             }
 
                         </div>
 
                     </section>
+
                 </section>
+
                 <Footer />
+
             </main>
 
         )

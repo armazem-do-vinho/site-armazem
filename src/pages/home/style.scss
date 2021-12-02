@@ -85,7 +85,7 @@
         display: flex;
         flex-direction: column;
         width: 95vw;
-        height: 35vh;
+        // height: 35vh;
         margin-bottom: 4rem;
 
         .featuredProductsText {
@@ -126,71 +126,79 @@
         .featuredProducts {
 
             display: flex;
+            flex-wrap: wrap;
             width: 100%;
-            height: 50vh;
-            justify-content: space-around;
+            justify-content: center;
 
             .featuredProductsCard {
 
                 display: flex;
-                width: 20%;
-                height: 70%;
+                max-width: 30%;
+                margin: 0 1rem;
+                // height: 70%;
                 background-color:#2B303A;
-                flex-direction: row;
                 align-items: center;
                 text-align: center;
-                margin: 0 auto;
                 border-radius: 10px;
                 position: relative;
-                margin-top: 4rem;
+                margin-top: 2.5rem;
+                padding: 1rem;
 
-                .imgFeaturedWrapper {
+                .visualData {
 
                     display: flex;
-                    width: 30%;
-                    height: 100%;
-                    border-top-left-radius: 10px;
-                    border-bottom-left-radius: 10px;
+                    flex-direction: column;
                     align-items: center;
-                    justify-content: center;
+                    justify-content: space-around;
+                    height: 100%;
 
-                    img {
-                        
-                        max-width: 50px;
+                    .imgFeaturedWrapper {
 
+                        display: flex;
+                        width: 30%;
+                        height: 60%;
+                        border-top-left-radius: 10px;
+                        border-bottom-left-radius: 10px;
+                        align-items: center;
+                        justify-content: center;
+    
+                        img {
+                            
+                            max-width: 100%;
+    
+                        }
+    
                     }
-
-                    #imgVinho {
-
-                        width: 30px;
-
-                    }
-
-                }
-
-                .featuredTag {
-
-                    position: absolute;
-                    top: 0;
-                    right: 0;
-                    width: 40%;
-                    height: 25%;
-                    background-color: $vinhoPink;
-                    border-top-right-radius: 10px;
-                    border-bottom-left-radius: 10px;
-
-                    h6 {
-
-                        color: $branco;
-                        text-transform: uppercase;
-                        font-size: .75rem;
-                        margin-top: 0.4rem;
-
+    
+                    .featuredTag {
+    
+                        display:flex;
+                        align-items: center;
+                        justify-content: center;
+                        width: 100%;
+                        background-color: $vinhoPink;
+                        border-top-right-radius: 10px;
+                        border-bottom-left-radius: 10px;
+                        padding: 5px 10px;
+                        margin-bottom: 10px;
+    
+                        h6 {
+    
+                            color: $branco;
+                            text-transform: uppercase;
+                            font-size: 12px;
+                            padding: 0 5px;
+    
+                        }
+    
                     }
 
                 }
 
                 .featuredTextWrapper {
+
+                    display: flex;
+                    flex-direction: column;
                     
                     h5 {
 
@@ -203,6 +211,13 @@
                         color: #666C75;
                         font-size: .9rem;
                         font-weight: 500;
+                        margin-bottom: 20px;
+
+                    }
+
+                    p {
+
+                        color: #c4c4c4;
 
                     }
                     
@@ -502,14 +517,13 @@
             .featuredProducts {
 
                 height: auto;
-                justify-content: default;
                 flex-direction: column;
                 align-items: center;
                 justify-content: center;
 
                 .featuredProductsCard {
 
-                    width: 85%;
+                    max-width: 85%;
                     height: auto;
                     margin: 1rem 0;
 
