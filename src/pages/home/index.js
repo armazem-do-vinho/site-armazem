@@ -202,12 +202,6 @@ function Home() {
                 <div className="heroWrapper">
 
                     <Slider {...carouselSettings}>
-                        {/* <div className="sliderImg">
-                            <img src={banner} alt="banner dia dos pais" />
-                        </div>
-                        <div className="sliderImg">
-                            <img src={banner2} alt="banner kits" />
-                        </div> */}
 
                         {dataBanner.map((item) => {
 
@@ -354,19 +348,44 @@ function Home() {
 
                     <h2>Nossa recomendação para você</h2>
 
-                    <div className="textVinho">
-                        <h3>Anciano</h3>
-                        <p>Espanha • Tinto</p>
-                    </div>
-                    <div className="imageVinho">
-                        <img src={vinhoImg4} alt="a" />
-                    </div>
+                    <div className="sliderWrapper">
 
+                        <Slider className="slider" {...carouselSettings}>
 
+                            {dataProductCards.map((item) => {
+
+                                return (
+
+                                    <div className="sliderContent">
+
+                                        <div className="textVinho">
+
+                                            <h2>{item.name}</h2>
+                                            <span>{item.country} • {item.type}</span>
+                                            <p>{item.description}</p>
+
+                                        </div>
+
+                                        <div className="imageVinho">
+
+                                            <img src={item.imageSrc} alt="Vinho" />
+
+                                        </div>
+
+                                    </div>
+
+                                )
+
+                            })}
+
+                        </Slider>
+
+                    </div>
 
                 </div>
 
                 <div className="infosHighlightWrapper">
+
                     <div className="infosCard">
 
                         <h3>Qualidade máxima</h3>
@@ -382,6 +401,7 @@ function Home() {
                         <img src={wine} alt="" />
 
                     </div>
+
                 </div>
 
             </section>
