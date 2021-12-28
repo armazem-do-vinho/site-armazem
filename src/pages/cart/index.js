@@ -2,6 +2,8 @@ import React, { useEffect, useRef, useState } from 'react'
 import { Link } from "react-router-dom";
 import { useHistory } from 'react-router-dom'
 
+import InputMask from 'react-input-mask';
+
 import Header from '../../components/header'
 import Footer from '../../components/footer'
 import './style.scss'
@@ -16,22 +18,52 @@ import trashCan from '../../img/trash.svg'
 function Cart() {
 
     const [data, setData] = useState([]);
-    const [seller, setSeller] = useState([]);
     const [dataUsers, setDataUsers] = useState([]);
-    const [isSeller, setIsSeller] = useState(false);
+    const [dataVoucher, setDataVoucher] = useState([]);
     const [totalValue, setTotalValue] = useState(0);
+    const [finalValue, setFinalValue] = useState(0);
+    const [voucherValue, setVoucherValue] = useState(0);
     const [dataAccount, setDataAccount] = useState([]);
     const [dataExists, setDataExists] = useState(false);
     const [userIsLogged, setUserIsLogged] = useState(false);
     const [selectedClient, setSelectedClient] = useState('');
     const [clientNote, setClientNote] = useState('');
     const [displayButtonClear, setDisplayButtonClear] = useState('none');
+    const [displayTransport, setDisplayTransport] = useState('none');
+    const [displayCepDiv, setDisplayCepDiv] = useState('flex');
     const [selectedPayment, setSelectedPayment] = useState('');
+    const [pickupSelect, setPickupSelect] = useState('');
+    const [userVoucher, setUserVoucher] = useState('');
+    const [userDiscount, setUserDiscount] = useState(0);
+    const [transportValue, setTransportValue] = useState(0);
+    const [dataProduct, setDataProduct] = useState([]);
+    const [customerCep, setCustomerCep] = useState('');
+    const [transportData, setTransportData] = useState([]);
+    const [selectedTransportData, setSelectedTransportData] = useState({});
+    const [displayCepSearch, setDisplayCepSearch] = useState('none');
+    const [displayPopup, setDisplayPopup] = useState('none');
+    const [choosedVoucher, setChoosedVoucher] = useState('');
+    const [displayAddressForms, setDisplayAddressForms] = useState('none');
+    const [transportDataVerify, setTransportDataVerify] = useState(false);
+    const [purchasedProductData, setPurchasedProductData] = useState([]);
 
-    const [paidFor, setPaidForm] = useState(false);
+    const [paidForm, setPaidForm] = useState(false);
     const [loaded, setLoaded] = useState(false);
 
     const [redirect, setRedirect] = useState(useHistory());
+
+    const [newDataReceiver, setNewDataReceiver] = useState({
+
+        receiverName: '',
+        receiverPhone: '',
+        receiverAddress: '',
+        receiverHouseNumber: '',
+        receiverComplement: '',
+        receiverDistrict: '',
+        receiverCity: '',
+        receiverCpf: '',
+
+    })
 
     function onAuthStateChanged(user) {
 
@@ -54,8 +86,6 @@ function Cart() {
             setDataExists(true)
             setDisplayButtonClear('block')
 
-            console.log(verify)
-
             var total = 0
 
             temp.map((item) => {
@@ -64,6 +94,8 @@ function Cart() {
                 total = value + total
 
                 setTotalValue(total)
+                setFinalValue(total)
+
             })
 
         }
@@ -79,6 +111,79 @@ function Cart() {
         if (!firebase.apps.length)
             firebase.initializeApp(firebaseConfig);
         onAuthStateChanged()
+
+    }, [])
+
+    useEffect(async () => {
+
+        const verify = await JSON.parse(localStorage.getItem('products'))
+
+        if (verify != {}) {
+
+            var temp = Object.keys(verify).map((key) => verify[key])
+
+            let aux = [];
+
+            temp.map((product) => {
+
+                const productInfos = {
+
+                    "id": product.id,
+                    "width": product.itemWidth,
+                    "height": product.itemHeight,
+                    "length": product.itemLength,
+                    "weight": product.itemWeight,
+                    "insurance_value": product.price,
+                    "quantity": product.amount,
+
+                }
+
+                aux.push(productInfos)
+                setDataProduct(aux)
+
+            })
+        }
+
+    }, [])
+
+    // useEffect(() => {
+
+    //     if (userDiscount !== 0) {
+
+    //         setFinalValue(totalValue - (totalValue * (userDiscount / 100)))
+
+    //     } else {
+
+    //         setFinalValue(totalValue)
+    //         console.log('aaa', selectedTransportData)
+
+    //     }
+
+    // }, [])
+
+    useEffect(() => {
+
+        if (!firebase.apps.length)
+            firebase.initializeApp(firebaseConfig);
+
+        var firebaseRef = firebase.database().ref('vouchers/');
+
+        firebaseRef.on('value', (snapshot) => {
+
+            if (snapshot.exists()) {
+
+                var data = snapshot.val()
+                var temp = Object.keys(data).map((key) => data[key])
+                setDataVoucher(temp.sort((a, b) => {
+
+                    return (a.title > b.title) ? 1 : ((b.title > a.title) ? -1 : 0)
+
+                }))
+            }
+            else {
+                console.log("No data available");
+            }
+        })
 
     }, [])
 
@@ -109,27 +214,27 @@ function Cart() {
 
             })
 
-        firebase.database().ref('sellers/').get('/sellers')
-            .then(function (snapshot) {
+        // firebase.database().ref('sellers/').get('/sellers')
+        //     .then(function (snapshot) {
 
-                if (snapshot.exists()) {
+        //         if (snapshot.exists()) {
 
-                    var data = snapshot.val()
-                    var temp = Object.keys(data).map((key) => data[key])
+        //             var data = snapshot.val()
+        //             var temp = Object.keys(data).map((key) => data[key])
 
-                    temp.map((item) => {
+        //             temp.map((item) => {
 
-                        if (item.email === userEmail) {
-                            setSeller(item)
-                            setIsSeller(true)
-                        }
+        //                 if (item.email === userEmail) {
+        //                     setSeller(item)
+        //                     setIsSeller(true)
+        //                 }
 
-                    })
+        //             })
 
-                } else
-                    console.log("No data available");
+        //         } else
+        //             console.log("No data available");
 
-            })
+        //     })
 
     }, []);
 
@@ -137,49 +242,66 @@ function Cart() {
 
         if (userIsLogged) {
 
-            if (selectedPayment !== '') {
+            if (selectedPayment !== '' && pickupSelect !== '') {
 
-                const id = firebase.database().ref().child('posts').push().key
-                const now = new Date()
+                if (transportDataVerify === true) {
 
-                const dataToSend = {
+                    const id = firebase.database().ref().child('posts').push().key
+                    const now = new Date()
 
-                    id: id,
-                    listItem: data,
-                    totalValue: totalValue.toFixed(2),
-                    userName: dataAccount.name,
-                    phoneNumber: dataAccount.phoneNumber,
-                    address: dataAccount.address,
-                    houseNumber: dataAccount.houseNumber,
-                    district: dataAccount.district,
-                    cepNumber: dataAccount.cepNumber,
-                    complement: dataAccount.complement,
-                    paymentType: selectedPayment,
-                    clientNote: clientNote,
-                    userEmail: dataAccount.email,
-                    // adminNote: '',
-                    dateToCompare: new Date().toDateString(),
-                    date: `${now.getUTCDate()}/${now.getMonth()}/${now.getFullYear()}-${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}`
+                    const dataToSend = {
 
-                }
+                        id: id,
+                        listItem: data,
+                        totalValue: finalValue.toFixed(2),
+                        userName: newDataReceiver.receiverName,
+                        phoneNumber: newDataReceiver.receiverPhone,
+                        address: newDataReceiver.receiverAddress,
+                        houseNumber: newDataReceiver.receiverHouseNumber,
+                        complement: newDataReceiver.receiverComplement,
+                        district: newDataReceiver.receiverDistrict,
+                        city: newDataReceiver.receiverCity,
+                        cpf: newDataReceiver.receiverCpf,
+                        cepNumber: customerCep,
+                        paymentType: selectedPayment,
+                        clientNote: clientNote,
+                        userEmail: dataAccount.email,
+                        voucher: choosedVoucher,
+                        pickupOption: pickupSelect,
+                        paymentProof: '',
+                        adminNote: '',
+                        requestStatus: '',
+                        // choosedTransport: transportData,
+                        selectedTransport: selectedTransportData.company.name,
+                        // adminNote: '',
+                        dateToCompare: new Date().toDateString(),
+                        date: `${now.getUTCDate()}/${now.getMonth()}/${now.getFullYear()}-${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}`
 
-                firebase.database().ref('requests/' + id).set(dataToSend)
-                    .then(() => {
-                        localStorage.setItem('products', '{}')
-                    })
+                    }
 
-                firebase.database().ref('reportsSales/' + id).set(dataToSend)
-                    .then(() => {
-                        localStorage.setItem('products', '{}')
-                        alert("Pedido finalizado com sucesso!.")
-                    })
+                    firebase.database().ref('requests/' + id).set(dataToSend)
+                        .then(() => {
+                            setPurchasedProductData(dataToSend)
+                            localStorage.setItem('products', '{}')
+                        })
 
-            } else alert('Você precisa selecionar o tipo de pagamento!')
+                    firebase.database().ref('reportsSales/' + id).set(dataToSend)
+                        .then(() => {
+                            setPurchasedProductData(dataToSend)
+                            localStorage.setItem('products', '{}')
+                            alert("Pedido finalizado com sucesso!.")
+                        })
+
+                    setPaidForm(true)
+
+                } else alert('Você precisa preencher todos os campos!')
+
+            } else alert('Você precisa selecionar todos os campos!')
 
         }
         else {
 
-            var confirm = window.confirm("Você precisa ter uma conta para finalizar um pedido!.")
+            var confirm = window.confirm("Você precisa ter uma conta para finalizar um pedido!")
 
             if (confirm)
                 redirect.push("/Cadastrar")
@@ -194,42 +316,51 @@ function Cart() {
 
         if (userIsLogged) {
 
-                const id = firebase.database().ref().child('posts').push().key
-                const now = new Date()
+            const id = firebase.database().ref().child('posts').push().key
+            const now = new Date()
 
-                const dataToSend = {
+            const dataToSend = {
 
-                    id: id,
-                    listItem: data,
-                    totalValue: totalValue.toFixed(2),
-                    userName: dataAccount.name,
-                    phoneNumber: dataAccount.phoneNumber,
-                    address: dataAccount.address,
-                    houseNumber: dataAccount.houseNumber,
-                    district: dataAccount.district,
-                    cepNumber: dataAccount.cepNumber,
-                    complement: dataAccount.complement,
-                    paymentType: 'Paypal',
-                    clientNote: clientNote,
-                    userEmail: dataAccount.email,
-                    // adminNote: '',
-                    dateToCompare: new Date().toDateString(),
-                    date: `${now.getUTCDate()}/${now.getMonth()}/${now.getFullYear()}-${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}`
+                id: id,
+                listItem: data,
+                totalValue: finalValue.toFixed(2),
+                userName: newDataReceiver.receiverName,
+                phoneNumber: newDataReceiver.receiverPhone,
+                address: newDataReceiver.receiverAddress,
+                houseNumber: newDataReceiver.receiverHouseNumber,
+                complement: newDataReceiver.receiverComplement,
+                district: newDataReceiver.receiverDistrict,
+                city: newDataReceiver.receiverCity,
+                cpf: newDataReceiver.receiverCpf,
+                cepNumber: customerCep,
+                paymentType: 'Paypal',
+                clientNote: clientNote,
+                userEmail: dataAccount.email,
+                voucher: choosedVoucher,
+                paymentProof: '',
+                adminNote: '',
+                requestStatus: '',
+                // choosedTransport: transportData,
+                selectedTransport: selectedTransportData.company.name,
+                // adminNote: '',
+                dateToCompare: new Date().toDateString(),
+                date: `${now.getUTCDate()}/${now.getMonth()}/${now.getFullYear()}-${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}`
 
-                }
+            }
 
-                firebase.database().ref('requests/' + id).set(dataToSend)
-                    .then(() => {
-                        localStorage.setItem('products', '{}')
-                    })
+            firebase.database().ref('requests/' + id).set(dataToSend)
+                .then(() => {
+                    localStorage.setItem('products', '{}')
+                })
 
-                firebase.database().ref('reportsSales/' + id).set(dataToSend)
-                    .then(() => {
-                        localStorage.setItem('products', '{}')
-                        alert("Pedido finalizado com sucesso!.")
-                    })
+            firebase.database().ref('reportsSales/' + id).set(dataToSend)
+                .then(() => {
+                    localStorage.setItem('products', '{}')
+                    alert("Pedido finalizado com sucesso!")
+                })
 
         }
+
         else {
 
             var confirm = window.confirm("Você precisa ter uma conta para finalizar um pedido!.")
@@ -243,31 +374,56 @@ function Cart() {
 
     }
 
-    function sendOrderSeller() {
+    useEffect(() => {
 
-        const id = firebase.database().ref().child('posts').push().key
+        var counter = 0
 
-        firebase.database().ref('requests/' + id).set({
+        newDataReceiver.receiverName != '' ? counter = counter + 1 : counter = counter
+        newDataReceiver.receiverPhone != '' ? counter++ : counter = counter
+        newDataReceiver.receiverAddress != '' ? counter++ : counter = counter
+        newDataReceiver.receiverHouseNumber != '' ? counter++ : counter = counter
+        newDataReceiver.receiverComplement != '' ? counter++ : counter = counter
+        newDataReceiver.receiverDistrict != '' ? counter++ : counter = counter
+        newDataReceiver.receiverCity != '' ? counter++ : counter = counter
+        newDataReceiver.receiverCpf != '' ? counter++ : counter = counter
 
-            id: id,
-            listItem: data,
-            totalValue: totalValue.toFixed(2),
-            userName: dataUsers[selectedClient].name,
-            phoneNumber: dataUsers[selectedClient].phoneNumber,
-            street: dataUsers[selectedClient].street,
-            houseNumber: dataUsers[selectedClient].houseNumber,
-            district: dataUsers[selectedClient].district,
-            cepNumber: dataUsers[selectedClient].cepNumber,
-            complement: dataUsers[selectedClient].complement,
-            paymentType: selectedPayment,
-            seller: seller.name
+        if (counter == 8) {
 
-        }).then(() => {
-            localStorage.setItem('products', '[{}]')
-            alert("Pedido finalizado com sucesso!.")
-        })
+            setTransportDataVerify(true)
 
-    }
+        } else if (counter !== 8 || pickupSelect !== 'Retirada física') {
+
+            setTransportDataVerify(false)
+
+        }
+
+    }, [newDataReceiver])
+
+    // function sendOrderSeller() {
+
+    //     const id = firebase.database().ref().child('posts').push().key
+
+    //     firebase.database().ref('requests/' + id).set({
+
+    //         id: id,
+    //         listItem: data,
+    //         totalValue: finalValue.toFixed(2),
+    //         userName: dataUsers[selectedClient].name,
+    //         phoneNumber: dataUsers[selectedClient].phoneNumber,
+    //         street: dataUsers[selectedClient].street,
+    //         houseNumber: dataUsers[selectedClient].houseNumber,
+    //         district: dataUsers[selectedClient].district,
+    //         cepNumber: dataUsers[selectedClient].cepNumber,
+    //         complement: dataUsers[selectedClient].complement,
+    //         paymentType: selectedPayment,
+    //         seller: seller.name
+
+    //     }).then(() => {
+    //         localStorage.setItem('products', '[{}]')
+    //         alert("Pedido finalizado com sucesso!.")
+    //     })
+
+    // }
 
     function cleanCart() {
 
@@ -283,9 +439,92 @@ function Cart() {
 
     }
 
+    function verifyVoucher() {
+
+        var verify = false
+
+        dataVoucher.map((item) => {
+
+            if (userVoucher === item.title) {
+
+                verify = true
+
+                setUserDiscount(item.discount)
+                setChoosedVoucher(item.title)
+                setDisplayCepDiv('none')
+
+                setVoucherValue(totalValue + transportValue - ((totalValue + transportValue) * (item.discount / 100)))
+                setFinalValue(totalValue + transportValue - ((totalValue + transportValue) * (item.discount / 100)))
+
+                window.alert('Cupom inserido com sucesso!')
+
+            }
+
+        })
+
+        if (verify === false) {
+
+            window.alert('O cupom inserido é inválido ou não está mais disponível')
+
+        }
+
+    }
+
+    // useEffect(() => {
+
+    //     if(userDiscount) {
+
+    //         setFinalValue(totalValue - (totalValue * (userDiscount / 100)))
+    //         console.log('discount', totalValue - (totalValue * (userDiscount / 100)))
+
+    //     }
+
+    // }, [])
+
     function handleSelectPayment(event) {
 
-        setSelectedPayment(event.target.value)
+        let payment = event.target.value
+
+        setSelectedPayment(payment)
+
+        if (payment === 'Pix') {
+
+            setDisplayPopup('flex')
+
+        } else {
+
+            setDisplayPopup('none')
+
+        }
+
+    }
+
+    function handlePickupSelect(event) {
+
+        const pickup = event.target.value
+
+        setPickupSelect(pickup)
+
+        if (pickup === 'Frete') {
+
+            setDisplayCepSearch('flex');
+
+        } else {
+
+            setDisplayCepSearch('none');
+
+        }
+
+        if (pickup !== 'Retirada física') {
+
+            setDisplayAddressForms('flex');
+
+        } else {
+
+            setDisplayAddressForms('none');
+            setTransportDataVerify(true)
+
+        }
 
     }
 
@@ -295,9 +534,41 @@ function Cart() {
 
     }
 
+    function handleSelectedTransport(item, event) {
+
+        setSelectedTransportData(event)
+        console.log(event)
+        // const value = finalValue
+
+        setTransportValue(Number(event.custom_price))
+
+        if (voucherValue) {
+
+            setFinalValue(voucherValue + (Number(event.custom_price) - (Number(event.custom_price) * userDiscount / 100)))
+
+        } else {
+
+            setFinalValue(totalValue + Number(event.custom_price))
+
+        }
+
+    }
+
     function handleClientNote(event) {
 
         setClientNote(event.target.value)
+
+    }
+
+    function handleInputCep(event) {
+
+        setCustomerCep(event.target.value)
+
+    }
+
+    function handleVoucher(event) {
+
+        setUserVoucher(event.target.value)
 
     }
 
@@ -317,47 +588,98 @@ function Cart() {
 
     }
 
+    function handleInputInfosChange(event) {
+
+        const { name, value } = event.target
+
+        setNewDataReceiver({
+
+            ...newDataReceiver, [name]: value
+
+        })
+
+    }
+
+    function closePopup() {
+
+        setDisplayPopup('none')
+
+    }
+
+    const dataToSend = {
+        "from": {
+            "postal_code": "28909120"
+        },
+        "to": {
+            "postal_code": customerCep
+        },
+        "products": dataProduct
+    }
+
+    const calculaFrete = async () => {
+
+        await fetch('https://melhorenvio.com.br/api/v2/me/shipment/calculate', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${process.env.REACT_APP_BEARER_KEY} `,
+                'User-Agent': 'Armazém teste higorb2000@gmail.com'
+            },
+            body: JSON.stringify(dataToSend)
+        }).then((response) => {
+            return response.json();
+        }).then((data) => {
+            setTransportData(data)
+            setDisplayTransport('flex')
+            console.log(data)
+        }).catch(err => console.log(err))
+    };
+
     let paypalRef = useRef();
 
     useEffect(() => {
 
         const script = document.createElement("script");
-        script.src = "https://www.paypal.com/sdk/js?client-id=AZAsiBXlnYmk2HXDpGkZgYx7zWvFpak2iKq473EPHi9LrnM2lAbAHIzVaxns_-jmD34dYqpuTSaRFWy0&currency=BRL"
+        script.src = "https://www.paypal.com/sdk/js?client-id=AVdZOvhSTEekVtepWxObjC6L1Yrm8ng37lrDLna1AbkBBZej8x3KQEiLfZyUhOJ1aqtG0mnddL63lDQX&currency=BRL"
         script.addEventListener("load", () => setLoaded(true));
         document.body.appendChild(script);
 
         if (loaded) {
 
-            setTimeout(() => {
+            if (selectedPayment === 'PayPal' || selectedPayment === 'Cartão') {
 
-                window.paypal
-                    .Buttons({
+                setTimeout(() => {
 
-                        createOrder: (data, actions) => {
+                    window.paypal
+                        .Buttons({
 
-                            return actions.order.create({
-                                purchase_units: [
-                                    {
-                                        // description: product.description,
-                                        amount: {
-                                            currency_code: "BRL",
-                                            value: totalValue
+                            createOrder: (data, actions) => {
+
+                                return actions.order.create({
+                                    purchase_units: [
+                                        {
+                                            // description: product.description,
+                                            amount: {
+                                                currency_code: "BRL",
+                                                value: finalValue
+                                            }
                                         }
-                                    }
-                                ]
-                            })
-                        },
-                        onApprove: async (data, actions) => {
+                                    ]
+                                })
+                            },
+                            onApprove: async (data, actions) => {
 
-                            const order = await actions.order.capture();
-                            setPaidForm(true)
-                            sendOrderPaypal();
+                                const order = await actions.order.capture();
+                                setPaidForm(true)
+                                sendOrderPaypal();
 
-                        },
+                            },
 
-                    })
-                    .render(paypalRef)
-            })
+                        })
+                        .render(paypalRef)
+                }, 100)
+            }
         }
     })
 
@@ -369,43 +691,168 @@ function Cart() {
 
                 <div className="paymentForm">
 
-                    {paidFor ? (
+                    {paidForm ? (
 
-                        <main>
+                        <main id="mainPaid">
+
+                            <Header />
 
                             <section id="purchaseDetails">
 
-                                <h1>Compra confirmada com sucesso!</h1>
+                                <div className="receiverDetails">
 
-                                    <div className="purchaseWrapper">
+                                    <h4>Resumo da compra</h4>
 
-                                        <h5>Detalhes da compra</h5>
+                                    <ul>
 
-                                        <table>
+                                        {
 
-                                            <tr>
+                                            purchasedProductData.id ?
 
-                                                <td>Produto</td>
-                                                <td>Quantidade</td>
-                                                <td>Valor</td>
+                                                <li><strong>Código de identificação da compra: </strong>{purchasedProductData.id}</li>
 
-                                            </tr>
+                                                :
 
-                                            <tr>
+                                                <li></li>
 
-                                                <td>A</td>
-                                                <td>3</td>
-                                                <td>44,55</td>
+                                        }
 
-                                            </tr>
+                                        {
 
-                                        </table>
+                                            purchasedProductData.address ?
 
-                                        <h3>Total: R$ 999,99</h3>
+                                                <li><strong>Endereço: </strong>{purchasedProductData.address} - {purchasedProductData.houseNumber}, {purchasedProductData.district}</li>
 
-                                    </div>
+                                                :
+
+                                                <li></li>
+
+                                        }
+
+                                        {
+
+                                            purchasedProductData.paymentType === 'Pix' ?
+
+                                                <>
+
+                                                    <li><strong>Pagamento: </strong>{purchasedProductData.paymentType}</li>
+                                                    <span><strong>Chave Pix: </strong>(22) 98112 9219 - Envie seu comprovante em <Link to='/MeusPedidos'>Meus pedidos</Link></span>
+
+                                                </>
+
+                                                :
+
+                                                <li><strong>Pagamento: </strong>{purchasedProductData.paymentType}</li>
+
+                                        }
+
+                                        {
+
+                                            purchasedProductData.voucher ?
+
+                                                <li><strong>Cupom de desconto: </strong>{purchasedProductData.voucher}</li>
+
+                                                :
+
+                                                <li></li>
+
+                                        }
+
+                                        <li><strong>Como deseja receber: </strong>{purchasedProductData.pickupOption}</li>
+
+                                        {
+
+                                            selectedTransportData ?
+
+                                                <>
+
+                                                    <li><strong>Transportadora: </strong>{selectedTransportData.company.name} ({selectedTransportData.name})</li>
+                                                    <li><strong>Valor do frete: </strong>R$ {selectedTransportData.price}</li>
+                                                    <li><strong>Prazo de entrega: </strong>{selectedTransportData.delivery_time} dias úteis após a postagem</li>
+
+                                                </>
+
+                                                :
+
+                                                <li></li>
+
+                                        }
+
+                                    </ul>
+
+                                    {console.log(purchasedProductData)}
+
+                                </div>
+
+                                <div className='purchasedProductsDetails' >
+
+                                    <h4>Você comprou: </h4>
+
+                                    <ul>
+
+                                        {purchasedProductData.listItem ?
+
+                                            (
+                                                purchasedProductData.listItem.map((item) => {
+
+                                                    return (
+
+                                                        <div className="purchasedItensInfos">
+
+                                                            <li>
+
+                                                                <div className="purchasedItensImgWrapper">
+
+                                                                    <img src={item.imageSrc} alt="Imagem do produto" />
+
+                                                                </div>
+
+                                                                <div className="itensText">
+
+                                                                    <span><strong>{item.title}</strong> ({item.amount})</span>
+
+                                                                    {
+
+                                                                        item.desc ?
+
+                                                                            <span>{item.desc}</span>
+
+                                                                            :
+
+                                                                            <span></span>
+
+                                                                    }
+
+                                                                    <span>{item.country} • {item.sweetness} • {item.type}</span>
+
+                                                                </div>
+
+                                                            </li>
+
+                                                        </div>
+
+                                                    )
+
+                                                })
+                                            )
+
+                                            :
+
+                                            (
+                                                <p></p>
+                                            )
+
+                                        }
+
+                                    </ul>
+
+                                    <h4>Valor total: R$ {purchasedProductData.totalValue}</h4>
+
+                                </div>
 
                             </section>
+
+                            <Footer />
 
                         </main>
 
@@ -416,13 +863,26 @@ function Cart() {
 
                             <section id="CartSection">
 
+                                <div style={{ display: displayPopup }} className='popupWrapper'>
+
+                                    <div className='popupContent'>
+
+                                        <h3>Ao finalizar o pedido, realize um Pix para a chave: <br /> (22) 98112 9219 </h3>
+                                        <h4>Após isso, envie seu comprovante através da seção "meus produtos" em seu perfil.</h4>
+
+                                        <button onClick={() => closePopup()}>Confirmar</button>
+
+                                    </div>
+
+                                </div>
+
                                 <Header />
 
                                 <div className="cartPage">
 
                                     <div className="cartIntro">
 
-                                        <h3>Após revisar os itens, clique no botão para prosseguir com a sua compra</h3>
+                                        <h3>Após revisar os itens, clique no botão de finalizar para prosseguir com a sua compra</h3>
 
                                     </div>
 
@@ -491,7 +951,19 @@ function Cart() {
 
                                             <button style={{ display: displayButtonClear }} onClick={() => cleanCart()}>Esvaziar carrinho</button>
 
-                                            <h3>Valor total: R$ {totalValue.toFixed(2)}</h3>
+                                            <h3>Valor total: R$ {finalValue.toFixed(2)}</h3>
+
+                                            {userDiscount ?
+
+                                                <>
+                                                    <h3>Desconto: {userDiscount}%</h3>
+                                                </>
+
+                                                :
+
+                                                <h3></h3>
+
+                                            }
 
                                         </div>
 
@@ -499,21 +971,136 @@ function Cart() {
 
                                     <div className="finishOrder">
 
-                                        <select className="paymentSelect" onChange={handleSelectPayment} >
+                                        <div style={{ display: displayCepDiv }} className="cepInputDiv">
 
-                                            <option value=''>Selecione o tipo de pagamento</option>
-                                            <option value="Dinheiro" >Dinheiro</option>
-                                            <option value="Débito" >Cartão de débito (máquina)</option>
-                                            <option value="Crédito" >Cartão de crédito (máquina)</option>
-                                            <option value="Pix" >PIX</option>
+                                            <label for="voucherInput">Inserir cupom de desconto</label>
+
+                                            <input onChange={handleVoucher} id="voucherInput" placeholder="Cupom" />
+
+                                            <button onClick={() => verifyVoucher()}>Inserir cupom</button>
+
+                                        </div>
+
+                                        <input className="clientNoteInput" onChange={handleClientNote} placeholder='Observação sobre seu pedido (opcional)' />
+
+                                        <select className="pickupSelect" onChange={handlePickupSelect} >
+
+                                            <option value=''>Selecione como deseja receber sua encomenda</option>
+                                            <option value="Motoboy" >Entrega por motoboy (apenas região)</option>
+                                            <option value="Frete" >Entrega por transportadora</option>
+                                            <option value="Retirada física" >Retirada em ponto físico</option>
 
                                         </select>
 
-                                        <h3>Pague com PayPal sem sair do conforto de sua casa</h3>
+                                        {/* <input style={{ display: displayCepSearch }} onChange={handleInputCep} placeholder="CEP" /> */}
+                                        <label style={{ display: displayCepSearch }} for="cepNumber">Insira o CEP abaixo</label>
+                                        <InputMask id="cepNumber" name='cepNumber' type='text' mask="99999-999" maskChar="" style={{ display: displayCepSearch }} onChange={handleInputCep} placeholder="CEP" />
+
+                                        <button style={{ display: displayCepSearch }} onClick={() => { calculaFrete() }}>Calcular frete</button>
+
+                                        <div className="transportInfos" style={{ display: displayTransport }}>
+
+                                            <h1>Selecione a opção de envio abaixo</h1>
+
+                                            {transportData.map((item, index) => {
+
+                                                if (item.id === 1 || item.id === 2 || item.id === 3) {
+
+                                                    if (!item.error) {
+
+                                                        return (
+
+                                                            <div className="optionsTransport">
+
+                                                                <div className="radioButton">
+
+                                                                    <input onClick={(e) => handleSelectedTransport(e, item, index)} type="radio" name="selectedTransport" key={item.id} value={item.name} />
+
+                                                                </div>
+
+                                                                <div className="transportLogoWrapper">
+
+                                                                    <img src={item.company.picture} alt={item.company.name} />
+
+                                                                </div>
+
+                                                                <div className="textTransportInfos">
+
+                                                                    <span>{item.company.name} ({item.name})</span>
+                                                                    <span><strong>R$ {item.custom_price}</strong></span>
+                                                                    <span>Prazo de entrega: <strong>{item.custom_delivery_time} dias úteis</strong></span>
+
+                                                                </div>
+
+                                                            </div>
+
+                                                        )
+                                                    }
+                                                }
+
+                                            })}
+
+                                        </div>
+
+                                        <div style={{ display: displayAddressForms }} className="transportDiv">
+
+                                            <h2>Insira os dados para entrega abaixo</h2>
+
+                                            <div className="userInfos">
+
+                                                <input name='receiverName' onChange={handleInputInfosChange} placeholder='Nome do destinatário' value={newDataReceiver.receiverName} />
+
+                                                {/* <input name='receiverPhone' onChange={handleInputInfosChange} placeholder='Telefone' value={newDataReceiver.receiverPhone} /> */}
+                                                <InputMask
+                                                    id="receiverPhone"
+                                                    name='receiverPhone'
+                                                    type='text'
+                                                    mask="(99) 99999-9999"
+                                                    maskChar=""
+                                                    onChange={handleInputInfosChange}
+                                                    placeholder='Telefone'
+                                                    value={newDataReceiver.receiverPhone}
+                                                />
+
+                                                <input name='receiverAddress' onChange={handleInputInfosChange} placeholder='Endereço de entrega' value={newDataReceiver.receiverAddress} />
+
+                                                <input name='receiverHouseNumber' onChange={handleInputInfosChange} placeholder='Número da residência' value={newDataReceiver.receiverHouseNumber} />
+
+                                                <input name='receiverComplement' onChange={handleInputInfosChange} placeholder='Complemento' value={newDataReceiver.receiverComplement} />
+
+                                                <input name='receiverDistrict' onChange={handleInputInfosChange} placeholder='Bairro' value={newDataReceiver.receiverDistrict} />
+
+                                                <input name='receiverCity' onChange={handleInputInfosChange} placeholder='Cidade' value={newDataReceiver.receiverCity} />
+
+                                                {/* <input name='receiverCpf' onChange={handleInputInfosChange} placeholder='CPF' value={newDataReceiver.receiverCpf} /> */}
+                                                <InputMask
+                                                    id="receiverCpf"
+                                                    name='receiverCpf'
+                                                    type='text'
+                                                    mask="999.999.999-99"
+                                                    maskChar=""
+                                                    onChange={handleInputInfosChange}
+                                                    placeholder='CPF'
+                                                    value={newDataReceiver.receiverCpf}
+                                                />
+
+                                            </div>
+
+                                        </div>
+
+                                        <select className="paymentSelect" onChange={handleSelectPayment} >
+
+                                            <option value=''>Selecione o tipo de pagamento</option>
+                                            <option value="Dinheiro" >Dinheiro (apenas para entregas na região)</option>
+                                            <option value="Débito (máquina)" >Cartão de débito (apenas para entregas na região)</option>
+                                            <option value="Crédito (máquina)" >Cartão de crédito (apenas para entregas na região)</option>
+                                            <option value="PayPal" >PayPal </option>
+                                            <option value="Cartão" >Cartão </option>
+                                            <option value="Pix" >Pix</option>
+
+                                        </select>
 
                                         <div className="paypalButtons" ref={v => (paypalRef = v)} />
-
-                                        <input className="clientNoteInput" onChange={handleClientNote} placeholder='Observação sobre seu pedido (opcional)' />
 
                                     </div>
 

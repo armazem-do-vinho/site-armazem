@@ -144,6 +144,10 @@ function SignIn() {
                                 <Link to='/cadastrar' >Cadastrar-se</Link>
                             </div>
 
+                            <div className='passwordRecover' >
+                               <h5>Esqueceu sua senha? <Link to='/RecuperarSenha' >Recuperar senha</Link></h5> 
+                            </div>
+
                         </div>
 
                     </main>

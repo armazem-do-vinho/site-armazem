@@ -101,6 +101,24 @@
         }
     }
 
+    .passwordRecover {
+
+        margin-top: 1rem;
+
+        a {
+
+            text-decoration: none;
+
+            &:hover {
+
+                color: rgb(69, 69, 219);
+
+            }
+
+        }
+
+    }
+
     fieldset {
         margin-top: 1rem;
         display: flex;

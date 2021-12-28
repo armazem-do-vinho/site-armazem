@@ -1,12 +1,12 @@
 @import '../../../global.scss';
 
-.AdminItems {
+.AdminVouchers {
 
     display: flex;
     flex-direction: column;
     min-height: 100vh;
 
-    .itemsOptions {
+    .vouchersOptions {
 
         width: 100%;
         align-items: center;
@@ -48,12 +48,6 @@
     
         }
 
-        input[type="file"] {
-
-            padding-top: .8rem;
-
-        }
-
         select {
 
             background-color: $vinho;
@@ -82,7 +76,7 @@
 
         }
 
-        .buttonProducts {
+        .buttonVoucher {
 
             width: 100%;
             display: flex;
@@ -127,17 +121,18 @@
 
 @media screen and (max-width: 768px) {
     
-    .AdminItems {
+    .AdminVouchers {
 
         width: 100vw;
 
-        .itemsOptions {
+        .vouchersOptions {
 
             fieldset {
 
                 border: none;
                 width: 100%;
                 display: flex;
+                flex-direction: column;
                 justify-content: center;
                 align-items: center;
 

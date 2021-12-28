@@ -29,7 +29,7 @@
             height: 8vh;
             width: 100vw;
             margin-top: 1rem;
-            background-color: #2B303A;
+            background-color: blue;
             align-items: center;
             justify-content: space-around;
             flex-direction: row;
@@ -58,16 +58,21 @@
         .heroWrapper {
             
             width: 90vw;
-            height: auto;
-            background-color: $deepVinho;
             margin-top: 1rem;
             border-radius: 8px;
 
             .sliderImg {
+
+                display: flex;
+                width: 90vw;
+
                 img {
-                    display: flex;
-                    justify-content: center;
+
+                    width: 100%;
+                    overflow: hidden;
+
                 }
+
             }
 
         
@@ -80,7 +85,7 @@
         display: flex;
         flex-direction: column;
         width: 95vw;
-        height: 35vh;
+        // height: 35vh;
         margin-bottom: 4rem;
 
         .featuredProductsText {
@@ -121,71 +126,79 @@
         .featuredProducts {
 
             display: flex;
+            flex-wrap: wrap;
             width: 100%;
-            height: 50vh;
-            justify-content: space-around;
+            justify-content: center;
 
             .featuredProductsCard {
 
                 display: flex;
-                width: 20%;
-                height: 70%;
+                max-width: 30%;
+                margin: 0 1rem;
+                // height: 70%;
                 background-color:#2B303A;
-                flex-direction: row;
                 align-items: center;
                 text-align: center;
-                margin: 0 auto;
                 border-radius: 10px;
                 position: relative;
-                margin-top: 4rem;
+                margin-top: 2.5rem;
+                padding: 1rem;
 
-                .imgFeaturedWrapper {
+                .visualData {
 
                     display: flex;
-                    width: 30%;
-                    height: 100%;
-                    border-top-left-radius: 10px;
-                    border-bottom-left-radius: 10px;
+                    flex-direction: column;
                     align-items: center;
-                    justify-content: center;
+                    justify-content: space-around;
+                    height: 100%;
 
-                    img {
-                        
-                        max-width: 50px;
+                    .imgFeaturedWrapper {
 
+                        display: flex;
+                        width: 30%;
+                        height: 60%;
+                        border-top-left-radius: 10px;
+                        border-bottom-left-radius: 10px;
+                        align-items: center;
+                        justify-content: center;
+    
+                        img {
+                            
+                            max-width: 100%;
+    
+                        }
+    
                     }
-
-                    #imgVinho {
-
-                        width: 30px;
-
-                    }
-
-                }
-
-                .featuredTag {
-
-                    position: absolute;
-                    top: 0;
-                    right: 0;
-                    width: 40%;
-                    height: 25%;
-                    background-color: $vinhoPink;
-                    border-top-right-radius: 10px;
-                    border-bottom-left-radius: 10px;
-
-                    h6 {
-
-                        color: $branco;
-                        text-transform: uppercase;
-                        font-size: .75rem;
-                        margin-top: 0.4rem;
-
+    
+                    .featuredTag {
+    
+                        display:flex;
+                        align-items: center;
+                        justify-content: center;
+                        width: 100%;
+                        background-color: $vinhoPink;
+                        border-top-right-radius: 10px;
+                        border-bottom-left-radius: 10px;
+                        padding: 5px 10px;
+                        margin-bottom: 10px;
+    
+                        h6 {
+    
+                            color: $branco;
+                            text-transform: uppercase;
+                            font-size: 12px;
+                            padding: 0 5px;
+    
+                        }
+    
                     }
 
                 }
 
                 .featuredTextWrapper {
+
+                    display: flex;
+                    flex-direction: column;
                     
                     h5 {
 
@@ -198,6 +211,13 @@
                         color: #666C75;
                         font-size: .9rem;
                         font-weight: 500;
+                        margin-bottom: 20px;
+
+                    }
+
+                    p {
+
+                        color: #c4c4c4;
 
                     }
                     
@@ -209,15 +229,91 @@
 
     }
 
-#optionSection {
+    #homeText {
 
-    h4 {
+        display: flex;
+        width: 100vw;
+        height: auto;
+        background-color: #2B303A;
+        padding: 5rem 2rem;
+        align-items: center;
+        margin-bottom: 3rem;
 
-        font-size: 1.1rem;
-        color: $branco;
-        margin-bottom: 1rem;
+        .leftSideHomeText {
+
+            display: flex;
+            padding: 1rem 4rem 1rem 1rem;
+            width: 40%;
+            flex-direction: column;
+
+            h1 {
+
+                color: $offwhite;
+                font-size: 2rem;
+
+            }
+
+            h1:nth-child(2) {
+
+                color: $vinho;
+                
+            }
+
+        }
+
+        .rightSideHomeText {
+
+            display: flex;
+            width: 60%;
+            flex-direction: column;
+
+            p {
+
+                color: $offwhite;
+                padding: .7rem 0;
+
+            }
+
+        }   
 
     }
+
+    .divModalCountry {
+
+        width: 100vw;
+        position: relative;
+        background-color: $offwhite;
+
+        span {
+
+            width: 30px;
+            height: 30px;
+            padding: 8px;
+            line-height: 15px;
+            color: white;
+            position: absolute;
+            top: 20px;
+            left: 67%;
+            z-index: 3;
+            cursor: pointer;
+            border-radius: 50px;
+            text-align: center;
+            background-color: #2b303a;
+            font-weight: 700;
+
+        }
+
+    }
+
+    #optionSection {
+
+        h4 {
+
+            font-size: 1.1rem;
+            color: $branco;
+            margin-bottom: 1rem;
+
+        }
 
     .optionsInfos {
 
@@ -227,6 +323,7 @@
         background-color: #2b2b2b;
         margin-bottom: 4rem;
         position: relative;
+        border-radius: 5px;
 
         img {
 
@@ -259,13 +356,13 @@
                 justify-content: center;
                 text-transform: uppercase;
                 color: $branco;
-                cursor: default;
+                cursor: pointer;
 
-                // :hover{
+                &:hover>h3 {
 
-                //     color: $vinhoPink;
+                    color: $vinhoPink;
 
-                // }
+                }
 
             }
 
@@ -274,6 +371,151 @@
     }
 
 }
+
+#infosSection {
+
+    display: flex;
+    width: 95vw;
+    margin-bottom: 2rem;
+
+        .infosPromoWrapper {
+
+            width: 50%;
+            background-color: $deepVinho;
+            border-radius: 5px;
+            -webkit-box-shadow: 5px 5px 12px -4px rgba(0,0,0,0.59); 
+            box-shadow: 5px 5px 12px -4px rgba(0,0,0,0.59);
+            margin-left: 1rem;
+            display: flex;
+            flex-direction: column;
+            align-items: space-around;
+            justify-content: center;
+            padding: 1rem 0;
+            color: $offwhite;
+
+            h2 {
+
+                text-align: center;
+
+            }
+
+            .sliderWrapper {
+
+                display: flex;
+                width: 100%;
+                height: 100%;
+                align-items: center;
+                justify-content: center;
+
+                .slider {
+
+                    width: 100%;
+                    margin: 0;
+                    padding: 0;
+
+                }
+
+                .sliderContent {
+
+                    display: flex !important;
+                    align-items: center;
+                    justify-content: space-around !important;
+
+                    .textVinho {
+
+                        display: flex;
+                        width: 50%;
+                        text-align: center;
+                        flex-direction: column;
+                        align-items: center;
+
+                        h2 {
+
+                            margin-bottom: 5px;
+
+                        }
+
+                        span {
+
+                            color: #cccccc;
+
+                        }
+
+                        p {
+
+                            margin-top: 20px;
+
+                        }
+                        
+                    }
+    
+                    .imageVinho {
+    
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        width: 40%;
+                        height: 80%;
+    
+                        img {
+                            
+                            max-width: 200px;
+                            max-height: 300px;
+            
+                        }
+                    }
+
+                }
+
+            }
+
+        }
+
+        .infosHighlightWrapper {
+
+            width: 50%;
+            background-color: #1D222C;
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: space-between;
+            padding: 0 1rem;
+
+            .infosCard {
+                
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                border-radius: 5px;
+                margin: 0 1rem;
+                background-color: #2B303A;
+                color: $offwhite;
+                padding: 3rem 2.5rem;
+                -webkit-box-shadow: 5px 5px 12px -4px rgba(0,0,0,0.59); 
+                box-shadow: 5px 5px 12px -4px rgba(0,0,0,0.59);
+
+                img {
+                    height: 100px;
+                }
+
+                h3 {
+                    font-size: 1.75rem;
+                }
+
+                p {
+                    margin: 1rem 0 2rem;
+                    font-size: 1.3rem;
+                }
+
+                h2 {
+                    margin-bottom: 1rem;
+                }
+                
+            }
+        }
+
+    }
 }
 
 @media screen and (max-width: 768px) {
@@ -338,15 +580,16 @@
 
             .featuredProducts {
 
-                height: 100vh;
-                justify-content: default;
+                height: auto;
                 flex-direction: column;
+                align-items: center;
+                justify-content: center;
 
                 .featuredProductsCard {
 
-                    width: 85%;
-                    height: 15%;
-                    margin-top: 0;
+                    max-width: 85%;
+                    height: auto;
+                    margin: 1rem 0;
 
                     .imgFeaturedWrapper {
 
@@ -367,6 +610,70 @@
                 }
             }
             
+        }
+
+        #homeText {
+
+            display: flex;
+            flex-direction: column;
+            padding: 2rem 0;
+
+            .leftSideHomeText {
+
+                display: flex;
+                flex-direction: column;
+                width: 80%;
+                margin: 0;
+                padding: 0;
+                margin-bottom: 2rem;
+
+                h1 {
+                    text-align: center;
+                }
+
+
+            }
+
+            .rightSideHomeText {
+
+                display: flex;
+                flex-direction: column;
+                width: 80%;
+
+                p {
+                    text-align: center;
+                }
+            }
+        }
+
+        #infosSection {
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+
+            .infosPromoWrapper {
+                flex-direction: column;
+                padding: 1rem;
+                width: 80vw;
+                height: 100%;
+                margin: 2vh;
+            }
+
+            .infosHighlightWrapper {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                width: 80vw;
+                padding: 0px;
+                margin: 0px;
+
+                .infosCard {
+                    margin: 2vh;
+                    width: 100%;
+                }
+            }
         }
 
         #optionSection {
@@ -407,8 +714,8 @@
                 }
             }
 
-            
         }
+
     }
     
 }

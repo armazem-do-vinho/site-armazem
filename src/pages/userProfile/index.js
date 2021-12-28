@@ -177,12 +177,8 @@ function UserProfile() {
             <Header />
 
             <section className="dataSection">
-
-                <div className="sideBar">
                     
-                    <SideBar />
-
-                </div>
+                <SideBar />
 
                 <div className="userData">
 

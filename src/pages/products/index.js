@@ -224,7 +224,7 @@ function Products() {
 
         data.map((item) => {
 
-            if (selectedProduct === item.type || selectedProduct === item.sweetness) {
+            if (selectedProduct === item.type || selectedProduct === item.sweetness || selectedProduct === item.country) {
 
                 counter ++
                 
@@ -273,8 +273,13 @@ function Products() {
                     <li onClick={handleSelectedProduct}>Seco</li>
                     <li onClick={handleSelectedProduct}>Suave</li>
                     <li onClick={handleSelectedProduct}>Kits</li>
-                    <li onClick={handleSelectedProduct}>Outros</li>
                     <li onClick={handleSelectedProduct}>Espanha</li>
+                    <li onClick={handleSelectedProduct}>Argentina</li>
+                    <li onClick={handleSelectedProduct}>Portugal</li>
+                    <li onClick={handleSelectedProduct}>Chile</li>
+                    <li onClick={handleSelectedProduct}>França</li>
+                    <li onClick={handleSelectedProduct}>Brasil</li>
+                    <li onClick={handleSelectedProduct}>Outros</li>
 
                 </ul>
 
@@ -345,7 +350,7 @@ function Products() {
                         data.map((item, index) => {
 
                             if (item.itemAvailability === 'true' && (selectedProduct === item.type || selectedProduct === item.sweetness || selectedProduct === item.country)) { 
-                                // add o country pra tentar fazer a home funfar 
+                                
                                 return (
                                     
                                     <div className="showProductContainer">

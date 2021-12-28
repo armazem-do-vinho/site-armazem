@@ -81,13 +81,14 @@
         width: 30vw;
         height: 3vw;
         border: none;
-        text-align: center;
+        // text-align: center;
         font-size: .9rem;
         margin-top: 1rem;
         border-radius: 5px;
         background-color: $deepVinho;
         outline: none;
         color: white;
+        padding-left: 15px;
     }
 
     ::placeholder {
@@ -124,7 +125,7 @@
     padding: 1rem 2.5rem;
     border-radius: 20px;
     background-color: #2B303A;
-    cursor: pointer;
+    // cursor: pointer;
 
     display: flex;
     align-items: center;

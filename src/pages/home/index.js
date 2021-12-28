@@ -1,10 +1,11 @@
 import { React } from 'react';
 import { useState, useEffect } from 'react';
-import { useHistory } from 'react-router-dom'
 
 import Slider from "react-slick";
 
 import rightArrow from '../../img/right-arrow.svg'
+import trust from '../../img/trust.svg'
+import wine from '../../img/wine.svg'
 
 import vinhoImg from '../../img/vinho_periquita_tinto.png'
 import vinhoImg2 from '../../img/vinho tinto.png'
@@ -12,13 +13,12 @@ import vinhoImg3 from '../../img/vinho rosé.png'
 import vinhoImg4 from '../../img/vinho tinto 2.png'
 import mapaLagos from '../../img/mapa.png';
 
-import banner from '../../img/banner.png'
-import banner2 from '../../img/banner 2.png'
-
 import Header from '../../components/header'
 import Footer from '../../components/footer'
+
 import WhatsAppButton from '../../components/whatsappButton'
 import AgePopup from '../../components/agePopup'
+import ModalCountries from '../../components/modalCountries'
 
 import './style.scss'
 
@@ -31,11 +31,29 @@ import 'firebase/database'
 import firebaseConfig from '../../FirebaseConfig.js'
 import { Link } from 'react-router-dom';
 
+// import calculaFrete from '../../functions/CalculaFrete'
+
 function Home() {
 
     const [data, setData] = useState([]);
+    const [dataBanner, setDataBanner] = useState([]);
+    const [displayModal, setDisplayModal] = useState("none");
+    const [modalDataCountries, setModalDataCountries] = useState({});
+    const [dataCountries, setDataCountries] = useState([]);
+    const [dataProductCards, setDataProductCards] = useState([]);
+
+    // const teste = async () => {
+
+    //     const promisse = calculaFrete()
+    //     // const promisse = await calculaFrete().then(
+    //     //     console.log('promisse', promisse)
+    //     // )
+
+    // }
 
     useEffect(() => {
+
+        // teste()
 
         if (!firebase.apps.length)
             firebase.initializeApp(firebaseConfig);
@@ -59,6 +77,76 @@ function Home() {
 
     }, []);
 
+    useEffect(() => {
+
+        if (!firebase.apps.length)
+            firebase.initializeApp(firebaseConfig);
+
+        var firebaseRef = firebase.database().ref('banners/');
+
+        firebaseRef.on('value', (snapshot) => {
+
+            if (snapshot.exists()) {
+
+                var data = snapshot.val()
+                var temp = Object.keys(data).map((key) => data[key])
+                setDataBanner(temp)
+                // console.log(temp)
+
+            }
+            else {
+                console.log("No data available");
+            }
+
+        });
+
+    }, []);
+
+    useEffect(() => {
+
+        if (!firebase.apps.length)
+            firebase.initializeApp(firebaseConfig);
+
+        firebase.database().ref('aboutCards').get('/aboutCards')
+            .then(function (snapshot) {
+
+                if (snapshot.exists()) {
+
+                    var data = snapshot.val()
+                    var temp = Object.keys(data).map((key) => data[key])
+                    setDataCountries(temp)
+
+                }
+                else {
+                    console.log("No data available");
+                }
+            })
+
+    }, []);
+
+    useEffect(() => {
+
+        if (!firebase.apps.length)
+            firebase.initializeApp(firebaseConfig);
+
+        var firebaseRef = firebase.database().ref('productsCard/');
+
+        firebaseRef.on('value', (snapshot) => {
+
+            if (snapshot.exists()) {
+
+                var data = snapshot.val()
+                var temp = Object.keys(data).map((key) => data[key])
+                setDataProductCards(temp)
+
+            }
+            else {
+                console.log("No data available");
+            }
+        })
+
+    }, []);
+
     var carouselSettings = {
         dots: true,
         infinite: true,
@@ -70,6 +158,24 @@ function Home() {
         adaptiveHeight: true,
     };
 
+    function handleModalInfos(item) {
+
+        setModalDataCountries(item)
+        // window.scrollTo(0, 0);
+        displayModal === "none" ? setDisplayModal("flex") : setDisplayModal("none")
+
+    }
+
+    function closeModal() {
+
+        if (displayModal === "none")
+            setDisplayModal("flex")
+        else {
+            setDisplayModal("none");
+        }
+
+    }
+
     return (
 
         <div className="HomePage">
@@ -79,7 +185,7 @@ function Home() {
             <AgePopup />
 
             <section id="heroSection">
-{/* 
+                {/* 
                 <div className="optionsHero">
 
                     <span>Tintos</span>
@@ -96,12 +202,21 @@ function Home() {
                 <div className="heroWrapper">
 
                     <Slider {...carouselSettings}>
-                        <div className="sliderImg">
-                            <img src={banner} alt="banner dia dos pais" />
-                        </div>
-                        <div>
-                            <img src={banner2} alt="banner kits" />
-                        </div>
+
+                        {dataBanner.map((item) => {
+
+                            return (
+
+                                <div className="sliderImg">
+
+                                    <img src={item.imageSrc} alt="Banner" />
+
+                                </div>
+
+                            )
+
+                        })}
+
                     </Slider>
 
                 </div>
@@ -125,105 +240,73 @@ function Home() {
 
                 <div className="featuredProducts">
 
-                    <div className="featuredProductsCard">
+                    {dataProductCards.map((item => {
 
-                        <div className="imgFeaturedWrapper">
+                        return (
 
-                            <img src={vinhoImg} alt="Imagem do vinho" />
+                            <div className="featuredProductsCard">
 
-                        </div>
+                                <div className="visualData">
 
-                        <div className="featuredTag">
+                                    <div className="featuredTag">
 
-                            <h6>Informação</h6>
+                                        <h6>{item.info}</h6>
 
-                        </div>
+                                    </div>
 
-                        <div className="featuredTextWrapper">
+                                    <div className="imgFeaturedWrapper">
 
-                            <h5>Vinho Periquita tinto</h5>
+                                        <img src={item.imageSrc} alt="Imagem do vinho" />
 
-                            <span>Espanha • Tinto</span>
+                                    </div>
 
-                        </div>
+                                </div>
 
-                    </div>
+                                <div className="featuredTextWrapper">
 
-                    <div className="featuredProductsCard">
+                                    <h5>{item.name}</h5>
 
-                        <div className="imgFeaturedWrapper">
+                                    <span>{item.country} • {item.type}</span>
 
-                            <img id="imgVinho" src={vinhoImg2} alt="Imagem do vinho" />
+                                    <p>{item.description}</p>
 
-                        </div>
+                                </div>
 
-                        <div className="featuredTag">
+                            </div>
 
-                            <h6>Informação</h6>
-
-                        </div>
-
-                        <div className="featuredTextWrapper">
-
-                            <h5>Vinho Don Simon</h5>
-
-                            <span>Espanha • Tinto</span>
-
-                        </div>
-
-                    </div>
-
-                    <div className="featuredProductsCard">
-
-                        <div className="imgFeaturedWrapper">
-
-                            <img id="imgVinho" src={vinhoImg3} alt="Imagem do vinho" />
-
-                        </div>
-
-                        <div className="featuredTag">
-
-                            <h6>Informação</h6>
-
-                        </div>
-
-                        <div className="featuredTextWrapper">
-
-                            <h5>Vinho Viñapeña</h5>
-
-                            <span>Espanha • Rosé</span>
-
-                        </div>
-
-                    </div>
-
-                    <div className="featuredProductsCard">
-
-                        <div className="imgFeaturedWrapper">
-
-                            <img id="imgVinho" src={vinhoImg4} alt="Imagem do vinho" />
-
-                        </div>
-
-                        <div className="featuredTag">
-
-                            <h6>Informação</h6>
-
-                        </div>
-
-                        <div className="featuredTextWrapper">
-
-                            <h5>Vinho Anciano</h5>
-
-                            <span>Espanha • Tinto</span>
-
-                        </div>
-
-                    </div>
+                        )
+                    }))
+                    }
 
                 </div>
 
             </section>
+
+            <section id="homeText">
+
+                <div className="leftSideHomeText">
+
+                    <h1>Brinde os bons momentos!</h1>
+                    <h1>Brinde com Armazém</h1>
+
+                </div>
+
+                <div className="rightSideHomeText">
+
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat.</p>
+
+                </div>
+
+            </section>
+
+            <div style={{ display: displayModal }} role="dialog" className='divModalCountry' >
+
+                <span onClick={closeModal}>X</span>
+                <ModalCountries displayProperty={displayModal} modalDataCountries={modalDataCountries} />
+
+            </div>
 
             <section id="optionSection">
 
@@ -239,36 +322,83 @@ function Home() {
 
                     <div className="optionsSelection">
 
-                        <div className="cardsOptionsSelection">
+                        {dataCountries.map((item) => {
 
-                            <h3>Argentina</h3>
+                            return (
 
-                        </div>
-                        <div className="cardsOptionsSelection">
+                                <div onClick={() => { handleModalInfos(item) }} className="cardsOptionsSelection">
 
-                            <h3>Chile</h3>
+                                    <h3>{item.country}</h3>
 
-                        </div>
-                        <div className="cardsOptionsSelection">
+                                </div>
 
-                            <h3>Portugal</h3>
+                            )
 
-                        </div>
-                        <div className="cardsOptionsSelection">
+                        })}
 
-                            <h3>Espanha</h3>
+                    </div>
 
-                        </div>
-                        <div className="cardsOptionsSelection">
+                </div>
 
-                            <h3>França</h3>
+            </section>
 
-                        </div>
-                        <div className="cardsOptionsSelection">
+            <section id="infosSection">
 
-                            <h3>Brasil</h3>
+                <div className="infosPromoWrapper">
 
-                        </div>
+                    <h2>Nossa recomendação para você</h2>
+
+                    <div className="sliderWrapper">
+
+                        <Slider className="slider" {...carouselSettings}>
+
+                            {dataProductCards.map((item) => {
+
+                                return (
+
+                                    <div className="sliderContent">
+
+                                        <div className="textVinho">
+
+                                            <h2>{item.name}</h2>
+                                            <span>{item.country} • {item.type}</span>
+                                            <p>{item.description}</p>
+
+                                        </div>
+
+                                        <div className="imageVinho">
+
+                                            <img src={item.imageSrc} alt="Vinho" />
+
+                                        </div>
+
+                                    </div>
+
+                                )
+
+                            })}
+
+                        </Slider>
+
+                    </div>
+
+                </div>
+
+                <div className="infosHighlightWrapper">
+
+                    <div className="infosCard">
+
+                        <h3>Qualidade máxima</h3>
+                        <p>Produtos selecionados a dedo</p>
+                        <img src={trust} alt="" />
+
+                    </div>
+
+                    <div className="infosCard">
+
+                        <h3>O melhor para você</h3>
+                        <p>Brindando todos os seus momentos</p>
+                        <img src={wine} alt="" />
 
                     </div>
 

@@ -5,6 +5,7 @@ footer {
 
     width: 100vw;
     overflow-y: hidden;
+    overflow-x: hidden;
     color: var(--branco);
     background-color: $deepVinho;
     display: flex;
@@ -43,44 +44,44 @@ footer {
 
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: center;    
     flex-direction: column;
-    width: 40%;
+    width: 100%;
     max-height: 40vh;
     margin-top: 15px;
     margin-bottom: 15px;
 
-}
+    img {
 
-.footerContacts img {
+        height: 9.75vh;
+        margin-bottom: 15px;
+    
+    }
 
-    height: 100px;
-    margin-bottom: 15px;
+    ul {
 
-}
+        display: flex;
+        flex-direction: row;
+        align-items: space-between;
+        justify-content: center;
+        width: 100%;
+        list-style: none;
+    
+        
+    }
 
-.footerContacts ul {
+    p {
+        margin-top: 20px;
+    }
 
-    display: flex;
-    flex-direction: row;
-    align-items: space-between;
-    justify-content: space-between;
-    width: 100%;
-    margin-right: 30px;
-    list-style: none;
+    li a {
 
-}
-
-.footerContacts p {
-    margin-top: 20px;
-}
-
-.footerContacts li a {
-
-    cursor: pointer;
-    text-decoration: none;
-    color: $branco;
-
+        cursor: pointer;
+        text-decoration: none;
+        color: $branco;
+        margin: 0 15px;
+    
+    }
 }
 
 .socialMedias {
@@ -88,21 +89,21 @@ footer {
     display: flex;
     justify-content: space-between;
     align-items: flex-end;
-    margin: 1rem;
+    margin-bottom: .75rem;
 
-}
+    img {
 
-.socialMedias img {
+        height: 5vh;
+        margin-right: 10px;
+        margin-left: 10px;
+    
+    }
 
-    height: 50px;
-    margin-right: 10px;
-    margin-left: 10px;
+    a {
 
-}
-
-.socialMedias a {
-
-    cursor: pointer;
+        cursor: pointer;
+    
+    }
 
 }
 
@@ -112,6 +113,9 @@ footer {
 
         flex-direction: column;
         padding-bottom: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
 
     }
 
@@ -123,57 +127,72 @@ footer {
         margin-top: 15px;
         margin-bottom: 20px;
         align-items: center;
-        border-top: 1px solid white;
+        justify-content: center;
+        font-size: .8rem;
+        //border-top: 1px solid white;
         display: flex;
 
+        img {
+
+            height: 6vh;
+    
+        }
+
     }
 
-    .copyright img {
-
-        height: 50px;
-
-    }
-
-    .footerContacts{
+    .footerContacts {
 
         width: 90vw;
         height: auto;
         text-align: justify;
         margin: 0px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
         /* max-height: none; */
 
-    }
+        ul {
 
-    .footerContacts ul {
+            display: flex;
+            flex-wrap: wrap;
+            width: 90vw;
+            justify-content: center;
+            padding: 0;
+            margin: 0;
+    
+        }
 
-        width: 90vw;
-        justify-content: space-between;
-        padding: 0;
+        li {
 
-    }
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 9.5pt;
+            margin: 10px 0;
+    
+        }
 
-    .footerContacts li {
+        p {
 
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 9pt;
-
-    }
-
-    .footerContacts p {
-
-        font-size: 9pt;
+            font-size: 9.5pt;
+    
+        }
 
     }
 
     .socialMedias {
 
         width: 100vw;
-        height: 10vh;
+        height: 6vh;
         align-items: center;
         justify-content: center;
         padding: 0;
+        margin: 0;
+        margin-top: 1rem;
+
+        img {
+            height: 5vh;
+        }
 
     }
 

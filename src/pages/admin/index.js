@@ -69,15 +69,6 @@ function Admin() {
         
     }
 
-/*     useEffect(() => {
-        
-        window.scrollTo(0, 0);
-
-        if(!firebase.apps.length)
-            firebase.initializeApp(firebaseConfig)
-
-    }, []); */
-
     useEffect(() => {
 
         var userEmail = localStorage.getItem('userEmail')
@@ -135,6 +126,8 @@ function Admin() {
                             <Link to="/ListaDeClientes" >Listagem de clientes</Link>
                             <Link to="/AdminRelatorios" >Relatórios</Link>
                             <Link to="/AdminEstoque" >Estoque</Link>
+                            <Link to="/AdminCupons" >Gerenciar cupons</Link>
+                            <Link to="/AlterarConteudos" >Alterar conteúdos</Link>
                             
                         </ul>
 

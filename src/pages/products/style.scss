@@ -346,9 +346,17 @@
             .optionsList {
         
                 width: 100vw;
-                height: 80vw;
-                flex-direction: column;
+                height: auto;
+                flex-direction: row;
+                flex-wrap: wrap;
                 margin-bottom: 1rem;
+
+                li {
+                    margin: 0.2rem;
+                    background-color: $vinho;
+                    padding: 0.5rem;
+                    border-radius: 5px;
+                }
         
             }
     

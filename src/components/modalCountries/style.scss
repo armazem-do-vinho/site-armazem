@@ -1,0 +1,156 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat&display=swap');
+@import '../../global.scss';
+
+.modalCountries{
+
+    width: 45vw;
+    min-height: 70vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    border-radius: 10px;
+    position: absolute;
+    margin: 0 auto;
+    left: 0;
+    right: 0;
+    z-index: 2;
+    background-color: $offwhite;
+    padding: 1rem;
+
+    main {
+
+        background-color: $offwhite;
+        height: 100%;
+        width: 100%;
+
+        .countryInfos {
+
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            
+            .imgFlagWrapper {
+
+                display: flex;
+                width: 15%;
+
+                img {
+
+                    max-width: 100%;
+                    max-height: 100%;
+
+                }
+
+            }
+
+            h2 {
+
+                margin: 1rem 0 2rem 0;
+
+            }
+
+            p {
+
+                text-align: center;
+                padding: 0 1rem;
+                line-height: 1.5rem;
+
+            }
+
+        }
+    
+    }
+
+}
+
+
+@media screen and (max-width: 768px) {
+
+    .modalUser {
+
+        font-size: .7rem;
+        width: 90vw;
+        margin-top: 1rem;
+
+        main {
+
+            width: 100%;
+            box-shadow: none;
+            
+            img {
+                height: 80px;
+            }
+    
+        }
+
+    }
+
+    fieldset {
+        width: 80vw;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .userInfo {
+        flex-direction: column;
+
+        input {
+
+            margin: 15px 0;
+
+        }
+    }
+
+
+    .editUser input {
+        width: 100%;
+
+    }
+
+    .updateButton {
+
+        width: 100%;
+        align-items: center;
+
+        a {
+
+            width: 300px !important;
+
+        }
+
+    }
+
+    .titleModal {
+
+        h2 {
+            margin: 0 1rem;
+        }
+        h1 {
+
+            font-size: 17pt;
+            display: flex;
+            flex-wrap: wrap;
+            text-align: center;
+    
+        }
+
+        main p {
+    
+            text-align: justify;
+        
+        }
+    }
+
+    .userAddress {
+
+        input {
+
+            margin: 15px 0;
+
+        }
+
+    }
+    
+}
