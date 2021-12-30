@@ -319,11 +319,11 @@
 
         display: flex;
         width: 95vw;
-        height: 270px;
         background-color: #2b2b2b;
         margin-bottom: 4rem;
-        position: relative;
         border-radius: 5px;
+        justify-content: space-between;
+        align-items: center;
 
         img {
 
@@ -335,13 +335,8 @@
         .optionsSelection {
 
             display: flex;
-            position: absolute;
+            flex-wrap: wrap;
             height: 100%;
-            right:0;
-            width: 52vw; //antes 52vw; //antes 100vw
-            display: grid;
-            grid-template-columns: 210px 210px 210px;
-            padding-left: 3.5rem;
             align-items: center;
             justify-content: center;
 
@@ -406,6 +401,7 @@
                 height: 100%;
                 align-items: center;
                 justify-content: center;
+                margin-top: 20px;
 
                 .slider {
 
@@ -432,6 +428,7 @@
                         h2 {
 
                             margin-bottom: 5px;
+                            font-size: 16px;
 
                         }
 
@@ -521,6 +518,7 @@
 @media screen and (max-width: 768px) {
     
     .HomePage {
+
         width: 100vw;
         overflow-x: hidden;
 
@@ -588,7 +586,6 @@
                 .featuredProductsCard {
 
                     max-width: 85%;
-                    height: auto;
                     margin: 1rem 0;
 
                     .imgFeaturedWrapper {
@@ -605,6 +602,16 @@
     
                         }
     
+                    }
+
+                    .featuredTextWrapper {
+
+                        p {
+
+                            font-size: 12px;
+                            
+                        }
+
                     }
                     
                 }
@@ -641,9 +648,19 @@
                 width: 80%;
 
                 p {
-                    text-align: center;
+                    text-align: left;
                 }
             }
+        }
+
+        .divModalCountry {
+
+            span {
+
+                left: 80%;
+
+            }
+
         }
 
         #infosSection {
@@ -686,22 +703,24 @@
             .optionsInfos {
 
                 width: 100vw;
-                height: 46vh;
+                flex-direction: column;
 
                 .optionsWrapper {
 
                     img {
+
                         width: 100vw;
                         height: auto;
+
                     }
 
                 }
 
                 .optionsSelection {
+
                     width: 100%;
-                    grid-template-columns: 210px 210px;
                     align-items: center;
-                    justify-content: center;
+                    justify-content: space-around;
 
                     h3 {
                         font-size: 1rem;
@@ -709,6 +728,7 @@
 
                     .cardsOptionsSelection {
                         background-color: #424242;
+                        margin: 10px 0;
                     }
         
                 }

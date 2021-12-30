@@ -11,7 +11,7 @@ import vinhoImg from '../../img/vinho_periquita_tinto.png'
 import vinhoImg2 from '../../img/vinho tinto.png'
 import vinhoImg3 from '../../img/vinho rosé.png'
 import vinhoImg4 from '../../img/vinho tinto 2.png'
-import mapaLagos from '../../img/mapa.png';
+import mapaLagos from '../../img/mapa2.png';
 
 import Header from '../../components/header'
 import Footer from '../../components/footer'

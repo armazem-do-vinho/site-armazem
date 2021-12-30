@@ -68,89 +68,12 @@
 
 @media screen and (max-width: 768px) {
 
-    .modalUser {
+    .modalCountries {
 
-        font-size: .7rem;
         width: 90vw;
-        margin-top: 1rem;
-
-        main {
-
-            width: 100%;
-            box-shadow: none;
-            
-            img {
-                height: 80px;
-            }
-    
-        }
 
     }
 
-    fieldset {
-        width: 80vw;
-        display: flex;
-        flex-direction: column;
-    }
-
-    .userInfo {
-        flex-direction: column;
-
-        input {
-
-            margin: 15px 0;
-
-        }
-    }
-
-
-    .editUser input {
-        width: 100%;
-
-    }
-
-    .updateButton {
-
-        width: 100%;
-        align-items: center;
-
-        a {
-
-            width: 300px !important;
-
-        }
-
-    }
-
-    .titleModal {
-
-        h2 {
-            margin: 0 1rem;
-        }
-        h1 {
-
-            font-size: 17pt;
-            display: flex;
-            flex-wrap: wrap;
-            text-align: center;
-    
-        }
-
-        main p {
-    
-            text-align: justify;
-        
-        }
-    }
-
-    .userAddress {
-
-        input {
-
-            margin: 15px 0;
-
-        }
-
-    }
-    
 }
+
+   
