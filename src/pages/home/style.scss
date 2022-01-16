@@ -128,7 +128,7 @@
             display: flex;
             flex-wrap: wrap;
             width: 100%;
-            justify-content: center;
+            justify-content: flex-start;
 
             .featuredProductsCard {
 
@@ -209,7 +209,7 @@
                     span {
 
                         color: #666C75;
-                        font-size: .9rem;
+                        font-size: .8rem;
                         font-weight: 500;
                         margin-bottom: 20px;
 
@@ -218,6 +218,7 @@
                     p {
 
                         color: #c4c4c4;
+                        font-size: .8rem;
 
                     }
                     

@@ -146,21 +146,6 @@ function Cart() {
 
     }, [])
 
-    // useEffect(() => {
-
-    //     if (userDiscount !== 0) {
-
-    //         setFinalValue(totalValue - (totalValue * (userDiscount / 100)))
-
-    //     } else {
-
-    //         setFinalValue(totalValue)
-    //         console.log('aaa', selectedTransportData)
-
-    //     }
-
-    // }, [])
-
     useEffect(() => {
 
         if (!firebase.apps.length)
@@ -205,6 +190,7 @@ function Cart() {
 
                         if (item.email === userEmail) {
                             setDataAccount(item)
+                            console.log(item)
                         }
 
                     })
@@ -214,28 +200,6 @@ function Cart() {
 
             })
 
-        // firebase.database().ref('sellers/').get('/sellers')
-        //     .then(function (snapshot) {
-
-        //         if (snapshot.exists()) {
-
-        //             var data = snapshot.val()
-        //             var temp = Object.keys(data).map((key) => data[key])
-
-        //             temp.map((item) => {
-
-        //                 if (item.email === userEmail) {
-        //                     setSeller(item)
-        //                     setIsSeller(true)
-        //                 }
-
-        //             })
-
-        //         } else
-        //             console.log("No data available");
-
-        //     })
-
     }, []);
 
     function sendOrder() {
@@ -244,7 +208,7 @@ function Cart() {
 
             if (selectedPayment !== '' && pickupSelect !== '') {
 
-                if (transportDataVerify === true) {
+                if (transportDataVerify === true && pickupSelect !== 'Retirada física') {
 
                     const id = firebase.database().ref().child('posts').push().key
                     const now = new Date()
@@ -271,9 +235,7 @@ function Cart() {
                         paymentProof: '',
                         adminNote: '',
                         requestStatus: '',
-                        // choosedTransport: transportData,
-                        selectedTransport: selectedTransportData.company.name,
-                        // adminNote: '',
+                        selectedTransport: selectedTransportData,
                         dateToCompare: new Date().toDateString(),
                         date: `${now.getUTCDate()}/${now.getMonth()}/${now.getFullYear()}-${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}`
 
@@ -287,6 +249,52 @@ function Cart() {
 
                     firebase.database().ref('reportsSales/' + id).set(dataToSend)
                         .then(() => {
+                            localStorage.setItem('products', '{}')
+                            alert("Pedido finalizado com sucesso!.")
+                        })
+
+                    setPaidForm(true)
+
+                } else if (transportDataVerify === true && pickupSelect === 'Retirada física') {
+
+                    const id = firebase.database().ref().child('posts').push().key
+                    const now = new Date()
+
+                    const dataToSend = {
+
+                        id: id,
+                        listItem: data,
+                        totalValue: finalValue.toFixed(2),
+                        userName: dataAccount.name,
+                        phoneNumber: dataAccount.phoneNumber,
+                        address: dataAccount.address,
+                        houseNumber: dataAccount.houseNumber,
+                        complement: dataAccount.complement,
+                        district: dataAccount.district,
+                        city: dataAccount.city,
+                        cepNumber: dataAccount.cepNumber,
+                        paymentType: selectedPayment,
+                        clientNote: clientNote,
+                        userEmail: dataAccount.email,
+                        voucher: choosedVoucher,
+                        pickupOption: pickupSelect,
+                        paymentProof: '',
+                        adminNote: '',
+                        requestStatus: '',
+                        dateToCompare: new Date().toDateString(),
+                        date: `${now.getUTCDate()}/${now.getMonth()}/${now.getFullYear()}-${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}`
+
+                    }
+
+                    firebase.database().ref('requests/' + id).set(dataToSend)
+                        .then(() => {
+                            setPurchasedProductData(dataToSend)
+                            console.log('dataToSend', dataToSend)
+                            localStorage.setItem('products', '{}')
+                        })
+
+                    firebase.database().ref('reportsSales/' + id).set(dataToSend)
+                        .then(() => {
                             setPurchasedProductData(dataToSend)
                             localStorage.setItem('products', '{}')
                             alert("Pedido finalizado com sucesso!.")
@@ -294,7 +302,9 @@ function Cart() {
 
                     setPaidForm(true)
 
-                } else alert('Você precisa preencher todos os campos!')
+                }
+
+                else alert('Você precisa preencher todos os campos!')
 
             } else alert('Você precisa selecionar todos os campos!')
 
@@ -302,68 +312,6 @@ function Cart() {
         else {
 
             var confirm = window.confirm("Você precisa ter uma conta para finalizar um pedido!")
-
-            if (confirm)
-                redirect.push("/Cadastrar")
-
-        }
-
-        return 0;
-
-    }
-
-    function sendOrderPaypal() {
-
-        if (userIsLogged) {
-
-            const id = firebase.database().ref().child('posts').push().key
-            const now = new Date()
-
-            const dataToSend = {
-
-                id: id,
-                listItem: data,
-                totalValue: finalValue.toFixed(2),
-                userName: newDataReceiver.receiverName,
-                phoneNumber: newDataReceiver.receiverPhone,
-                address: newDataReceiver.receiverAddress,
-                houseNumber: newDataReceiver.receiverHouseNumber,
-                complement: newDataReceiver.receiverComplement,
-                district: newDataReceiver.receiverDistrict,
-                city: newDataReceiver.receiverCity,
-                cpf: newDataReceiver.receiverCpf,
-                cepNumber: customerCep,
-                paymentType: 'Paypal',
-                clientNote: clientNote,
-                userEmail: dataAccount.email,
-                voucher: choosedVoucher,
-                paymentProof: '',
-                adminNote: '',
-                requestStatus: '',
-                // choosedTransport: transportData,
-                selectedTransport: selectedTransportData.company.name,
-                // adminNote: '',
-                dateToCompare: new Date().toDateString(),
-                date: `${now.getUTCDate()}/${now.getMonth()}/${now.getFullYear()}-${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}`
-
-            }
-
-            firebase.database().ref('requests/' + id).set(dataToSend)
-                .then(() => {
-                    localStorage.setItem('products', '{}')
-                })
-
-            firebase.database().ref('reportsSales/' + id).set(dataToSend)
-                .then(() => {
-                    localStorage.setItem('products', '{}')
-                    alert("Pedido finalizado com sucesso!")
-                })
-
-        }
-
-        else {
-
-            var confirm = window.confirm("Você precisa ter uma conta para finalizar um pedido!.")
 
             if (confirm)
                 redirect.push("/Cadastrar")
@@ -398,32 +346,6 @@ function Cart() {
         }
 
     }, [newDataReceiver])
-
-    // function sendOrderSeller() {
-
-    //     const id = firebase.database().ref().child('posts').push().key
-
-    //     firebase.database().ref('requests/' + id).set({
-
-    //         id: id,
-    //         listItem: data,
-    //         totalValue: finalValue.toFixed(2),
-    //         userName: dataUsers[selectedClient].name,
-    //         phoneNumber: dataUsers[selectedClient].phoneNumber,
-    //         street: dataUsers[selectedClient].street,
-    //         houseNumber: dataUsers[selectedClient].houseNumber,
-    //         district: dataUsers[selectedClient].district,
-    //         cepNumber: dataUsers[selectedClient].cepNumber,
-    //         complement: dataUsers[selectedClient].complement,
-    //         paymentType: selectedPayment,
-    //         seller: seller.name
-
-    //     }).then(() => {
-    //         localStorage.setItem('products', '[{}]')
-    //         alert("Pedido finalizado com sucesso!.")
-    //     })
-
-    // }
 
     function cleanCart() {
 
@@ -470,17 +392,6 @@ function Cart() {
 
     }
 
-    // useEffect(() => {
-
-    //     if(userDiscount) {
-
-    //         setFinalValue(totalValue - (totalValue * (userDiscount / 100)))
-    //         console.log('discount', totalValue - (totalValue * (userDiscount / 100)))
-
-    //     }
-
-    // }, [])
-
     function handleSelectPayment(event) {
 
         let payment = event.target.value
@@ -525,12 +436,6 @@ function Cart() {
             setTransportDataVerify(true)
 
         }
-
-    }
-
-    function handleSelectedClient(event) {
-
-        setSelectedClient(event.target.value)
 
     }
 
@@ -641,7 +546,8 @@ function Cart() {
     useEffect(() => {
 
         const script = document.createElement("script");
-        script.src = "https://www.paypal.com/sdk/js?client-id=AVdZOvhSTEekVtepWxObjC6L1Yrm8ng37lrDLna1AbkBBZej8x3KQEiLfZyUhOJ1aqtG0mnddL63lDQX&currency=BRL"
+        // script.src = "https://www.paypal.com/sdk/js?client-id=AVdZOvhSTEekVtepWxObjC6L1Yrm8ng37lrDLna1AbkBBZej8x3KQEiLfZyUhOJ1aqtG0mnddL63lDQX&currency=BRL"
+        script.src = "https://www.paypal.com/sdk/js?client-id=AZAsiBXlnYmk2HXDpGkZgYx7zWvFpak2iKq473EPHi9LrnM2lAbAHIzVaxns_-jmD34dYqpuTSaRFWy0&currency=BRL"
         script.addEventListener("load", () => setLoaded(true));
         document.body.appendChild(script);
 
@@ -649,37 +555,44 @@ function Cart() {
 
             if (selectedPayment === 'PayPal' || selectedPayment === 'Cartão') {
 
-                setTimeout(() => {
+                if (pickupSelect !== '' && transportDataVerify === true) {
 
-                    window.paypal
-                        .Buttons({
+                    setTimeout(() => {
 
-                            createOrder: (data, actions) => {
+                        window.paypal
+                            .Buttons({
 
-                                return actions.order.create({
-                                    purchase_units: [
-                                        {
-                                            // description: product.description,
-                                            amount: {
-                                                currency_code: "BRL",
-                                                value: finalValue
+                                createOrder: (data, actions) => {
+
+                                    return actions.order.create({
+                                        purchase_units: [
+                                            {
+                                                // description: product.description,
+                                                amount: {
+                                                    currency_code: "BRL",
+                                                    value: finalValue.toFixed(2)
+                                                }
                                             }
-                                        }
-                                    ]
-                                })
-                            },
-                            onApprove: async (data, actions) => {
+                                        ]
+                                    })
+                                },
+                                onApprove: async (data, actions) => {
 
-                                const order = await actions.order.capture();
-                                setPaidForm(true)
-                                sendOrderPaypal();
+                                    const order = await actions.order.capture();
+                                    sendOrder();
+                                    setPaidForm(true)
 
-                            },
+                                },
 
-                        })
-                        .render(paypalRef)
-                }, 100)
+                            })
+                            .render(paypalRef)
+                    }, 100)
+                } else {
+                    window.alert("Você precisa preencher todos os campos antes de finalizar seu pedido")
+                }
+
             }
+
         }
     })
 
@@ -762,13 +675,13 @@ function Cart() {
 
                                         {
 
-                                            selectedTransportData ?
+                                            purchasedProductData.selectedTransport ?
 
                                                 <>
 
-                                                    <li><strong>Transportadora: </strong>{selectedTransportData.company.name} ({selectedTransportData.name})</li>
-                                                    <li><strong>Valor do frete: </strong>R$ {selectedTransportData.price}</li>
-                                                    <li><strong>Prazo de entrega: </strong>{selectedTransportData.delivery_time} dias úteis após a postagem</li>
+                                                    <li><strong>Transportadora: </strong>{purchasedProductData.selectedTransport.company.name} ({purchasedProductData.selectedTransport.name})</li>
+                                                    <li><strong>Valor do frete: </strong>R$ {purchasedProductData.selectedTransport.price}</li>
+                                                    <li><strong>Prazo de entrega: </strong>{purchasedProductData.selectedTransport.delivery_time} dias úteis após a postagem</li>
 
                                                 </>
 
@@ -1092,8 +1005,8 @@ function Cart() {
 
                                             <option value=''>Selecione o tipo de pagamento</option>
                                             <option value="Dinheiro" >Dinheiro (apenas para entregas na região)</option>
-                                            <option value="Débito (máquina)" >Cartão de débito (apenas para entregas na região)</option>
-                                            <option value="Crédito (máquina)" >Cartão de crédito (apenas para entregas na região)</option>
+                                            <option value="Débito (máquina)" >Cartão de débito (máquina)</option>
+                                            <option value="Crédito (máquina)" >Cartão de crédito (máquina)</option>
                                             <option value="PayPal" >PayPal </option>
                                             <option value="Cartão" >Cartão </option>
                                             <option value="Pix" >Pix</option>

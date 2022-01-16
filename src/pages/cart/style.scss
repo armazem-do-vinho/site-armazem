@@ -860,4 +860,75 @@
         }
     }
 
+    .paymentForm {
+
+        #mainPaid {
+    
+            display: flex;
+            justify-content: center;
+    
+            #purchaseDetails {
+    
+                flex-direction: column;
+                justify-content: space-between;
+    
+                .receiverDetails {
+    
+                    width: 90%;
+    
+                }
+    
+                .purchasedProductsDetails {
+    
+                    width: 90%;
+                    margin-top: 2rem;
+    
+                    ul {
+    
+                        list-style: none;
+                        display: flex;
+                        flex-direction: column;
+                        align-items: center;
+                        justify-content: space-between;
+    
+                        li {
+    
+                            .purchasedItensImgWrapper {
+    
+                                img {
+        
+                                    width: 30px;
+        
+                                }
+        
+                            }
+    
+                            .itensText {
+    
+                                display: flex;
+                                flex-direction: column;
+    
+                                span {
+        
+                                    padding: .3rem 0rem .3rem 2rem;
+        
+                                }
+                            }
+    
+                        }
+                    }
+    
+    
+                    h4 {
+    
+                        color: rgb(255, 255, 255);
+    
+                    }
+    
+                }
+               
+            }
+        }
+    }
+
 }
