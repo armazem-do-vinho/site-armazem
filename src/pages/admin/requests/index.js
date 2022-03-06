@@ -276,12 +276,25 @@ function Request() {
 
                 <Header />
 
-                {/* <div style={{ display: displayModal }} tabindex="-1" role="dialog" className='modalDelivery' >
-                    <span onClick={closeModal}>X</span>
-                    <DeliveryModal displayProperty={displayModal} modalData={modalData} />
-                </div> */}
-
                 <main id='mainRequest' >
+
+                <div className="finalizarPedido">
+                        <h3 className="texTripRequest" >Finalizar pedido</h3>
+
+                        <select onChange={handleIdSelected} className="selectFinishOrder" >
+
+                            <option className="optionSelectOrder" >Selecionar</option>
+
+                            {dataAdmin.map((item) => (
+                                <option className="optionSelectOrder" value={item.id} key={item.id}>{item.userName.split(' ')[0]}: {item.id}</option>
+                            ))}
+
+                        </select>
+
+                        <a className="finishButton" onClick={() => finishOrder()} >Finalizar</a>
+                    </div>
+
+                    <div className="boxProductInfos">
 
                     {dataAdmin.map((item, indexItem) => (
 
@@ -384,17 +397,25 @@ function Request() {
 
                                 {
 
-                                    item.selectedTransport ?
+                                    item.selectedTransport ? (
 
-                                        <div className="rowItens">
-                                            <p>Transportadora escolhida:</p>
-                                            <b>{item.selectedTransport}</b>
-                                        </div>
+                                        <>
 
-                                        : <p></p>
+                                            <div className="rowItens">
+                                                <p>Transportadora escolhida:</p>
+                                                <b>{item.selectedTransport.company.name}</b>
+                                            </div>
+
+                                            <div className="rowItens">
+                                                <p>Valor do frete:</p>
+                                                <b>R$ {item.selectedTransport.custom_price}</b>
+                                            </div>
+
+                                        </>
+
+                                    ) : null
 
                                 }
-
 
                                 <div className="requestStatus">
 
@@ -533,20 +554,6 @@ function Request() {
 
                     ))}
 
-                    <div className="finalizarPedido">
-                        <h3 className="texTripRequest" >Finalizar pedido</h3>
-
-                        <select onChange={handleIdSelected} className="selectFinishOrder" >
-
-                            <option className="optionSelectOrder" >Selecionar</option>
-
-                            {dataAdmin.map((item) => (
-                                <option className="optionSelectOrder" value={item.id} key={item.id}>{item.userName.split(' ')[0]}: {item.id}</option>
-                            ))}
-
-                        </select>
-
-                        <a className="finishButton" onClick={() => finishOrder()} >Finalizar</a>
                     </div>
 
                 </main>
