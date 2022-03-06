@@ -202,7 +202,6 @@ function Admin() {
                 <main id="mainClientList" >
     
                     <h1>Informações dos usuários</h1>
-                    <span>Clique em um cartão para alterar os dados do usuário</span>
     
                     <div className='filterName' >
     

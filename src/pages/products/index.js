@@ -417,7 +417,6 @@ function Products() {
 
                                     <div className="showProductContainer">
 
-
                                         <div className="showProductCard">
 
                                             <div className="imageProductWrapper">

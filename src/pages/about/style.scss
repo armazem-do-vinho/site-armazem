@@ -97,12 +97,14 @@
             justify-content: center;
             
             .card {
-                  box-shadow: inset 0px 0px 12px -1px rgba(0,0,0,0.6);
+
                   display: block;
                   overflow: hidden;
                   position: relative;
                   width: 450px;
                   max-height: 460px;
+                  -webkit-box-shadow: 11px -7px 8px -4px rgba(0,0,0,0.48); 
+                  box-shadow: 11px -7px 8px -4px rgba(0,0,0,0.48);
                   
                   padding: 2rem;
                   margin: 2rem;
@@ -112,7 +114,7 @@
                   border-radius: .3rem;
                   
                   flex-wrap: wrap;
-                  text-align: justify;
+                  text-align: right;
                   color: $preto;
                   font-size: 1.2rem;
                       

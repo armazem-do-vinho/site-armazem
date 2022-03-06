@@ -1,9 +1,20 @@
 @import '../../../global.scss';
 
 #mainRequest {
+
     display: flex;
     flex-direction: column;
 
+}
+
+.boxProductInfos {
+
+    display: flex;
+    flex-direction: column-reverse;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    
 }
 
 .boxOrder {
@@ -175,6 +186,12 @@
     padding: 20px;
     margin: 20px;
     width: 50%;
+
+    a {
+
+        cursor: pointer;
+
+    }
 }
 
 .finalizarPedido h3 {
