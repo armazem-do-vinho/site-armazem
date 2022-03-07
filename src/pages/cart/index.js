@@ -780,7 +780,7 @@ function Cart() {
 
                                     <div className='popupContent'>
 
-                                        <h3>Ao finalizar o pedido, realize um Pix para a chave: <br /> (22) 98112 9219 </h3>
+                                        <h3>Finalize seu pedido e realize o pagamento para a chave apresentada na descrição de sua compra</h3>
                                         <h4>Após isso, envie seu comprovante através da seção "meus produtos" em seu perfil.</h4>
 
                                         <button onClick={() => closePopup()}>Confirmar</button>
