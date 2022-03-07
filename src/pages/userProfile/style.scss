@@ -89,6 +89,24 @@
             }
 
         }
+
+        .deleteUser {
+
+            display: flex;
+            margin-bottom: 1rem;
+
+            button {
+
+                text-decoration: none;
+                border: none;
+                outline: none;
+                font-weight: 500;
+                padding: 3px 10px;
+                border-radius: 5px;
+
+            }
+
+        }
     
     }
 
