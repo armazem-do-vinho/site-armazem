@@ -38,6 +38,7 @@ function Requests() {
 
                     })
                     setRequestData(requestDataTemp)
+                    console.log(requestDataTemp)
 
                 } else {
                     console.log("No data available");
@@ -157,7 +158,7 @@ function Requests() {
 
                                                     request.selectedTransport ?
 
-                                                        <li><strong>Transportadora: </strong>{request.selectedTransport}</li>
+                                                        <li><strong>Transportadora: </strong>{request.selectedTransport.company.name}</li>
 
                                                         :
 

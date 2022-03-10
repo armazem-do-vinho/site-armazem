@@ -85,20 +85,19 @@
             align-items: center;
             justify-content: center;
             width: 100vw;
-            height: 55vh;
-            box-sizing: initial;
+            height: 60vh;
             transition: width 0.5s;
             margin: 0;
     
             ul {
     
-                position: absolute;
+                display: flex;
+                align-items: center;
+                justify-content: center;
                 top: 0;
                 left: 0;
-                width: 100%;
                 padding: 0;
                 background: linear-gradient(0deg, $vinho, $deepVinho);
-                height: 100%;
     
                 a, span {
     
