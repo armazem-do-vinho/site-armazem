@@ -63,6 +63,45 @@
 
         }
 
+    }
+}
+
+@media screen and (max-width: 768px) {
+
+    #ageWrapper {
+
+        .agePopup {
+
+            width: 80%;
+            transform: translate(0%, 50%);
+
+            .buttonsPopup {
+
+                width: 100%;
+                align-items: center;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+    
+                a {
+        
+                    width: auto;
+                    text-align: center;
+                    background-color: black;
+                    color: white;
+                    padding: 10px 30px;
+                    margin-top: 10px;
+                    display: inline-block;
+                    margin: 2rem 1rem;
+                    text-decoration: none;
+                    cursor: pointer;
+        
+                }
+    
+            }
+
+        }
 
     }
+
 }
